@@ -1,20 +1,11 @@
 package com.heredi.nowait.application;
 
-import com.heredi.nowait.domain.entities.User;
-import com.heredi.nowait.infrastructure.UserRepository;
-import com.heredi.nowait.presentation.user.dto.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.heredi.nowait.domain.model.Users;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService {
+public interface UserService {
 
-    @Autowired
-    private UserRepository userRepository;
-
-    public UserResponse createUser(User user) {
-        User savedUser = userRepository.save(user);
-        UserDTO userDTO = new UserDTO(savedUser);
-        return new UserResponse(userDTO);
-    }
+    Users createUser(Users user);
+    Users loginUser(String identifier, String password);
 }

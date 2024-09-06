@@ -1,8 +1,7 @@
-package com.heredi.nowait.presentation.user.controller;
+package com.heredi.nowait.infrastructure.rest.controller;
 
 import com.heredi.nowait.application.UserService;
-import com.heredi.nowait.domain.entities.User;
-import com.heredi.nowait.presentation.user.dto.UserResponse;
+import com.heredi.nowait.domain.model.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +16,8 @@ public class UserController {
 
     // Crear un nuevo usuario
     @PostMapping("/register")
-    public ResponseEntity<UserResponse> createUser(@RequestBody User user) {
-        UserResponse createdUser = userService.createUser(user);
-        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+    public ResponseEntity<Users> createUser(@RequestBody Users user) {
+        return new ResponseEntity<>(userService.createUser(user), HttpStatus.CREATED);
     }
 
 }
