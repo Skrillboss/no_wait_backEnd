@@ -4,5 +4,5 @@ import com.heredi.nowait.infrastructure.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserJPARepository extends JpaRepository<UserEntity, Long> {
-    UserEntity findByNameAndEmail(String name, String email);
+    UserEntity findByNameAndPassword(String name, String password);
 }

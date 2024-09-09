@@ -27,6 +27,6 @@ public class UserJPARepositoryImpl  implements UserRepository {
 
     @Override
     public Users getUser(String identifier, String password) {
-        return this.userMapper.toUser(this.userJPARepository.findByNameAndEmail(identifier, password));
+        return this.userMapper.toUser(this.userJPARepository.findByNameAndPassword(identifier, password));
     }
 }

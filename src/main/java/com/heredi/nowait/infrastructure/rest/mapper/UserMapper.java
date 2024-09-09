@@ -13,6 +13,7 @@ public interface UserMapper {
             @Mapping(source = "name", target = "name"),
             @Mapping(source = "nickName", target = "nickName"),
             @Mapping(source = "email", target = "email"),
+            @Mapping(source = "password", target = "password"),
             @Mapping(source = "phoneNumber", target = "phoneNumber"),
             @Mapping(source = "paymentInfos", target = "paymentInfos"),
             @Mapping(source = "business", target = "business")

@@ -1,11 +1,11 @@
-package com.heredi.nowait.application;
+package com.heredi.nowait.application.user.service;
 
 import com.heredi.nowait.domain.model.Users;
 import com.heredi.nowait.domain.ports.UserRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DomainUserService implements  UserService{
+public class DomainUserService implements UserService {
 
     private final UserRepository userRepository;
 

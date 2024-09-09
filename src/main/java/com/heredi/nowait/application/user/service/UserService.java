@@ -1,4 +1,4 @@
-package com.heredi.nowait.application;
+package com.heredi.nowait.application.user.service;
 
 import com.heredi.nowait.domain.model.Users;
 import org.springframework.stereotype.Service;
