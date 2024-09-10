@@ -28,4 +28,9 @@ public class DomainUserService implements UserService {
     public String generateToken(Users user) {
         return userRepository.getToken(user);
     }
+
+    @Override
+    public String generateRefreshToken(String nickName, String password){
+        return userRepository.getRefreshToken(nickName, password);
+    }
 }

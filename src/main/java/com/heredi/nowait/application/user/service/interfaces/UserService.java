@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 public interface UserService {
 
     Users createUser(Users user);
-    Users loginUser(String identifier, String password);
+    Users loginUser(String nickName, String password);
     String generateToken(Users user);
+    String generateRefreshToken(String userId, String password);
 }

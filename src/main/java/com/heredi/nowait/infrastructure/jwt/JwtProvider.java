@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
+import java.util.UUID;
 
 @Component
 public class JwtProvider {
@@ -20,13 +21,28 @@ public class JwtProvider {
     }
 
     // Método para generar un token JWT
-    public String generateToken(String username) {
+    public String generateToken(String userId, String nickName) {
         Date now = new Date();
-        long oneHourValidation = 3600000;
+        long oneHourValidation = 15 * 60 * 1000;
         Date validity = new Date(now.getTime() + oneHourValidation);
 
         return Jwts.builder()
-                .setSubject(username)
+                .claim("userId", userId)
+                .claim("nickName", nickName)
+                .setIssuedAt(now)
+                .setExpiration(validity)
+                .signWith(key, algorithm)
+                .compact();
+    }
+
+    public String generateRefreshToken() {
+        Date now = new Date();
+        long thirtyDaysValidation = 2592000000L;
+        Date validity = new Date(now.getTime() + thirtyDaysValidation);
+        UUID newRefreshToken = UUID.randomUUID();
+
+        return Jwts.builder()
+                .claim("refreshToken", newRefreshToken)
                 .setIssuedAt(now)
                 .setExpiration(validity)
                 .signWith(key, algorithm)
@@ -34,7 +50,7 @@ public class JwtProvider {
     }
 
     // Método para verificar y obtener los claims de un token JWT
-    public String obtenerUsernameDeToken(String token) {
+    public String getUserIdFromToken(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()

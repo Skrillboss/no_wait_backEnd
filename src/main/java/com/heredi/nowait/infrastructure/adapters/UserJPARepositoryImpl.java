@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 
+import java.util.UUID;
+
 @Repository
 public class UserJPARepositoryImpl  implements UserRepository {
 
@@ -37,6 +39,18 @@ public class UserJPARepositoryImpl  implements UserRepository {
 
     @Override
     public String getToken(Users user) {
-        return jwtProvider.generateToken(user.getName());
+        return jwtProvider.generateToken(user.getId().toString(), user.getNickName());
+    }
+
+    @Override
+    public String getRefreshToken(String nickName, String password) {
+        UserEntity userEntity = userJPARepository.findByNickNameAndPassword(nickName, password);
+        if(userEntity != null){
+            String refreshToken = jwtProvider.generateRefreshToken();
+            userEntity.setRefreshToken(refreshToken);
+            userJPARepository.save(userEntity);
+            return refreshToken;
+        }
+        throw new IllegalArgumentException("User not found or invalid credentials");
     }
 }

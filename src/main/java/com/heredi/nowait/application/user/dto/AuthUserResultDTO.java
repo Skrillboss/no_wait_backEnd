@@ -9,4 +9,5 @@ import lombok.NoArgsConstructor;
 public class AuthUserResultDTO {
     private UserDTO userDTO;
     private String token;
+    private String refreshToken;
 }

@@ -34,10 +34,11 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthUserResultDTO> loginUser(@RequestBody LoginDTO loginDTO){
-        Users loggedUser = userService.loginUser(loginDTO.getUserName(), loginDTO.getPassword());
+        Users loggedUser = userService.loginUser(loginDTO.getNickName(), loginDTO.getPassword());
         UserDTO userDTO = userMapper.toUserDTO(loggedUser);
         String token = userService.generateToken(loggedUser);
-        AuthUserResultDTO authUserResultDTO = new AuthUserResultDTO(userDTO, token);
+        String refreshToken = userService.generateRefreshToken(loginDTO.getNickName(), loginDTO.getPassword());
+        AuthUserResultDTO authUserResultDTO = new AuthUserResultDTO(userDTO, token, refreshToken);
         //TODO: cambiar el HttpStatus a un codigo que corresponda al autenticar un usuario
         return new ResponseEntity<AuthUserResultDTO>(authUserResultDTO, HttpStatus.FOUND);
     }

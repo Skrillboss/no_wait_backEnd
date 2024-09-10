@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "users")
@@ -17,6 +18,8 @@ public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Genera un valor único para el ID
     private Long id;
+
+    private String refreshToken;
 
     @Column(nullable = false)
     private String name;
