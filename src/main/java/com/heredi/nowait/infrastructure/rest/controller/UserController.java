@@ -1,8 +1,10 @@
 package com.heredi.nowait.infrastructure.rest.controller;
 
+import com.heredi.nowait.application.user.dto.AuthUserResultDTO;
+import com.heredi.nowait.application.user.dto.LoginDTO;
 import com.heredi.nowait.application.user.dto.UserDTO;
 import com.heredi.nowait.application.user.mapper.UserMapper;
-import com.heredi.nowait.application.user.service.UserService;
+import com.heredi.nowait.application.user.service.interfaces.UserService;
 import com.heredi.nowait.domain.model.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,8 +15,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/users")
 public class UserController {
 
-    private UserService userService;
-    private UserMapper userMapper;
+    private final UserService userService;
+    private final UserMapper userMapper;
 
     @Autowired
     UserController(UserService userService, UserMapper userMapper){
@@ -28,6 +30,16 @@ public class UserController {
         Users createdUser = userService.createUser(user);
         UserDTO userDTO = userMapper.toUserDTO(createdUser);
         return new ResponseEntity<UserDTO>(userDTO, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<AuthUserResultDTO> loginUser(@RequestBody LoginDTO loginDTO){
+        Users loggedUser = userService.loginUser(loginDTO.getUserName(), loginDTO.getPassword());
+        UserDTO userDTO = userMapper.toUserDTO(loggedUser);
+        String token = userService.generateToken(loggedUser);
+        AuthUserResultDTO authUserResultDTO = new AuthUserResultDTO(userDTO, token);
+        //TODO: cambiar el HttpStatus a un codigo que corresponda al autenticar un usuario
+        return new ResponseEntity<AuthUserResultDTO>(authUserResultDTO, HttpStatus.FOUND);
     }
 
 }

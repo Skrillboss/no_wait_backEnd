@@ -8,4 +8,7 @@ public interface UserRepository {
 
     // Obtener un usuario por email/nickname y password para login
     Users getUser(String identifier, String password);
+
+    // Obtener un token por nickname
+    String getToken(Users user);
 }
