@@ -34,13 +34,16 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthUserResultDTO> loginUser(@RequestBody LoginDTO loginDTO){
-        Users loggedUser = userService.loginUser(loginDTO.getNickName(), loginDTO.getPassword());
-        UserDTO userDTO = userMapper.toUserDTO(loggedUser);
-        String token = userService.generateToken(loggedUser);
-        String refreshToken = userService.generateRefreshToken(loginDTO.getNickName(), loginDTO.getPassword());
-        AuthUserResultDTO authUserResultDTO = new AuthUserResultDTO(userDTO, token, refreshToken);
-        //TODO: cambiar el HttpStatus a un codigo que corresponda al autenticar un usuario
-        return new ResponseEntity<AuthUserResultDTO>(authUserResultDTO, HttpStatus.FOUND);
+        try{
+            Users loggedUser = userService.loginUser(loginDTO.getNickName(), loginDTO.getPassword());
+            UserDTO userDTO = userMapper.toUserDTO(loggedUser);
+            String token = userService.generateToken(loggedUser);
+            String refreshToken = userService.generateRefreshToken(loginDTO.getNickName(), loginDTO.getPassword());
+            AuthUserResultDTO authUserResultDTO = new AuthUserResultDTO(userDTO, token, refreshToken);
+            return new ResponseEntity<AuthUserResultDTO>(authUserResultDTO, HttpStatus.FOUND);
+        }catch (Exception e){
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+        }
     }
 
 }

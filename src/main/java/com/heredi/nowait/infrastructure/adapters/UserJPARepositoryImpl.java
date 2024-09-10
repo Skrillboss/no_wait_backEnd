@@ -45,12 +45,9 @@ public class UserJPARepositoryImpl  implements UserRepository {
     @Override
     public String getRefreshToken(String nickName, String password) {
         UserEntity userEntity = userJPARepository.findByNickNameAndPassword(nickName, password);
-        if(userEntity != null){
             String refreshToken = jwtProvider.generateRefreshToken();
             userEntity.setRefreshToken(refreshToken);
             userJPARepository.save(userEntity);
             return refreshToken;
-        }
-        throw new IllegalArgumentException("User not found or invalid credentials");
     }
 }
