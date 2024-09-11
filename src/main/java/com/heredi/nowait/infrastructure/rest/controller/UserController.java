@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/users")
@@ -34,16 +35,19 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthUserResultDTO> loginUser(@RequestBody LoginDTO loginDTO){
-        try{
+        try {
             Users loggedUser = userService.loginUser(loginDTO.getNickName(), loginDTO.getPassword());
             UserDTO userDTO = userMapper.toUserDTO(loggedUser);
             String token = userService.generateToken(loggedUser);
             String refreshToken = userService.generateRefreshToken(loginDTO.getNickName(), loginDTO.getPassword());
             AuthUserResultDTO authUserResultDTO = new AuthUserResultDTO(userDTO, token, refreshToken);
-            return new ResponseEntity<AuthUserResultDTO>(authUserResultDTO, HttpStatus.FOUND);
-        }catch (Exception e){
+            return new ResponseEntity<>(authUserResultDTO, HttpStatus.FOUND);
+        } catch (NoSuchElementException e) {
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
 }
