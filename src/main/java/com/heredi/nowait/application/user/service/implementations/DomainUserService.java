@@ -22,8 +22,8 @@ public class DomainUserService implements UserService {
     }
 
     @Override
-    public UserDTO createUser(Users user) {
-        Users createdUser = this.userRepository.createUser(user);
+    public UserDTO createUser(UserDTO userDTO) {
+        Users createdUser = this.userRepository.createUser(userMapper.toUser(userDTO));
         return userMapper.toUserDTO(createdUser);
     }
 

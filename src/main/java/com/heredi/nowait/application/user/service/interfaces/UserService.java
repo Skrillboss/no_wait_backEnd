@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public interface UserService {
 
-    UserDTO createUser(Users user);
+    UserDTO createUser(UserDTO userDTO);
     AuthUserResultDTO loginUser(String nickName, String password);
     String generateToken(UserDTO user);
     String generateRefreshToken(String userId, String password);
