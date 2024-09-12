@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Table(name = "business")
 @Data // Genera automáticamente getters, setters, toString, equals, y hashCode
@@ -36,4 +38,8 @@ public class BusinessEntity {
 
     @Column(nullable = false)
     private String createdAt;
+
+    @OneToMany
+    @JoinColumn(name = "business_item_id")
+    private List<ItemEntity> items;
 }
