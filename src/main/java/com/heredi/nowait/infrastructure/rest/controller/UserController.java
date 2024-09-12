@@ -41,7 +41,7 @@ public class UserController {
             String token = userService.generateToken(loggedUser);
             String refreshToken = userService.generateRefreshToken(loginDTO.getNickName(), loginDTO.getPassword());
             AuthUserResultDTO authUserResultDTO = new AuthUserResultDTO(userDTO, token, refreshToken);
-            return new ResponseEntity<>(authUserResultDTO, HttpStatus.FOUND);
+            return new ResponseEntity<>(authUserResultDTO, HttpStatus.OK);
         } catch (NoSuchElementException e) {
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         } catch (Exception e) {
