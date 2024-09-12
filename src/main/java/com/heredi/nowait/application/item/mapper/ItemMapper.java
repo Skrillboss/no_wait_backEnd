@@ -7,10 +7,15 @@ import com.heredi.nowait.domain.model.Item.ItemStatus;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
-import java.util.stream.Collectors;
 
 @Component
 public class ItemMapper {
+
+    private final ShiftMapper shiftMapper;
+
+    public ItemMapper(ShiftMapper shiftMapper){
+        this.shiftMapper = shiftMapper;
+    }
 
     // Convierte de Item a ItemDTO
     public ItemDTO toItemDTO(Item item) {
@@ -31,9 +36,7 @@ public class ItemMapper {
         dto.setCurrentWaitingDuration((double) item.getCurrentWaitingDuration().toMinutes());
         dto.setDurationPerShifts((double) item.getDurationPerShifts().toMinutes());
         dto.setStatus(item.getStatus().name());
-        dto.setShifts(item.getShifts().stream()
-                .map(shift -> new ShiftMapper().toShiftDTO(shift))
-                .collect(Collectors.toList()));
+        dto.setShifts(shiftMapper.toShiftsDTO(item.getShifts()));
 
         return dto;
     }
@@ -57,9 +60,7 @@ public class ItemMapper {
         item.setCurrentWaitingDuration(Duration.ofMinutes(dto.getCurrentWaitingDuration().longValue()));
         item.setDurationPerShifts(Duration.ofMinutes(dto.getDurationPerShifts().longValue()));
         item.setStatus(ItemStatus.valueOf(dto.getStatus()));
-        item.setShifts(dto.getShifts().stream()
-                .map(shiftDTO -> new ShiftMapper().toShift(shiftDTO))
-                .collect(Collectors.toList()));
+        item.setShifts(shiftMapper.toShifts(dto.getShifts()));
 
         return item;
     }

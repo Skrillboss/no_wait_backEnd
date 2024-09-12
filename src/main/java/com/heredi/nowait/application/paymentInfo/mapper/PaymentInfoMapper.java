@@ -25,7 +25,7 @@ public class PaymentInfoMapper {
         return dto;
     }
 
-    public List<PaymentInfoDTO> toPaymentInfoDTOs(List<PaymentInfo> paymentInfos) {
+    public List<PaymentInfoDTO> toPaymentInfosDTO(List<PaymentInfo> paymentInfos) {
         if (paymentInfos == null) {
             return null;
         }

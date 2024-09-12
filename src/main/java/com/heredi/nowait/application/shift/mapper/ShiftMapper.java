@@ -6,10 +6,12 @@ import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class ShiftMapper {
-    public ShiftDTO toShiftDTO(Shift shift){
+    private ShiftDTO toShiftDTO(Shift shift){
         if(shift == null){
             return null;
         }
@@ -30,7 +32,17 @@ public class ShiftMapper {
         return dto;
     }
 
-    public Shift toShift(ShiftDTO dto) {
+    public List<ShiftDTO> toShiftsDTO(List<Shift> shifts){
+        if(shifts == null){
+            return null;
+        }
+
+        return shifts.stream()
+                .map(this::toShiftDTO)
+                .collect(Collectors.toList());
+    }
+
+    private Shift toShift(ShiftDTO dto) {
         if (dto == null) {
             return null;
         }
@@ -52,4 +64,13 @@ public class ShiftMapper {
         return shift;
     }
 
+    public List<Shift> toShifts(List<ShiftDTO> shiftsDTO){
+        if(shiftsDTO == null){
+            return null;
+        }
+
+        return shiftsDTO.stream()
+                .map(this::toShift)
+                .collect(Collectors.toList());
+    }
 }

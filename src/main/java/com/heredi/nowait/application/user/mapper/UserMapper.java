@@ -2,6 +2,7 @@ package com.heredi.nowait.application.user.mapper;
 
 import com.heredi.nowait.application.business.mapper.BusinessMapper;
 import com.heredi.nowait.application.paymentInfo.mapper.PaymentInfoMapper;
+import com.heredi.nowait.application.shift.mapper.ShiftMapper;
 import com.heredi.nowait.application.user.dto.UserDTO;
 import com.heredi.nowait.domain.model.Users;
 import org.springframework.stereotype.Component;
@@ -11,10 +12,12 @@ public class UserMapper {
 
     private final PaymentInfoMapper paymentInfoMapper;
     private final BusinessMapper businessMapper;
+    private final ShiftMapper shiftMapper;
 
-    public UserMapper(PaymentInfoMapper paymentInfoMapper, BusinessMapper businessMapper) {
+    public UserMapper(PaymentInfoMapper paymentInfoMapper, BusinessMapper businessMapper, ShiftMapper shiftMapper) {
         this.paymentInfoMapper = paymentInfoMapper;
         this.businessMapper = businessMapper;
+        this.shiftMapper = shiftMapper;
     }
 
     public UserDTO toUserDTO(Users user) {
@@ -28,7 +31,7 @@ public class UserMapper {
         dto.setNickName(user.getNickName());
         dto.setEmail(user.getEmail());
         dto.setPhoneNumber(user.getPhoneNumber());
-        dto.setPaymentInfos(paymentInfoMapper.toPaymentInfoDTOs(user.getPaymentInfos()));
+        dto.setPaymentInfos(paymentInfoMapper.toPaymentInfosDTO(user.getPaymentInfos()));
         dto.setBusiness(businessMapper.toBusinessDTO(user.getBusiness()));
 
         return dto;
@@ -44,11 +47,11 @@ public class UserMapper {
         user.setName(userDTO.getName());
         user.setNickName(userDTO.getNickName());
         user.setEmail(userDTO.getEmail());
-        user.setPassword(null); // No hay contraseña en DTO, manejar esto según necesidades
+        user.setPassword(null);
         user.setPhoneNumber(userDTO.getPhoneNumber());
         user.setPaymentInfos(paymentInfoMapper.toPaymentInfos(userDTO.getPaymentInfos()));
         user.setBusiness(businessMapper.toBusiness(userDTO.getBusiness()));
-        user.setShifts(null); // Asignar shifts si es necesario
+        user.setShifts(shiftMapper.toShifts(userDTO.getShifts()));
 
         return user;
     }
