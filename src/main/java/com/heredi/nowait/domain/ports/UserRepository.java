@@ -7,5 +7,11 @@ public interface UserRepository {
     Users createUser(Users user);
 
     // Obtener un usuario por email/nickname y password para login
-    Users getUser(String identifier, String password);
+    Users getUser(String nickName, String password);
+
+    // Obtener un token por nickname
+    String getToken(Users user);
+
+    // Obtener un refreshToken
+    String getRefreshToken(String nickName, String password);
 }

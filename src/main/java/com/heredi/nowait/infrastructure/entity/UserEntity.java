@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "users")
@@ -17,6 +18,8 @@ public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Genera un valor único para el ID
     private Long id;
+
+    private String refreshToken;
 
     @Column(nullable = false)
     private String name;
@@ -34,10 +37,14 @@ public class UserEntity {
     private String phoneNumber;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_payment_info_id")
     private List<PaymentInfoEntity> paymentInfos;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_business_id")
     private BusinessEntity business;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_shifts_id")
+    private List<ShiftEntity> shifts;
 }

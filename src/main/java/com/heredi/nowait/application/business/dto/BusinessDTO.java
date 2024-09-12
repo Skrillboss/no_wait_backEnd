@@ -12,5 +12,4 @@ public class BusinessDTO {
     private String address;
     private String email;
     private String createdAt;
-
 }
