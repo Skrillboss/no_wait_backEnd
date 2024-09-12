@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 
 import java.util.List;
 
-@Entity
 @Data // Genera getters, setters, toString, equals, y hashCode automáticamente
 @NoArgsConstructor // Constructor sin argumentos
 @AllArgsConstructor // Constructor con todos los atributos
@@ -32,11 +31,9 @@ public class Users {
     @Column(nullable = false)
     private String phoneNumber;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
     private List<PaymentInfo> paymentInfos;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
     private Business business;
+
+    private List<Shift> shifts;
 }

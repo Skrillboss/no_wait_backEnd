@@ -37,10 +37,14 @@ public class UserEntity {
     private String phoneNumber;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_payment_info_id")
     private List<PaymentInfoEntity> paymentInfos;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_business_id")
     private BusinessEntity business;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_shifts_id")
+    private List<ShiftEntity> shifts;
 }
