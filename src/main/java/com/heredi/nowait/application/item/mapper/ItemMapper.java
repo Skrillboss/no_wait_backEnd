@@ -7,6 +7,8 @@ import com.heredi.nowait.domain.model.Item.ItemStatus;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class ItemMapper {
@@ -18,7 +20,7 @@ public class ItemMapper {
     }
 
     // Convierte de Item a ItemDTO
-    public ItemDTO toItemDTO(Item item) {
+    private ItemDTO toItemDTO(Item item) {
         if (item == null) {
             return null;
         }
@@ -41,8 +43,18 @@ public class ItemMapper {
         return dto;
     }
 
+    public List<ItemDTO> toItemsDTO(List<Item> items){
+        if(items == null){
+            return null;
+        }
+
+        return items.stream()
+                .map(this::toItemDTO)
+                .collect(Collectors.toList());
+    }
+
     // Convierte de ItemDTO a Item
-    public Item toItem(ItemDTO dto) {
+    private Item toItem(ItemDTO dto) {
         if (dto == null) {
             return null;
         }
@@ -63,5 +75,15 @@ public class ItemMapper {
         item.setShifts(shiftMapper.toShifts(dto.getShifts()));
 
         return item;
+    }
+
+    public List<Item> toItems(List<ItemDTO> itemsDTO){
+        if(itemsDTO ==  null){
+            return null;
+        }
+
+        return itemsDTO.stream()
+                .map(this::toItem)
+                .collect(Collectors.toList());
     }
 }
