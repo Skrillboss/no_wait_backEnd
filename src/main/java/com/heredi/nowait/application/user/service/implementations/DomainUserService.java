@@ -1,5 +1,6 @@
 package com.heredi.nowait.application.user.service.implementations;
 
+import com.heredi.nowait.application.user.dto.AuthUserResultDTO;
 import com.heredi.nowait.application.user.dto.UserDTO;
 import com.heredi.nowait.application.user.mapper.UserMapper;
 import com.heredi.nowait.application.user.service.interfaces.UserService;
@@ -27,9 +28,12 @@ public class DomainUserService implements UserService {
     }
 
     @Override
-    public UserDTO loginUser(String nickName, String password) {
+    public AuthUserResultDTO loginUser(String nickName, String password) {
         Users obtainedUser = this.userRepository.getUser(nickName, password);
-        return userMapper.toUserDTO(obtainedUser);
+        UserDTO userDTO = userMapper.toUserDTO(obtainedUser);
+        String accessToken = userRepository.getToken(obtainedUser);
+        String refreshToken = userRepository.getRefreshToken(obtainedUser.getNickName(), obtainedUser.getPassword());
+        return new AuthUserResultDTO(userDTO, accessToken,refreshToken);
     }
 
     @Override

@@ -33,10 +33,7 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<AuthUserResultDTO> loginUser(@RequestBody LoginDTO loginDTO) {
         try {
-            UserDTO loggedUser = userService.loginUser(loginDTO.getNickName(), loginDTO.getPassword());
-            String token = userService.generateToken(loggedUser);
-            String refreshToken = userService.generateRefreshToken(loginDTO.getNickName(), loginDTO.getPassword());
-            AuthUserResultDTO authUserResultDTO = new AuthUserResultDTO(loggedUser, token, refreshToken);
+            AuthUserResultDTO authUserResultDTO = userService.loginUser(loginDTO.getNickName(), loginDTO.getPassword());
             return new ResponseEntity<>(authUserResultDTO, HttpStatus.OK);
         } catch (NoSuchElementException e) {
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
