@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.NoSuchElementException;
 
 @RestController
@@ -17,30 +18,25 @@ import java.util.NoSuchElementException;
 public class UserController {
 
     private final UserService userService;
-    private final UserMapper userMapper;
 
     @Autowired
-    UserController(UserService userService, UserMapper userMapper){
+    UserController(UserService userService, UserMapper userMapper) {
         this.userService = userService;
-        this.userMapper = userMapper;
     }
 
     // Crear un nuevo usuario
     @PostMapping("/register")
     public ResponseEntity<UserDTO> createUser(@RequestBody Users user) {
-        Users createdUser = userService.createUser(user);
-        UserDTO userDTO = userMapper.toUserDTO(createdUser);
-        return new ResponseEntity<UserDTO>(userDTO, HttpStatus.CREATED);
+        return new ResponseEntity<UserDTO>(userService.createUser(user), HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthUserResultDTO> loginUser(@RequestBody LoginDTO loginDTO){
+    public ResponseEntity<AuthUserResultDTO> loginUser(@RequestBody LoginDTO loginDTO) {
         try {
-            Users loggedUser = userService.loginUser(loginDTO.getNickName(), loginDTO.getPassword());
-            UserDTO userDTO = userMapper.toUserDTO(loggedUser);
+            UserDTO loggedUser = userService.loginUser(loginDTO.getNickName(), loginDTO.getPassword());
             String token = userService.generateToken(loggedUser);
             String refreshToken = userService.generateRefreshToken(loginDTO.getNickName(), loginDTO.getPassword());
-            AuthUserResultDTO authUserResultDTO = new AuthUserResultDTO(userDTO, token, refreshToken);
+            AuthUserResultDTO authUserResultDTO = new AuthUserResultDTO(loggedUser, token, refreshToken);
             return new ResponseEntity<>(authUserResultDTO, HttpStatus.OK);
         } catch (NoSuchElementException e) {
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);

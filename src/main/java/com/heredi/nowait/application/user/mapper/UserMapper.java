@@ -33,4 +33,23 @@ public class UserMapper {
 
         return dto;
     }
+
+    public Users toUser(UserDTO userDTO) {
+        if (userDTO == null) {
+            return null;
+        }
+
+        Users user = new Users();
+        user.setId(Long.valueOf(userDTO.getId()));
+        user.setName(userDTO.getName());
+        user.setNickName(userDTO.getNickName());
+        user.setEmail(userDTO.getEmail());
+        user.setPassword(null); // No hay contraseña en DTO, manejar esto según necesidades
+        user.setPhoneNumber(userDTO.getPhoneNumber());
+        user.setPaymentInfos(paymentInfoMapper.toPaymentInfos(userDTO.getPaymentInfos()));
+        user.setBusiness(businessMapper.toBusiness(userDTO.getBusiness()));
+        user.setShifts(null); // Asignar shifts si es necesario
+
+        return user;
+    }
 }

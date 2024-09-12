@@ -20,4 +20,23 @@ public class BusinessMapper {
 
         return dto;
     }
+
+    public Business toBusiness(BusinessDTO businessDTO) {
+        if (businessDTO == null) {
+            return null;
+        }
+
+        Business business = new Business();
+        business.setId(Long.valueOf(businessDTO.getId()));
+        business.setCif(businessDTO.getCif());
+        business.setName(businessDTO.getName());
+        business.setImageUrl(businessDTO.getImageUrl());
+        business.setPhone(businessDTO.getPhone());
+        business.setAddress(businessDTO.getAddress());
+        business.setEmail(businessDTO.getEmail());
+        business.setCreatedAt(businessDTO.getCreatedAt());
+
+        return business;
+    }
+
 }
