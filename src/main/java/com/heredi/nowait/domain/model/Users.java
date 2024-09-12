@@ -1,6 +1,5 @@
 package com.heredi.nowait.domain.model;
 
-import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -12,23 +11,16 @@ import java.util.List;
 @AllArgsConstructor // Constructor con todos los atributos
 public class Users {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Genera un valor único para el ID
     private Long id;
 
-    @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
     private String nickName;
 
-    @Column(nullable = false)
     private String email;
 
-    @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
     private String phoneNumber;
 
     private List<PaymentInfo> paymentInfos;
