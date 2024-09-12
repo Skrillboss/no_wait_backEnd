@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class ShiftDTO {
 
-    private String shiftId; // Identificador del turno
+    private String id; // Identificador del turno
     private String itemName; // Nombre del producto o servicio
     private String businessName; // Nombre del negocio
     private String shiftTime; // Tiempo aproximado del turno
