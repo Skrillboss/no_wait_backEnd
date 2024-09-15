@@ -1,6 +1,7 @@
 package com.heredi.nowait.application.paymentInfo.mapper;
 
-import com.heredi.nowait.application.paymentInfo.dto.PaymentInfoDTO;
+import com.heredi.nowait.application.paymentInfo.dto.in.PaymentInfoRequestDTO;
+import com.heredi.nowait.application.paymentInfo.dto.out.PaymentInfoResponseDTO;
 import com.heredi.nowait.domain.model.PaymentInfo;
 import org.springframework.stereotype.Component;
 
@@ -11,12 +12,12 @@ import java.util.stream.Collectors;
 @Component
 public class PaymentInfoMapper {
 
-    private PaymentInfoDTO toPaymentInfoDTO(PaymentInfo paymentInfo) {
+    private PaymentInfoResponseDTO toPaymentInfoResponseDTO(PaymentInfo paymentInfo) {
         if (paymentInfo == null) {
             return null;
         }
 
-        PaymentInfoDTO dto = new PaymentInfoDTO();
+        PaymentInfoResponseDTO dto = new PaymentInfoResponseDTO();
         dto.setId(paymentInfo.getId().toString());
         dto.setCardNumber(paymentInfo.getCardNumber());
         dto.setExpiryDate(paymentInfo.getExpiryDate().toString());
@@ -25,36 +26,37 @@ public class PaymentInfoMapper {
         return dto;
     }
 
-    public List<PaymentInfoDTO> toPaymentInfosDTO(List<PaymentInfo> paymentInfos) {
+    public List<PaymentInfoResponseDTO> toPaymentInfosDTO(List<PaymentInfo> paymentInfos) {
         if (paymentInfos == null) {
             return null;
         }
 
         return paymentInfos.stream()
-                .map(this::toPaymentInfoDTO)
+                .map(this::toPaymentInfoResponseDTO)
                 .collect(Collectors.toList());
     }
 
-    private PaymentInfo toPaymentInfo(PaymentInfoDTO paymentInfoDTO) {
+    private PaymentInfo toPaymentInfo(PaymentInfoRequestDTO paymentInfoDTO) {
         if (paymentInfoDTO == null) {
             return null;
         }
 
         PaymentInfo paymentInfo = new PaymentInfo();
-        paymentInfo.setId(Long.valueOf(paymentInfoDTO.getId()));
         paymentInfo.setCardNumber(paymentInfoDTO.getCardNumber());
         paymentInfo.setCardHolderName(paymentInfoDTO.getCardHolderName());
+        paymentInfo.setCardType(paymentInfoDTO.getCardType());
         paymentInfo.setExpiryDate(LocalDate.parse(paymentInfoDTO.getExpiryDate()));
+        paymentInfo.setCvv(paymentInfoDTO.getCvv());
 
         return paymentInfo;
     }
 
-    public List<PaymentInfo> toPaymentInfos(List<PaymentInfoDTO> paymentInfoDTOs) {
-        if (paymentInfoDTOs == null) {
+    public List<PaymentInfo> toPaymentInfos(List<PaymentInfoRequestDTO> paymentInfoRequestDTOs) {
+        if (paymentInfoRequestDTOs == null) {
             return null;
         }
 
-        return paymentInfoDTOs.stream()
+        return paymentInfoRequestDTOs.stream()
                 .map(this::toPaymentInfo)
                 .collect(Collectors.toList());
     }

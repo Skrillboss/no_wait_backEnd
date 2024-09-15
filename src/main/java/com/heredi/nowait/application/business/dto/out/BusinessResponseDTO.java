@@ -1,11 +1,11 @@
-package com.heredi.nowait.application.business.dto;
-import com.heredi.nowait.application.item.dto.ItemDTO;
+package com.heredi.nowait.application.business.dto.out;
+import com.heredi.nowait.application.item.dto.out.ItemResponseDTO;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class BusinessDTO {
+public class BusinessResponseDTO {
 
     private String id;
     private String cif;
@@ -15,5 +15,5 @@ public class BusinessDTO {
     private String address;
     private String email;
     private String createdAt;
-    private List<ItemDTO> items;
+    private List<ItemResponseDTO> items;
 }

@@ -13,11 +13,11 @@ import java.util.UUID;
 public class JwtProvider {
 
     private final SecretKey key;
-    private final SignatureAlgorithm algorithm = SignatureAlgorithm.HS512; // Puedes cambiar a HS256 o HS384 si lo prefieres
+    private final SignatureAlgorithm algorithm = SignatureAlgorithm.HS512;
 
     // Constructor para generar la clave secreta
     public JwtProvider() {
-        this.key = Keys.secretKeyFor(algorithm); // Genera una clave segura para el algoritmo HMAC seleccionado
+        this.key = Keys.secretKeyFor(algorithm);
     }
 
     // Método para generar un token JWT

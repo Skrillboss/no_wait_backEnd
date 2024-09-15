@@ -1,9 +1,9 @@
-package com.heredi.nowait.application.paymentInfo.dto;
+package com.heredi.nowait.application.paymentInfo.dto.out;
 
 import lombok.Data;
 
 @Data
-public class PaymentInfoDTO {
+public class PaymentInfoResponseDTO {
 
     private String id;
     private String cardNumber;

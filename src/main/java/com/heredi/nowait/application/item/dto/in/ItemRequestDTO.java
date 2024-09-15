@@ -1,14 +1,13 @@
-package com.heredi.nowait.application.item.dto;
+package com.heredi.nowait.application.item.dto.in;
 
-import com.heredi.nowait.application.shift.dto.ShiftDTO;
+import com.heredi.nowait.application.shift.dto.in.ShiftRequestDTO;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class ItemDTO {
+public class ItemRequestDTO {
 
-    private String id;
     private String name;
     private String description;
     private int numberPeopleWaiting;
@@ -20,5 +19,5 @@ public class ItemDTO {
     private Double currentWaitingDuration; // En minutos
     private Double durationPerShifts; // En minutos
     private String status; // Representa el ItemStatus como String
-    private List<ShiftDTO> shifts;
+    private List<ShiftRequestDTO> shifts;
 }

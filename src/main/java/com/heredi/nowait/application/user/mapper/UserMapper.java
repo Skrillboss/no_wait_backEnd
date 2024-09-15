@@ -3,7 +3,8 @@ package com.heredi.nowait.application.user.mapper;
 import com.heredi.nowait.application.business.mapper.BusinessMapper;
 import com.heredi.nowait.application.paymentInfo.mapper.PaymentInfoMapper;
 import com.heredi.nowait.application.shift.mapper.ShiftMapper;
-import com.heredi.nowait.application.user.dto.UserDTO;
+import com.heredi.nowait.application.user.dto.in.CreateUserRequestDTO;
+import com.heredi.nowait.application.user.dto.out.CreateUserResponseDTO;
 import com.heredi.nowait.domain.model.Users;
 import org.springframework.stereotype.Component;
 
@@ -20,12 +21,12 @@ public class UserMapper {
         this.shiftMapper = shiftMapper;
     }
 
-    public UserDTO toUserDTO(Users user) {
+    public CreateUserResponseDTO toCreateUserResponseDTO(Users user) {
         if (user == null) {
             return null;
         }
 
-        UserDTO dto = new UserDTO();
+        CreateUserResponseDTO dto = new CreateUserResponseDTO();
         dto.setId(user.getId().toString());
         dto.setName(user.getName());
         dto.setNickName(user.getNickName());
@@ -37,21 +38,20 @@ public class UserMapper {
         return dto;
     }
 
-    public Users toUser(UserDTO userDTO) {
-        if (userDTO == null) {
+    public Users toUser(CreateUserRequestDTO createUserRequestDTO) {
+        if (createUserRequestDTO == null) {
             return null;
         }
 
         Users user = new Users();
-        user.setId(Long.valueOf(userDTO.getId()));
-        user.setName(userDTO.getName());
-        user.setNickName(userDTO.getNickName());
-        user.setEmail(userDTO.getEmail());
-        user.setPassword(null);
-        user.setPhoneNumber(userDTO.getPhoneNumber());
-        user.setPaymentInfos(paymentInfoMapper.toPaymentInfos(userDTO.getPaymentInfos()));
-        user.setBusiness(businessMapper.toBusiness(userDTO.getBusiness()));
-        user.setShifts(shiftMapper.toShifts(userDTO.getShifts()));
+        user.setName(createUserRequestDTO.getName());
+        user.setNickName(createUserRequestDTO.getNickName());
+        user.setEmail(createUserRequestDTO.getEmail());
+        user.setPassword(createUserRequestDTO.getPassword());
+        user.setPhoneNumber(createUserRequestDTO.getPhoneNumber());
+        user.setPaymentInfos(paymentInfoMapper.toPaymentInfos(createUserRequestDTO.getPaymentInfos()));
+        user.setBusiness(businessMapper.toBusiness(createUserRequestDTO.getBusiness()));
+        user.setShifts(shiftMapper.toShifts(createUserRequestDTO.getShifts()));
 
         return user;
     }

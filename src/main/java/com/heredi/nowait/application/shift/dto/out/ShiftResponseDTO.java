@@ -1,9 +1,9 @@
-package com.heredi.nowait.application.shift.dto;
+package com.heredi.nowait.application.shift.dto.out;
 
 import lombok.Data;
 
 @Data
-public class ShiftDTO {
+public class ShiftResponseDTO {
 
     private String id; // Identificador del turno
     private String itemName; // Nombre del producto o servicio
