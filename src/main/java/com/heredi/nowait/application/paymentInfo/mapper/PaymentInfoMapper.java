@@ -26,7 +26,7 @@ public class PaymentInfoMapper {
         return dto;
     }
 
-    public List<PaymentInfoResponseDTO> toPaymentInfosDTO(List<PaymentInfo> paymentInfos) {
+    public List<PaymentInfoResponseDTO> toPaymentInfoListResponseDTO(List<PaymentInfo> paymentInfos) {
         if (paymentInfos == null) {
             return null;
         }
@@ -51,12 +51,12 @@ public class PaymentInfoMapper {
         return paymentInfo;
     }
 
-    public List<PaymentInfo> toPaymentInfos(List<PaymentInfoRequestDTO> paymentInfoRequestDTOs) {
-        if (paymentInfoRequestDTOs == null) {
+    public List<PaymentInfo> toPaymentInfoList(List<PaymentInfoRequestDTO> paymentInfoRequestDTOList) {
+        if (paymentInfoRequestDTOList == null) {
             return null;
         }
 
-        return paymentInfoRequestDTOs.stream()
+        return paymentInfoRequestDTOList.stream()
                 .map(this::toPaymentInfo)
                 .collect(Collectors.toList());
     }

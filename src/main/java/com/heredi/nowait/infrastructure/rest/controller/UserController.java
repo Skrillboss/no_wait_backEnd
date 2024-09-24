@@ -4,7 +4,6 @@ import com.heredi.nowait.application.user.dto.in.CreateUserRequestDTO;
 import com.heredi.nowait.application.user.dto.out.LoginUserResponseDTO;
 import com.heredi.nowait.application.user.dto.in.LoginUserRequestDTO;
 import com.heredi.nowait.application.user.dto.out.CreateUserResponseDTO;
-import com.heredi.nowait.application.user.mapper.UserMapper;
 import com.heredi.nowait.application.user.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,13 +13,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.NoSuchElementException;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api")
 public class UserController {
 
     private final UserService userService;
 
     @Autowired
-    UserController(UserService userService, UserMapper userMapper) {
+    UserController(UserService userService) {
         this.userService = userService;
     }
 
@@ -41,6 +40,4 @@ public class UserController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-
 }

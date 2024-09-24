@@ -56,10 +56,10 @@ public class ItemEntity {
     private List<ShiftEntity> shifts;
 
     public enum ItemStatus {
-        active,
-        inactive,
-        suspended,
-        noStock,
-        unhandledError
+        ACTIVE,
+        INACTIVE,
+        SUSPENDED,
+        NO_STOCK,
+        UNHANDLED_ERROR
     }
 }

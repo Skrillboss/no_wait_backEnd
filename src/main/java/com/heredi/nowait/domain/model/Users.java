@@ -23,7 +23,9 @@ public class Users {
 
     private String phoneNumber;
 
-    private List<PaymentInfo> paymentInfos;
+    private List<Role> roleList;
+
+    private List<PaymentInfo> paymentInfoList;
 
     private Business business;
 

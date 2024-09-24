@@ -15,7 +15,8 @@ public interface UserMapper {
             @Mapping(source = "email", target = "email"),
             @Mapping(source = "password", target = "password"),
             @Mapping(source = "phoneNumber", target = "phoneNumber"),
-            @Mapping(source = "paymentInfos", target = "paymentInfos"),
+            @Mapping(source = "roleEntityList", target = "roleList"),
+            @Mapping(source = "paymentInfoEntityList", target = "paymentInfoList"),
             @Mapping(source = "business", target = "business")
     })
     Users toUser(UserEntity userEntity);
