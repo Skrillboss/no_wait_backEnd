@@ -71,7 +71,6 @@ public class UserJPARepositoryImpl implements UserRepository {
         UserEntity userEntity = userJPARepository.findByNickName(nickName).
                 filter(user -> user.getPassword().equals(password)).
                 orElseThrow(() -> new NoSuchElementException("User not found"));
-        //TODO: aqui no tengo que guardar el token completo, sino el claim del token
         String refreshToken;
         try{
             refreshToken = jwtProvider.generateRefreshToken();
