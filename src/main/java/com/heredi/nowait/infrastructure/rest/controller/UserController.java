@@ -40,4 +40,9 @@ public class UserController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PostMapping("/saludo")
+    public String saludo(@RequestBody LoginUserRequestDTO loginDTO){
+        return "Hola como estas" + loginDTO.getNickName();
+    }
 }

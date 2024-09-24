@@ -54,7 +54,7 @@ public class JwtProvider {
         return (extractedUsername.equals(username) && !isTokenExpired(token));
     }
 
-    private String extractUsername(String token) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public String extractUsername(String token) throws NoSuchAlgorithmException, InvalidKeySpecException {
         return extractAllClaims(token).get("userName", String.class);
     }
 
