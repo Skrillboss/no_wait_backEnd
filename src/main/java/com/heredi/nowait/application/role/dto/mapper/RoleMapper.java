@@ -1,6 +1,6 @@
 package com.heredi.nowait.application.role.dto.mapper;
 
-import com.heredi.nowait.application.role.dto.in.RoleRequestDTO;
+import com.heredi.nowait.application.role.dto.RoleDTO;
 import com.heredi.nowait.domain.model.Role;
 import org.springframework.stereotype.Component;
 
@@ -10,7 +10,16 @@ import java.util.stream.Collectors;
 @Component
 public class RoleMapper {
 
-    private Role toRole(RoleRequestDTO roleRequestDTO){
+    private RoleDTO toRoleDTO(Role role){
+        if(role == null){
+            return null;
+        }
+        RoleDTO roleDTO = new RoleDTO();
+        roleDTO.setName(role.getName());
+        return roleDTO;
+    }
+
+    private Role toRole(RoleDTO roleRequestDTO){
         if(roleRequestDTO == null){
             return null;
         }
@@ -21,13 +30,23 @@ public class RoleMapper {
         return role;
     }
 
-    public List<Role> toRoleList(List<RoleRequestDTO> roleRequestDTOList){
+    public List<Role> toRoleList(List<RoleDTO> roleRequestDTOList){
         if(roleRequestDTOList == null){
             return null;
         }
 
         return roleRequestDTOList.stream()
                 .map(this::toRole)
+                .collect(Collectors.toList());
+    }
+
+    public List<RoleDTO> toRoleDTOList(List<Role> roleList){
+        if(roleList == null){
+            return null;
+        }
+
+        return roleList.stream()
+                .map(this::toRoleDTO)
                 .collect(Collectors.toList());
     }
 }
