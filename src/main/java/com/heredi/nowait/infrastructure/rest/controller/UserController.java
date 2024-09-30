@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.NoSuchElementException;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/user")
 public class UserController {
 
     private final UserService userService;
@@ -23,7 +23,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    // Crear un nuevo usuario
     @PostMapping("/register")
     public ResponseEntity<CreateUserResponseDTO> createUser(@RequestBody CreateUserRequestDTO createUserRequestDTO) {
         return new ResponseEntity<CreateUserResponseDTO>(userService.createUser(createUserRequestDTO), HttpStatus.CREATED);
