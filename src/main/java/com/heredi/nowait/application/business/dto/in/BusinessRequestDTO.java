@@ -15,6 +15,5 @@ public class BusinessRequestDTO {
     private String phone;
     private String address;
     private String email;
-    private String createdAt;
     private List<ItemRequestDTO> items;
 }

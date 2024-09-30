@@ -6,6 +6,8 @@ import com.heredi.nowait.application.item.mapper.ItemMapper;
 import com.heredi.nowait.domain.model.Business;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+
 @Component
 public class BusinessMapper {
 
@@ -46,7 +48,7 @@ public class BusinessMapper {
         business.setPhone(businessDTO.getPhone());
         business.setAddress(businessDTO.getAddress());
         business.setEmail(businessDTO.getEmail());
-        business.setCreatedAt(businessDTO.getCreatedAt());
+        business.setCreatedAt(LocalDate.now().toString());
         business.setItems(itemMapper.toItems(businessDTO.getItems()));
 
         return business;
