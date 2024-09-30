@@ -1,6 +1,7 @@
 package com.heredi.nowait.application.item.mapper;
 
-import com.heredi.nowait.application.item.dto.ItemDTO;
+import com.heredi.nowait.application.item.dto.in.ItemRequestDTO;
+import com.heredi.nowait.application.item.dto.out.ItemResponseDTO;
 import com.heredi.nowait.application.shift.mapper.ShiftMapper;
 import com.heredi.nowait.domain.model.Item;
 import com.heredi.nowait.domain.model.Item.ItemStatus;
@@ -20,12 +21,12 @@ public class ItemMapper {
     }
 
     // Convierte de Item a ItemDTO
-    private ItemDTO toItemDTO(Item item) {
+    private ItemResponseDTO toItemDTO(Item item) {
         if (item == null) {
             return null;
         }
 
-        ItemDTO dto = new ItemDTO();
+        ItemResponseDTO dto = new ItemResponseDTO();
         dto.setId(item.getId());
         dto.setName(item.getName());
         dto.setDescription(item.getDescription());
@@ -43,7 +44,7 @@ public class ItemMapper {
         return dto;
     }
 
-    public List<ItemDTO> toItemsDTO(List<Item> items){
+    public List<ItemResponseDTO> toItemsDTO(List<Item> items){
         if(items == null){
             return null;
         }
@@ -54,13 +55,12 @@ public class ItemMapper {
     }
 
     // Convierte de ItemDTO a Item
-    private Item toItem(ItemDTO dto) {
+    private Item toItem(ItemRequestDTO dto) {
         if (dto == null) {
             return null;
         }
 
         Item item = new Item();
-        item.setId(dto.getId());
         item.setName(dto.getName());
         item.setDescription(dto.getDescription());
         item.setNumberPeopleWaiting(dto.getNumberPeopleWaiting());
@@ -77,7 +77,7 @@ public class ItemMapper {
         return item;
     }
 
-    public List<Item> toItems(List<ItemDTO> itemsDTO){
+    public List<Item> toItems(List<ItemRequestDTO> itemsDTO){
         if(itemsDTO ==  null){
             return null;
         }

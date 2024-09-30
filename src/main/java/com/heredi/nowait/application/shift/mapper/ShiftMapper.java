@@ -1,6 +1,7 @@
 package com.heredi.nowait.application.shift.mapper;
 
-import com.heredi.nowait.application.shift.dto.ShiftDTO;
+import com.heredi.nowait.application.shift.dto.in.ShiftRequestDTO;
+import com.heredi.nowait.application.shift.dto.out.ShiftResponseDTO;
 import com.heredi.nowait.domain.model.Shift;
 import org.springframework.stereotype.Component;
 
@@ -11,11 +12,11 @@ import java.util.stream.Collectors;
 
 @Component
 public class ShiftMapper {
-    private ShiftDTO toShiftDTO(Shift shift){
+    private ShiftResponseDTO toShiftDTO(Shift shift){
         if(shift == null){
             return null;
         }
-        ShiftDTO dto = new ShiftDTO();
+        ShiftResponseDTO dto = new ShiftResponseDTO();
         dto.setId(shift.getId());
         dto.setItemName(shift.getItemName());
         dto.setBusinessName(shift.getBusinessName());
@@ -32,7 +33,7 @@ public class ShiftMapper {
         return dto;
     }
 
-    public List<ShiftDTO> toShiftsDTO(List<Shift> shifts){
+    public List<ShiftResponseDTO> toShiftsDTO(List<Shift> shifts){
         if(shifts == null){
             return null;
         }
@@ -42,13 +43,12 @@ public class ShiftMapper {
                 .collect(Collectors.toList());
     }
 
-    private Shift toShift(ShiftDTO dto) {
+    private Shift toShift(ShiftRequestDTO dto) {
         if (dto == null) {
             return null;
         }
 
         Shift shift = new Shift();
-        shift.setId(dto.getId());
         shift.setItemName(dto.getItemName());
         shift.setBusinessName(dto.getBusinessName());
         shift.setShiftTime(LocalDateTime.parse(dto.getShiftTime()));
@@ -64,7 +64,7 @@ public class ShiftMapper {
         return shift;
     }
 
-    public List<Shift> toShifts(List<ShiftDTO> shiftsDTO){
+    public List<Shift> toShifts(List<ShiftRequestDTO> shiftsDTO){
         if(shiftsDTO == null){
             return null;
         }

@@ -1,11 +1,10 @@
 package com.heredi.nowait.infrastructure.rest.controller;
 
-import com.heredi.nowait.application.user.dto.AuthUserResultDTO;
-import com.heredi.nowait.application.user.dto.LoginDTO;
-import com.heredi.nowait.application.user.dto.UserDTO;
-import com.heredi.nowait.application.user.mapper.UserMapper;
+import com.heredi.nowait.application.user.dto.in.CreateUserRequestDTO;
+import com.heredi.nowait.application.user.dto.out.LoginUserResponseDTO;
+import com.heredi.nowait.application.user.dto.in.LoginUserRequestDTO;
+import com.heredi.nowait.application.user.dto.out.CreateUserResponseDTO;
 import com.heredi.nowait.application.user.service.interfaces.UserService;
-import com.heredi.nowait.domain.model.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,27 +13,27 @@ import org.springframework.web.bind.annotation.*;
 import java.util.NoSuchElementException;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api")
 public class UserController {
 
     private final UserService userService;
 
     @Autowired
-    UserController(UserService userService, UserMapper userMapper) {
+    UserController(UserService userService) {
         this.userService = userService;
     }
 
     // Crear un nuevo usuario
     @PostMapping("/register")
-    public ResponseEntity<UserDTO> createUser(@RequestBody Users user) {
-        return new ResponseEntity<UserDTO>(userService.createUser(user), HttpStatus.CREATED);
+    public ResponseEntity<CreateUserResponseDTO> createUser(@RequestBody CreateUserRequestDTO createUserRequestDTO) {
+        return new ResponseEntity<CreateUserResponseDTO>(userService.createUser(createUserRequestDTO), HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthUserResultDTO> loginUser(@RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<LoginUserResponseDTO> loginUser(@RequestBody LoginUserRequestDTO loginDTO) {
         try {
-            AuthUserResultDTO authUserResultDTO = userService.loginUser(loginDTO.getNickName(), loginDTO.getPassword());
-            return new ResponseEntity<>(authUserResultDTO, HttpStatus.OK);
+            LoginUserResponseDTO authUserResultDTO = userService.loginUser(loginDTO.getNickName(), loginDTO.getPassword());
+            return new ResponseEntity<LoginUserResponseDTO>(authUserResultDTO, HttpStatus.OK);
         } catch (NoSuchElementException e) {
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         } catch (Exception e) {
@@ -42,5 +41,8 @@ public class UserController {
         }
     }
 
-
+    @PostMapping("/saludo")
+    public String saludo(@RequestBody LoginUserRequestDTO loginDTO){
+        return "Hola como estas" + loginDTO.getNickName();
+    }
 }

@@ -1,15 +1,13 @@
 package com.heredi.nowait.application.user.service.interfaces;
 
-import com.heredi.nowait.application.user.dto.AuthUserResultDTO;
-import com.heredi.nowait.application.user.dto.UserDTO;
-import com.heredi.nowait.domain.model.Users;
+import com.heredi.nowait.application.user.dto.in.CreateUserRequestDTO;
+import com.heredi.nowait.application.user.dto.out.LoginUserResponseDTO;
+import com.heredi.nowait.application.user.dto.out.CreateUserResponseDTO;
 import org.springframework.stereotype.Service;
 
 @Service
 public interface UserService {
 
-    UserDTO createUser(Users user);
-    AuthUserResultDTO loginUser(String nickName, String password);
-    String generateToken(UserDTO user);
-    String generateRefreshToken(String userId, String password);
+    CreateUserResponseDTO createUser(CreateUserRequestDTO userDTO);
+    LoginUserResponseDTO loginUser(String nickName, String password);
 }
