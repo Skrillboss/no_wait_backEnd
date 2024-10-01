@@ -2,11 +2,10 @@ package com.heredi.nowait.application.paymentInfo.mapper;
 
 import com.heredi.nowait.application.paymentInfo.dto.in.PaymentInfoRequestDTO;
 import com.heredi.nowait.application.paymentInfo.dto.out.PaymentInfoResponseDTO;
-import com.heredi.nowait.domain.model.PaymentInfo;
+import com.heredi.nowait.domain.paymentInfo.model.PaymentInfo;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 

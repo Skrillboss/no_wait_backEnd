@@ -1,7 +1,7 @@
 package com.heredi.nowait.infrastructure.securityConfig;
 
-import com.heredi.nowait.infrastructure.adapters.UserJPARepository;
-import com.heredi.nowait.infrastructure.entity.UserEntity;
+import com.heredi.nowait.infrastructure.model.user.jpa.UserJPARepository;
+import com.heredi.nowait.infrastructure.model.user.entity.UserEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;

@@ -2,7 +2,7 @@ package com.heredi.nowait.application.shift.mapper;
 
 import com.heredi.nowait.application.shift.dto.in.ShiftRequestDTO;
 import com.heredi.nowait.application.shift.dto.out.ShiftResponseDTO;
-import com.heredi.nowait.domain.model.Shift;
+import com.heredi.nowait.domain.shift.model.Shift;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
