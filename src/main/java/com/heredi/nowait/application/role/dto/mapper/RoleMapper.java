@@ -1,7 +1,7 @@
 package com.heredi.nowait.application.role.dto.mapper;
 
 import com.heredi.nowait.application.role.dto.RoleDTO;
-import com.heredi.nowait.domain.model.Role;
+import com.heredi.nowait.domain.role.model.Role;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

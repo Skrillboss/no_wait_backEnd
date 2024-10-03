@@ -1,10 +1,10 @@
 package com.heredi.nowait.application.item.mapper;
 
-import com.heredi.nowait.application.item.dto.in.ItemRequestDTO;
+import com.heredi.nowait.application.item.dto.in.CreateItemRequestDTO;
 import com.heredi.nowait.application.item.dto.out.ItemResponseDTO;
 import com.heredi.nowait.application.shift.mapper.ShiftMapper;
-import com.heredi.nowait.domain.model.Item;
-import com.heredi.nowait.domain.model.Item.ItemStatus;
+import com.heredi.nowait.domain.item.model.Item;
+import com.heredi.nowait.domain.item.model.Item.ItemStatus;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
@@ -21,7 +21,7 @@ public class ItemMapper {
     }
 
     // Convierte de Item a ItemDTO
-    private ItemResponseDTO toItemDTO(Item item) {
+    public ItemResponseDTO toItemResponseDTO(Item item) {
         if (item == null) {
             return null;
         }
@@ -36,8 +36,8 @@ public class ItemMapper {
         dto.setRating(item.getRating());
         dto.setMainImagePath(item.getMainImagePath());
         dto.setSecondaryImagePath(item.getSecondaryImagePath());
-        dto.setCurrentWaitingDuration((double) item.getCurrentWaitingDuration().toMinutes());
-        dto.setDurationPerShifts((double) item.getDurationPerShifts().toMinutes());
+        dto.setCurrentWaitingDuration((int) item.getCurrentWaitingDuration().toMinutes());
+        dto.setDurationPerShifts((int) item.getDurationPerShifts().toMinutes());
         dto.setStatus(item.getStatus().name());
         dto.setShifts(shiftMapper.toShiftsDTO(item.getShifts()));
 
@@ -50,12 +50,12 @@ public class ItemMapper {
         }
 
         return items.stream()
-                .map(this::toItemDTO)
+                .map(this::toItemResponseDTO)
                 .collect(Collectors.toList());
     }
 
     // Convierte de ItemDTO a Item
-    private Item toItem(ItemRequestDTO dto) {
+    public Item toItem(CreateItemRequestDTO dto) {
         if (dto == null) {
             return null;
         }
@@ -63,21 +63,21 @@ public class ItemMapper {
         Item item = new Item();
         item.setName(dto.getName());
         item.setDescription(dto.getDescription());
-        item.setNumberPeopleWaiting(dto.getNumberPeopleWaiting());
+        item.setNumberPeopleWaiting(0);
         item.setPeoplePerShift(dto.getPeoplePerShift());
-        item.setNumberShiftsWaiting(dto.getNumberShiftsWaiting());
-        item.setRating(dto.getRating());
+        item.setNumberShiftsWaiting(0);
+        item.setRating(0.0);
         item.setMainImagePath(dto.getMainImagePath());
         item.setSecondaryImagePath(dto.getSecondaryImagePath());
-        item.setCurrentWaitingDuration(Duration.ofMinutes(dto.getCurrentWaitingDuration().longValue()));
-        item.setDurationPerShifts(Duration.ofMinutes(dto.getDurationPerShifts().longValue()));
+        item.setCurrentWaitingDuration(Duration.ofMinutes(0));
+        item.setDurationPerShifts(Duration.ofMinutes(dto.getDurationPerShifts()));
         item.setStatus(ItemStatus.valueOf(dto.getStatus()));
-        item.setShifts(shiftMapper.toShifts(dto.getShifts()));
+        item.setShifts(shiftMapper.toShifts(null));
 
         return item;
     }
 
-    public List<Item> toItems(List<ItemRequestDTO> itemsDTO){
+    public List<Item> toItems(List<CreateItemRequestDTO> itemsDTO){
         if(itemsDTO ==  null){
             return null;
         }

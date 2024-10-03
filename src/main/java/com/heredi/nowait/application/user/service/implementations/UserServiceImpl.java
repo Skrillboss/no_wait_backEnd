@@ -5,8 +5,8 @@ import com.heredi.nowait.application.user.dto.out.LoginUserResponseDTO;
 import com.heredi.nowait.application.user.dto.out.CreateUserResponseDTO;
 import com.heredi.nowait.application.user.mapper.UserMapper;
 import com.heredi.nowait.application.user.service.interfaces.UserService;
-import com.heredi.nowait.domain.model.Users;
-import com.heredi.nowait.domain.ports.UserRepository;
+import com.heredi.nowait.domain.user.model.Users;
+import com.heredi.nowait.domain.user.port.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

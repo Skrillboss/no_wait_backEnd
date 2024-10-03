@@ -3,7 +3,7 @@ package com.heredi.nowait.application.business.mapper;
 import com.heredi.nowait.application.business.dto.in.BusinessRequestDTO;
 import com.heredi.nowait.application.business.dto.out.BusinessResponseDTO;
 import com.heredi.nowait.application.item.mapper.ItemMapper;
-import com.heredi.nowait.domain.model.Business;
+import com.heredi.nowait.domain.business.model.Business;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -23,7 +23,7 @@ public class BusinessMapper {
         }
 
         BusinessResponseDTO dto = new BusinessResponseDTO();
-        dto.setId(business.getId().toString());
+        dto.setId(business.getId());
         dto.setCif(business.getCif());
         dto.setName(business.getName());
         dto.setImageUrl(business.getImageUrl());

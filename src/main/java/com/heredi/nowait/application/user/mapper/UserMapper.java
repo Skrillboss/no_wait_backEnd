@@ -6,7 +6,7 @@ import com.heredi.nowait.application.role.dto.mapper.RoleMapper;
 import com.heredi.nowait.application.shift.mapper.ShiftMapper;
 import com.heredi.nowait.application.user.dto.in.CreateUserRequestDTO;
 import com.heredi.nowait.application.user.dto.out.CreateUserResponseDTO;
-import com.heredi.nowait.domain.model.Users;
+import com.heredi.nowait.domain.user.model.Users;
 import org.springframework.stereotype.Component;
 
 @Component
