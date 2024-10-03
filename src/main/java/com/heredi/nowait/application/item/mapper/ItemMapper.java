@@ -36,8 +36,8 @@ public class ItemMapper {
         dto.setRating(item.getRating());
         dto.setMainImagePath(item.getMainImagePath());
         dto.setSecondaryImagePath(item.getSecondaryImagePath());
-        dto.setCurrentWaitingDuration((double) item.getCurrentWaitingDuration().toMinutes());
-        dto.setDurationPerShifts((double) item.getDurationPerShifts().toMinutes());
+        dto.setCurrentWaitingDuration((int) item.getCurrentWaitingDuration().toMinutes());
+        dto.setDurationPerShifts((int) item.getDurationPerShifts().toMinutes());
         dto.setStatus(item.getStatus().name());
         dto.setShifts(shiftMapper.toShiftsDTO(item.getShifts()));
 
@@ -70,7 +70,7 @@ public class ItemMapper {
         item.setMainImagePath(dto.getMainImagePath());
         item.setSecondaryImagePath(dto.getSecondaryImagePath());
         item.setCurrentWaitingDuration(Duration.ofMinutes(0));
-        item.setDurationPerShifts(Duration.ofMinutes(dto.getDurationPerShifts().longValue()));
+        item.setDurationPerShifts(Duration.ofMinutes(dto.getDurationPerShifts()));
         item.setStatus(ItemStatus.valueOf(dto.getStatus()));
         item.setShifts(shiftMapper.toShifts(null));
 

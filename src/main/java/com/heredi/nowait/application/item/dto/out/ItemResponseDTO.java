@@ -18,8 +18,8 @@ public class ItemResponseDTO {
     private Double rating;
     private String mainImagePath;
     private String secondaryImagePath;
-    private Double currentWaitingDuration; // En minutos
-    private Double durationPerShifts; // En minutos
+    private int currentWaitingDuration; // En minutos
+    private int durationPerShifts; // En minutos
     private String status; // Representa el ItemStatus como String
     private List<ShiftResponseDTO> shifts;
 }

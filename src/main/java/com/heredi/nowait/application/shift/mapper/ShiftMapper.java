@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,7 +36,7 @@ public class ShiftMapper {
 
     public List<ShiftResponseDTO> toShiftsDTO(List<Shift> shifts){
         if(shifts == null){
-            return null;
+            return new ArrayList<>();
         }
 
         return shifts.stream()
