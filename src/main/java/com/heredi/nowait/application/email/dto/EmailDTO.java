@@ -1,0 +1,16 @@
+package com.heredi.nowait.application.email.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+import java.io.File;
+
+@Data
+@AllArgsConstructor
+public class EmailDTO {
+    private String addressee;
+    private String affair;
+    private String message;
+    private String attachmentFileName;
+    private File fileImage;
+}

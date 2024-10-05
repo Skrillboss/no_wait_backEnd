@@ -26,4 +26,9 @@ public class ItemRepositoryImpl implements ItemRepository {
         ItemEntity itemEntity = this.itemEntityMapper.toItemEntity(item);
         return this.itemEntityMapper.toItem(this.itemJPARepository.save(itemEntity));
     }
+
+    @Override
+    public Item getItemById(Long itemId){
+        return this.itemEntityMapper.toItem(this.itemJPARepository.getReferenceById(itemId));
+    }
 }

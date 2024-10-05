@@ -1,6 +1,6 @@
 package com.heredi.nowait.infrastructure.model.item.controller;
 
-import com.heredi.nowait.application.item.dto.in.CreateItemRequestDTO;
+import com.heredi.nowait.application.item.dto.in.ItemRequestDTO;
 import com.heredi.nowait.application.item.dto.out.ItemResponseDTO;
 import com.heredi.nowait.application.item.service.interfaces.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class ItemController {
 //    Business para poder introducir dentro del la entididad de Business el item, por lo tanto este endpoint no debe existir
 //    Lo conservo por una futura implementación de un metodo Item...
     @PostMapping("/create")
-    public ResponseEntity<ItemResponseDTO> createItem(@RequestBody CreateItemRequestDTO createItemRequestDTO) {
+    public ResponseEntity<ItemResponseDTO> createItem(@RequestBody ItemRequestDTO createItemRequestDTO) {
         return new ResponseEntity<ItemResponseDTO>(itemService.createItem(createItemRequestDTO), HttpStatus.CREATED);
     }
 }
