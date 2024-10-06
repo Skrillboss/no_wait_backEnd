@@ -1,6 +1,6 @@
 package com.heredi.nowait.application.item.service.implementations;
 
-import com.heredi.nowait.application.item.dto.in.CreateItemRequestDTO;
+import com.heredi.nowait.application.item.dto.in.ItemRequestDTO;
 import com.heredi.nowait.application.item.dto.out.ItemResponseDTO;
 import com.heredi.nowait.application.item.mapper.ItemMapper;
 import com.heredi.nowait.application.item.service.interfaces.ItemService;
@@ -22,7 +22,12 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemResponseDTO createItem(CreateItemRequestDTO createItemRequestDTO) {
+    public Item getItem(Long itemId) {
+        return this.itemRepository.getItemById(itemId);
+    }
+
+    @Override
+    public ItemResponseDTO createItem(ItemRequestDTO createItemRequestDTO) {
         Item createdItem = this.itemRepository.createItem(itemMapper.toItem(createItemRequestDTO));
         return itemMapper.toItemResponseDTO(createdItem);
     }

@@ -3,7 +3,7 @@ package com.heredi.nowait.application.item.dto.in;
 import lombok.Data;
 
 @Data
-public class CreateItemRequestDTO {
+public class ItemRequestDTO {
 
     private String name;
     private String description;

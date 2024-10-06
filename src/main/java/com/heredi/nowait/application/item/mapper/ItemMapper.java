@@ -1,6 +1,6 @@
 package com.heredi.nowait.application.item.mapper;
 
-import com.heredi.nowait.application.item.dto.in.CreateItemRequestDTO;
+import com.heredi.nowait.application.item.dto.in.ItemRequestDTO;
 import com.heredi.nowait.application.item.dto.out.ItemResponseDTO;
 import com.heredi.nowait.application.shift.mapper.ShiftMapper;
 import com.heredi.nowait.domain.item.model.Item;
@@ -55,7 +55,7 @@ public class ItemMapper {
     }
 
     // Convierte de ItemDTO a Item
-    public Item toItem(CreateItemRequestDTO dto) {
+    public Item toItem(ItemRequestDTO dto) {
         if (dto == null) {
             return null;
         }
@@ -77,7 +77,7 @@ public class ItemMapper {
         return item;
     }
 
-    public List<Item> toItems(List<CreateItemRequestDTO> itemsDTO){
+    public List<Item> toItems(List<ItemRequestDTO> itemsDTO){
         if(itemsDTO ==  null){
             return null;
         }
