@@ -18,6 +18,7 @@ import com.heredi.nowait.domain.item.model.Item;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,6 +46,7 @@ public class BusinessServiceImpl implements BusinessService {
         this.itemMapper = itemMapper;
     }
 
+    @Transactional
     @Override
     public AddItemResponseDTO addItem(AddItemRequestDTO addItemRequestDTO) throws IOException, WriterException {
         Item item = itemMapper.toItem(addItemRequestDTO.getCreateItemRequestDTO());
@@ -56,6 +58,7 @@ public class BusinessServiceImpl implements BusinessService {
         return new AddItemResponseDTO(business.getId(), itemMapper.toItemResponseDTO(itemAdded));
     }
 
+    @Transactional
     @Override
     public boolean saveItemIdToMail(SaveItemIdToMailDTO saveItemIdToMailDTO) throws IOException, WriterException, MessagingException {
         try{

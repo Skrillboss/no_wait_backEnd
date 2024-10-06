@@ -6,7 +6,6 @@ import com.heredi.nowait.application.business.dto.in.SaveItemIdToMailDTO;
 import com.heredi.nowait.application.business.dto.out.AddItemResponseDTO;
 import com.heredi.nowait.application.business.service.interfaces.BusinessService;
 import jakarta.mail.MessagingException;
-import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
