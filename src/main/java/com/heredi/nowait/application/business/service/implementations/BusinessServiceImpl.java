@@ -3,11 +3,10 @@ package com.heredi.nowait.application.business.service.implementations;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
-import com.heredi.nowait.application.business.dto.in.AddItemRequestDTO;
-import com.heredi.nowait.application.business.dto.in.SaveItemIdToMailDTO;
 import com.heredi.nowait.application.business.dto.out.AddItemResponseDTO;
 import com.heredi.nowait.application.business.mapper.BusinessMapper;
 import com.heredi.nowait.application.business.service.interfaces.BusinessService;
+import com.heredi.nowait.application.item.dto.in.ItemRequestDTO;
 import com.heredi.nowait.application.item.mapper.ItemMapper;
 import com.heredi.nowait.application.email.service.interfaces.MailSenderService;
 import com.heredi.nowait.application.email.dto.EmailDTO;
@@ -48,10 +47,10 @@ public class BusinessServiceImpl implements BusinessService {
 
     @Transactional
     @Override
-    public AddItemResponseDTO addItem(AddItemRequestDTO addItemRequestDTO) throws IOException, WriterException {
-        Item item = itemMapper.toItem(addItemRequestDTO.getCreateItemRequestDTO());
-        Long businessId = Long.parseLong(addItemRequestDTO.getBusinessId());
-        Business business = businessRepository.addItem(businessId, item);
+    public AddItemResponseDTO addItem(String businessId, ItemRequestDTO itemRequestDTO) throws IOException, WriterException {
+        Item item = itemMapper.toItem(itemRequestDTO);
+        Long longBusinessId = Long.parseLong(businessId);
+        Business business = businessRepository.addItem(longBusinessId, item);
         List<Item> itemList = business.getItems();
         Item itemAdded = itemList.get(itemList.size() -1);
 
@@ -60,10 +59,10 @@ public class BusinessServiceImpl implements BusinessService {
 
     @Transactional
     @Override
-    public boolean saveItemIdToMail(SaveItemIdToMailDTO saveItemIdToMailDTO) throws IOException, WriterException, MessagingException {
+    public boolean saveItemIdToMail(String businessId, String itemId) throws IOException, WriterException, MessagingException {
         try{
-            Business business = businessRepository.getBusiness(Long.parseLong(saveItemIdToMailDTO.getBusinessId()));
-            Item item = this.itemService.getItem(Long.parseLong(saveItemIdToMailDTO.getItemId()));
+            Business business = businessRepository.getBusiness(Long.parseLong(businessId));
+            Item item = this.itemService.getItem(Long.parseLong(itemId));
 
             String path = "itemId.png";
             String charset = "UTF-8";
