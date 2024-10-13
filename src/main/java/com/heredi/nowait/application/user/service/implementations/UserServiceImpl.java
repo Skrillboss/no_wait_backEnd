@@ -1,8 +1,10 @@
 package com.heredi.nowait.application.user.service.implementations;
 
+import com.heredi.nowait.application.auth.AuthService;
 import com.heredi.nowait.application.user.dto.in.CreateUserRequestDTO;
 import com.heredi.nowait.application.user.dto.out.LoginUserResponseDTO;
 import com.heredi.nowait.application.user.dto.out.CreateUserResponseDTO;
+import com.heredi.nowait.application.user.dto.out.RefreshTokenResponseDTO;
 import com.heredi.nowait.application.user.mapper.UserMapper;
 import com.heredi.nowait.application.user.service.interfaces.UserService;
 import com.heredi.nowait.domain.user.model.Users;
@@ -17,9 +19,12 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private final UserMapper userMapper;
 
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper){
+    private AuthService authService;
+
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, AuthService authService) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
+        this.authService = authService;
     }
 
     @Override
@@ -32,8 +37,27 @@ public class UserServiceImpl implements UserService {
     public LoginUserResponseDTO loginUser(String nickName, String password) {
         Users obtainedUser = this.userRepository.getUser(nickName, password);
         CreateUserResponseDTO userResponseDTO = userMapper.toCreateUserResponseDTO(obtainedUser);
-        String accessToken = userRepository.getToken(obtainedUser);
-        String refreshToken = userRepository.getRefreshToken(obtainedUser.getNickName(), obtainedUser.getPassword());
-        return new LoginUserResponseDTO(userResponseDTO, accessToken,refreshToken);
+        String accessToken = authService.generateToken(obtainedUser.getId(), obtainedUser.getNickName());
+        String refreshToken = authService.generateRefreshToken();
+        String randomUUID = authService.extractRandomUUID(refreshToken);
+        userRepository.saveUUID(randomUUID, obtainedUser.getId());
+        return new LoginUserResponseDTO(userResponseDTO, accessToken, refreshToken);
+    }
+
+    @Override
+    public RefreshTokenResponseDTO refreshTokens(String authorizationHeader, String accessToken) {
+        String nickName = authService.extractUsername(accessToken);
+        Long userId = authService.extractUserId(accessToken);
+        Users obtainedUser = this.userRepository.getUserFromIdAndNickName(userId, nickName);
+        String refreshToken = authorizationHeader.replace("Bearer ", "");
+
+        if (obtainedUser.getRefreshToken().equals(authService.extractRandomUUID(refreshToken))) {
+            String newRefreshToken = authService.generateRefreshToken();
+            String newRandomUUID = authService.extractRandomUUID(newRefreshToken);
+            userRepository.saveUUID(newRandomUUID, userId);
+            return new RefreshTokenResponseDTO(authService.generateToken(obtainedUser.getId(), obtainedUser.getNickName()), newRefreshToken);
+        }
+
+        return null;
     }
 }

@@ -6,4 +6,5 @@ import java.util.Optional;
 
 public interface UserJPARepository extends JpaRepository<UserEntity, Long> {
     Optional<UserEntity> findByNickName(String nickName);
+    Optional<UserEntity> findByRefreshToken(String refreshToken);
 }

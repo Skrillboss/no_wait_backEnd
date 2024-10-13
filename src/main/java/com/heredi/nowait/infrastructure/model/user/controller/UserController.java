@@ -2,8 +2,8 @@ package com.heredi.nowait.infrastructure.model.user.controller;
 
 import com.heredi.nowait.application.user.dto.in.CreateUserRequestDTO;
 import com.heredi.nowait.application.user.dto.out.LoginUserResponseDTO;
-import com.heredi.nowait.application.user.dto.in.LoginUserRequestDTO;
 import com.heredi.nowait.application.user.dto.out.CreateUserResponseDTO;
+import com.heredi.nowait.application.user.dto.out.RefreshTokenResponseDTO;
 import com.heredi.nowait.application.user.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,9 +29,9 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginUserResponseDTO> loginUser(@RequestBody LoginUserRequestDTO loginDTO) {
+    public ResponseEntity<LoginUserResponseDTO> loginUser(@RequestParam String nickName, String password) {
         try {
-            LoginUserResponseDTO authUserResultDTO = userService.loginUser(loginDTO.getNickName(), loginDTO.getPassword());
+            LoginUserResponseDTO authUserResultDTO = userService.loginUser(nickName, password);
             return new ResponseEntity<LoginUserResponseDTO>(authUserResultDTO, HttpStatus.OK);
         } catch (NoSuchElementException e) {
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
@@ -40,8 +40,9 @@ public class UserController {
         }
     }
 
-    @PostMapping("/saludo")
-    public String saludo(@RequestBody LoginUserRequestDTO loginDTO){
-        return "Hola como estas" + loginDTO.getNickName();
+    @PatchMapping("/refreshToken")
+    public ResponseEntity<RefreshTokenResponseDTO> refreshToken(@RequestHeader("Authorization") String authorizationHeader, @RequestParam String accessToken) {
+        RefreshTokenResponseDTO refreshTokenResponseDTO = userService.refreshTokens(authorizationHeader, accessToken);
+        return new ResponseEntity<RefreshTokenResponseDTO>(refreshTokenResponseDTO, HttpStatus.OK);
     }
 }

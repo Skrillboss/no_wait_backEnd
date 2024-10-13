@@ -1,11 +1,14 @@
 package com.heredi.nowait.infrastructure.securityConfig;
 
 
-import com.heredi.nowait.infrastructure.jwt.JwtProvider;
+import com.heredi.nowait.infrastructure.auth.jwt.AuthJwtImpl;
+import com.heredi.nowait.infrastructure.model.user.entity.UserEntity;
+import com.heredi.nowait.infrastructure.model.user.jpa.UserJPARepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.SneakyThrows;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,18 +18,22 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.NoSuchElementException;
 
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-    private final JwtProvider jwtProvider;
-    private final UserDetailsService userDetailsService; // Necesitamos esto para cargar los detalles del usuario
+    private final AuthJwtImpl jwtProvider;
+    private final UserDetailsService userDetailsService;
+    private final UserJPARepository userJPARepository;
 
-    public JwtAuthFilter(JwtProvider jwtProvider, UserDetailsService userDetailsService) {
+    public JwtAuthFilter(AuthJwtImpl jwtProvider, UserDetailsService userDetailsService, UserJPARepository userJPARepository) {
         this.jwtProvider = jwtProvider;
         this.userDetailsService = userDetailsService;
+        this.userJPARepository = userJPARepository;
     }
 
+    @SneakyThrows
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
@@ -36,27 +43,28 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         String token = null;
         String username = null;
+        String randomUUID = null;
 
-        // Comprueba si el header contiene el token y si está en el formato correcto
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            token = authorizationHeader.substring(7); // Extraer el token después de "Bearer "
+            token = authorizationHeader.substring(7); // Extrae el token después de "Bearer "
+
             try {
-                username = jwtProvider.extractUsername(token); // Extraer el nombre de usuario del token
+                // Comprueba si el token es de acceso o refresh basándote en los claims o longitud del token
+                if (isAccessToken(token)) {
+                    username = jwtProvider.extractUsername(token); // Extraer username del accessToken
+                } else {
+                    randomUUID = jwtProvider.extractRandomUUID(token); // Extraer UUID del refreshToken
+                }
             } catch (Exception e) {
                 System.out.println("Token invalido: " + e.getMessage());
             }
         }
 
-        // Validar token y establecer la autenticación en el contexto de seguridad
+        // Si es accessToken, validamos por username
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            boolean isValidated = jwtProvider.validateToken(token, username);
 
-            boolean isValidated = false;
-            try {
-                isValidated = jwtProvider.validateToken(token, username);
-            } catch (Exception e) {
-                System.out.println("Error ================== " + e);
-            }
             if (isValidated) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
@@ -67,7 +75,35 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             }
         }
 
+        // Si es refreshToken, validamos por UUID
+        else if (randomUUID != null) {
+            // Consulta en la base de datos si el UUID del token coincide
+            UserEntity userEntity = userJPARepository.findByRefreshToken(randomUUID)
+                    .orElseThrow(() -> new NoSuchElementException("User not found"));
+
+            if (userEntity != null) {
+                // El token es válido, extraemos los detalles del usuario
+                UserDetails userDetails = userDetailsService.loadUserByUsername(userEntity.getNickName());
+
+                // Crear la autenticación usando el UUID validado
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                        userDetails, null, userDetails.getAuthorities());
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+                SecurityContextHolder.getContext().setAuthentication(authToken);
+            }
+        }
+
         // Continúa el filtro
         filterChain.doFilter(request, response);
+    }
+
+    private boolean isAccessToken(String token) {
+        try {
+            String tokenType = jwtProvider.extractTokenType(token); // Extrae el tipo del token del claim
+            return "ACCESS".equals(tokenType); // Devuelve true si es un accessToken
+        } catch (Exception e) {
+            return false; // Si ocurre un error, asumimos que no es un accessToken
+        }
     }
 }

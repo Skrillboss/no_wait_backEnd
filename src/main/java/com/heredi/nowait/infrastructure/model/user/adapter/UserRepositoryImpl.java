@@ -4,15 +4,12 @@ import com.heredi.nowait.domain.user.model.Users;
 import com.heredi.nowait.domain.user.port.UserRepository;
 import com.heredi.nowait.infrastructure.model.user.entity.UserEntity;
 import com.heredi.nowait.infrastructure.model.user.jpa.UserJPARepository;
-import com.heredi.nowait.infrastructure.jwt.JwtProvider;
 import com.heredi.nowait.infrastructure.model.user.mapper.UserEntityMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.util.NoSuchElementException;
 
 @Repository
@@ -24,14 +21,10 @@ public class UserRepositoryImpl implements UserRepository {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private final JwtProvider jwtProvider;
-
-    @Autowired
     private UserEntityMapper userEntityMapper;
 
-    public UserRepositoryImpl(@Lazy UserJPARepository userJPARepository, JwtProvider jwtProvider) {
+    public UserRepositoryImpl(@Lazy UserJPARepository userJPARepository) {
         this.userJPARepository = userJPARepository;
-        this.jwtProvider = jwtProvider;
     }
 
     @Override
@@ -54,33 +47,30 @@ public class UserRepositoryImpl implements UserRepository {
         return userEntityMapper.toUser(userEntity);
     }
 
-
     @Override
-    public String getToken(Users user) {
-        String token;
-        try{
-            token = jwtProvider.generateToken(user.getId(), user.getNickName());
-        } catch (Exception e){
-            System.out.println("El error es el siguiente ================= " + e);
-            return null;
+    public Users getUserFromIdAndNickName(Long userId, String nickName) {
+        UserEntity userEntity = this.userJPARepository.findByNickName(nickName)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+
+        // Compara con Id
+        if(!userEntity.getId().equals(userId)){
+            throw new NoSuchElementException("Invalid Id");
         }
-        return token;
+
+        return userEntityMapper.toUser(userEntity);
     }
 
     @Override
-    public String getRefreshToken(String nickName, String password) {
-        UserEntity userEntity = userJPARepository.findByNickName(nickName).
-                filter(user -> user.getPassword().equals(password)).
+    public void saveUUID(String randomUUID, Long userId) {
+        UserEntity userEntity = userJPARepository.findById(userId).
                 orElseThrow(() -> new NoSuchElementException("User not found"));
-        String refreshToken;
-        try{
-            refreshToken = jwtProvider.generateRefreshToken();
-            String claimFromRefreshToken = jwtProvider.extractRandomUUID(refreshToken);
-            userEntity.setRefreshToken(claimFromRefreshToken);
+            userEntity.setRefreshToken(randomUUID);
             userJPARepository.save(userEntity);
-        }catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            throw new RuntimeException(e);
-        }
-        return refreshToken;
+    }
+
+    @Override
+    public void updateUser(Users user) {
+        UserEntity userEntity = userEntityMapper.toUserEntity(user);
+        userJPARepository.save(userEntity);
     }
 }

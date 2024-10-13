@@ -17,6 +17,8 @@ public class Users {
 
     private Long id;
 
+    private String refreshToken;
+
     private String name;
 
     private String nickName;

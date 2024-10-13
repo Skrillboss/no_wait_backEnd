@@ -1,5 +1,6 @@
-package com.heredi.nowait.infrastructure.jwt;
+package com.heredi.nowait.infrastructure.auth.jwt;
 
+import com.heredi.nowait.domain.auth.port.AuthRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -17,16 +18,18 @@ import java.util.Map;
 import java.util.UUID;
 
 @Component
-public class JwtProvider {
+public class AuthJwtImpl implements AuthRepository {
 
     private final String SECRET_KEY = "HolaMundo_07."; // Cambia esto por una clave más segura
     private final String SALT = "valorAleatorio"; // Este salt debe ser único y aleatorio
 
+    @Override
     public String generateToken(Long userId, String username) throws NoSuchAlgorithmException, InvalidKeySpecException {
         Map<String, Object> claims = new HashMap<>();
-        long EXPIRATION_TIME = 86400000; // 1 día en milisegundos
+        long EXPIRATION_TIME = 10 * 60 * 1000; // 10 minutos en milisegundos
         return Jwts.builder()
                 .setClaims(claims)
+                .claim("token_type", "ACCESS")
                 .claim("userName", username)
                 .claim("userId", userId)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
@@ -35,13 +38,14 @@ public class JwtProvider {
                 .compact();
     }
 
+    @Override
     public String generateRefreshToken() throws NoSuchAlgorithmException, InvalidKeySpecException {
         Date now = new Date();
         long EXPIRATION_TIME = 2592000000L; // 30 días en milisegundos
         Date validity = new Date(now.getTime() + EXPIRATION_TIME);
         UUID newRefreshToken = UUID.randomUUID();
-
         return Jwts.builder()
+                .claim("token_type", "REFRESH")
                 .claim("randomUUID", newRefreshToken)
                 .setIssuedAt(now)
                 .setExpiration(validity)
@@ -49,29 +53,46 @@ public class JwtProvider {
                 .compact();
     }
 
-    public boolean validateToken(String token, String username) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        final String extractedUsername = extractUsername(token);
-        return (extractedUsername.equals(username) && !isTokenExpired(token));
+    public boolean validateRefreshToken(String token, String refreshUUID) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        final String extractedUUID = extractRandomUUID(token);
+        return (extractedUUID.equals(refreshUUID) && isNotExpired(token));
     }
 
+    @Override
+    public String extractTokenType(String token) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        return extractAllClaims(token).get("token_type", String.class);
+    }
+
+    public boolean validateToken(String token, String username) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        final String extractedUsername = extractUsername(token);
+        return (extractedUsername.equals(username) && isNotExpired(token));
+    }
+
+    @Override
     public String extractUsername(String token) throws NoSuchAlgorithmException, InvalidKeySpecException {
         return extractAllClaims(token).get("userName", String.class);
     }
 
+    @Override
+    public Long extractUserId(String token) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        return extractAllClaims(token).get("userId", Long.class);
+    }
+
+    @Override
     public String extractRandomUUID(String token) throws NoSuchAlgorithmException, InvalidKeySpecException {
         return extractAllClaims(token).get("randomUUID", String.class);
     }
 
     private Claims extractAllClaims(String token) throws NoSuchAlgorithmException, InvalidKeySpecException {
         return Jwts.parserBuilder()
-                .setSigningKey(getKeyFromPassword(SECRET_KEY, SALT)) // Ahora usamos HMAC adecuado
+                .setSigningKey(getKeyFromPassword(SECRET_KEY, SALT))
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
     }
 
-    private boolean isTokenExpired(String token) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        return extractAllClaims(token).getExpiration().before(new Date());
+    private boolean isNotExpired(String token) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        return !extractAllClaims(token).getExpiration().before(new Date());
     }
 
     public static SecretKey getKeyFromPassword(String password, String salt)

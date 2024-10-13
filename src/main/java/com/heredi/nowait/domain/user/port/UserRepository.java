@@ -9,9 +9,9 @@ public interface UserRepository {
     // Obtener un usuario por email/nickname y password para login
     Users getUser(String nickName, String password);
 
-    // Obtener un token por nickname
-    String getToken(Users user);
+    Users getUserFromIdAndNickName(Long userId, String nickName);
 
-    // Obtener un refreshToken
-    String getRefreshToken(String nickName, String password);
+    void saveUUID(String randomUUID, Long userId);
+
+    void updateUser(Users user);
 }

@@ -10,6 +10,7 @@ import org.mapstruct.Mapping;
 public interface UserEntityMapper {
     @Mappings({
             @Mapping(source = "id", target = "id"),
+            @Mapping(source = "refreshToken", target = "refreshToken"),
             @Mapping(source = "name", target = "name"),
             @Mapping(source = "nickName", target = "nickName"),
             @Mapping(source = "email", target = "email"),
