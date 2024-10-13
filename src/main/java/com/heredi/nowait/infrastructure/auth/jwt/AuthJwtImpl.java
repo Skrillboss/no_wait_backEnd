@@ -2,8 +2,10 @@ package com.heredi.nowait.infrastructure.auth.jwt;
 
 import com.heredi.nowait.domain.auth.port.AuthRepository;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.SignatureException;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -26,7 +28,8 @@ public class AuthJwtImpl implements AuthRepository {
     @Override
     public String generateToken(Long userId, String username) throws NoSuchAlgorithmException, InvalidKeySpecException {
         Map<String, Object> claims = new HashMap<>();
-        long EXPIRATION_TIME = 10 * 60 * 1000; // 10 minutos en milisegundos
+        //TODO: AUMENTAR EL TIEMPO DE SESION DEL JWT
+        long EXPIRATION_TIME = 1 * 60 * 1000; // 10 minutos en milisegundos
         return Jwts.builder()
                 .setClaims(claims)
                 .claim("token_type", "ACCESS")
@@ -84,15 +87,28 @@ public class AuthJwtImpl implements AuthRepository {
     }
 
     public Claims extractAllClaims(String token) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        return Jwts.parserBuilder()
-                .setSigningKey(getKeyFromPassword(SECRET_KEY, SALT))
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        try {
+            // Intentamos extraer las claims normalmente
+            return Jwts.parserBuilder()
+                    .setSigningKey(getKeyFromPassword(SECRET_KEY, SALT))
+                    .build()
+                    .parseClaimsJws(token)  // Esto es lo que verifica la firma y la expiración
+                    .getBody();
+        } catch (ExpiredJwtException e) {
+            //TODO: mejorar por temas de seguridad.
+            // Si el token ha expirado, aún podemos obtener las claims desde e.getClaims()
+            return e.getClaims();  // Retornamos las claims incluso si está expirado
+        } catch (SignatureException e) {
+            throw new IllegalArgumentException("Token signature invalid");
+        }
     }
 
     public boolean isNotExpired(String token) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        return !extractAllClaims(token).getExpiration().before(new Date());
+        try{
+            return !extractAllClaims(token).getExpiration().before(new Date());
+        }catch (ExpiredJwtException e){
+            return false;
+        }
     }
 
     public static SecretKey getKeyFromPassword(String password, String salt)

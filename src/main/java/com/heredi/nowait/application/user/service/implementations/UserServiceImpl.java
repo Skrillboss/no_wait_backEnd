@@ -11,6 +11,7 @@ import com.heredi.nowait.domain.user.model.Users;
 import com.heredi.nowait.domain.user.port.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -44,6 +45,7 @@ public class UserServiceImpl implements UserService {
         return new LoginUserResponseDTO(userResponseDTO, accessToken, refreshToken);
     }
 
+    @Transactional
     @Override
     public RefreshTokenResponseDTO refreshTokens(String authorizationHeader, String accessToken) {
         if (!authService.isNotExpiredToken(accessToken)) {
@@ -61,7 +63,6 @@ public class UserServiceImpl implements UserService {
         } else {
             throw new IllegalStateException("The access token has not expired yet.");
         }
-
         throw new IllegalStateException("Invalid refresh token.");
     }
 

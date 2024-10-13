@@ -40,6 +40,7 @@ public class BusinessEntity {
     @Column(nullable = false)
     private String createdAt;
 
+    @Lob
     @OneToMany
     @JoinColumn(name = "business_item_id")
     private List<ItemEntity> items;
