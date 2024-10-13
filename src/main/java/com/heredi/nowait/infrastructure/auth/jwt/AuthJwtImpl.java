@@ -83,7 +83,7 @@ public class AuthJwtImpl implements AuthRepository {
         return extractAllClaims(token).get("randomUUID", String.class);
     }
 
-    private Claims extractAllClaims(String token) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public Claims extractAllClaims(String token) throws NoSuchAlgorithmException, InvalidKeySpecException {
         return Jwts.parserBuilder()
                 .setSigningKey(getKeyFromPassword(SECRET_KEY, SALT))
                 .build()
@@ -91,7 +91,7 @@ public class AuthJwtImpl implements AuthRepository {
                 .getBody();
     }
 
-    private boolean isNotExpired(String token) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public boolean isNotExpired(String token) throws NoSuchAlgorithmException, InvalidKeySpecException {
         return !extractAllClaims(token).getExpiration().before(new Date());
     }
 

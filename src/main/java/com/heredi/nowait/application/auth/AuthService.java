@@ -24,6 +24,11 @@ public class AuthService {
     }
 
     @SneakyThrows
+    public boolean isNotExpiredToken(String token){
+        return authRepository.isNotExpired(token);
+    }
+
+    @SneakyThrows
     public boolean validateToken(String token, String username) {
         return authRepository.validateToken(token, username);
     }

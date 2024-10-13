@@ -19,7 +19,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private final UserMapper userMapper;
 
-    private AuthService authService;
+    private final AuthService authService;
 
     public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, AuthService authService) {
         this.userRepository = userRepository;
@@ -46,18 +46,23 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public RefreshTokenResponseDTO refreshTokens(String authorizationHeader, String accessToken) {
-        String nickName = authService.extractUsername(accessToken);
-        Long userId = authService.extractUserId(accessToken);
-        Users obtainedUser = this.userRepository.getUserFromIdAndNickName(userId, nickName);
-        String refreshToken = authorizationHeader.replace("Bearer ", "");
+        if (!authService.isNotExpiredToken(accessToken)) {
+            String nickName = authService.extractUsername(accessToken);
+            Long userId = authService.extractUserId(accessToken);
+            Users obtainedUser = this.userRepository.getUserFromIdAndNickName(userId, nickName);
+            String refreshToken = authorizationHeader.replace("Bearer ", "");
 
-        if (obtainedUser.getRefreshToken().equals(authService.extractRandomUUID(refreshToken))) {
-            String newRefreshToken = authService.generateRefreshToken();
-            String newRandomUUID = authService.extractRandomUUID(newRefreshToken);
-            userRepository.saveUUID(newRandomUUID, userId);
-            return new RefreshTokenResponseDTO(authService.generateToken(obtainedUser.getId(), obtainedUser.getNickName()), newRefreshToken);
+            if (obtainedUser.getRefreshToken().equals(authService.extractRandomUUID(refreshToken))) {
+                String newRefreshToken = authService.generateRefreshToken();
+                String newRandomUUID = authService.extractRandomUUID(newRefreshToken);
+                userRepository.saveUUID(newRandomUUID, userId);
+                return new RefreshTokenResponseDTO(authService.generateToken(obtainedUser.getId(), obtainedUser.getNickName()), newRefreshToken);
+            }
+        } else {
+            throw new IllegalStateException("The access token has not expired yet.");
         }
 
-        return null;
+        throw new IllegalStateException("Invalid refresh token.");
     }
+
 }

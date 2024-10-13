@@ -9,6 +9,8 @@ public interface AuthRepository {
 
     String generateRefreshToken() throws NoSuchAlgorithmException, InvalidKeySpecException ;
 
+    boolean isNotExpired(String token) throws NoSuchAlgorithmException, InvalidKeySpecException ;
+
     boolean validateToken(String token, String username) throws NoSuchAlgorithmException, InvalidKeySpecException ;
 
     boolean validateRefreshToken(String token, String refreshUUID) throws NoSuchAlgorithmException, InvalidKeySpecException ;
