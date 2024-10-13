@@ -34,7 +34,7 @@ public class UserMapper {
         dto.setNickName(user.getNickName());
         dto.setEmail(user.getEmail());
         dto.setPhoneNumber(user.getPhoneNumber());
-        dto.setRoleDTOList(roleMapper.toRoleDTOList(user.getRoleList()));
+        dto.setRoleDTO(roleMapper.toRoleDTO(user.getRole()));
         dto.setPaymentInfoResponseDTOList(paymentInfoMapper.toPaymentInfoListResponseDTO(user.getPaymentInfoList()));
         dto.setBusiness(businessMapper.toBusinessDTO(user.getBusiness()));
 
@@ -52,7 +52,7 @@ public class UserMapper {
         user.setEmail(createUserRequestDTO.getEmail());
         user.setPassword(createUserRequestDTO.getPassword());
         user.setPhoneNumber(createUserRequestDTO.getPhoneNumber());
-        user.setRoleList(roleMapper.toRoleList(createUserRequestDTO.getRoleRequestDTOList()));
+        user.setRole(roleMapper.toRole(createUserRequestDTO.getRoleRequestDTO()));
         user.setPaymentInfoList(paymentInfoMapper.toPaymentInfoList(createUserRequestDTO.getPaymentInfoRequestDTOList()));
         user.setBusiness(businessMapper.toBusiness(createUserRequestDTO.getBusinessRequestDTO()));
         user.setShifts(shiftMapper.toShifts(createUserRequestDTO.getShifts()));

@@ -14,7 +14,7 @@ public class CreateUserResponseDTO {
     private String nickName;
     private String email;
     private String phoneNumber;
-    private List<RoleDTO> roleDTOList;
+    private RoleDTO roleDTO;
     private List<PaymentInfoResponseDTO> paymentInfoResponseDTOList;
     private BusinessResponseDTO business;
     private List<ShiftResponseDTO> shifts;

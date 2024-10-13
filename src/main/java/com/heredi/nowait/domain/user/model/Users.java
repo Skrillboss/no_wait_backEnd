@@ -27,7 +27,7 @@ public class Users {
 
     private String phoneNumber;
 
-    private List<Role> roleList;
+    private Role role;
 
     private List<PaymentInfo> paymentInfoList;
 

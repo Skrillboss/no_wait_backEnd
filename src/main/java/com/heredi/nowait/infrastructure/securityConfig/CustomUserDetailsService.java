@@ -24,19 +24,19 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String nickName) throws UsernameNotFoundException {
         // Cargar el usuario desde la base de datos usando el repositorio
-        UserEntity user = userRepository.findByNickName(nickName)
+        UserEntity userEntity = userRepository.findByNickName(nickName)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado con el nickName: " + nickName));
 
-        // Convertir los roles de RoleEntity a authorities de Spring Security
-        List<GrantedAuthority> authorities = user.getRoleEntityList().stream()
-                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName())) // "ROLE_" es importante
-                .collect(Collectors.toList());
+        // Obtener el rol directamente del usuario
+        String roleName = userEntity.getRoleEntity().getName();
+        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + roleName)); // Solo un rol
 
         // Crear un UserDetails de Spring con los detalles del usuario
         return new User(
-                user.getNickName(),
-                user.getPassword(),
+                userEntity.getNickName(),
+                userEntity.getPassword(),
                 authorities
         );
     }
 }
+

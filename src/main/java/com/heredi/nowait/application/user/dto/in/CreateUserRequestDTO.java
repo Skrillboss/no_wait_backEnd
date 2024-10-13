@@ -15,7 +15,7 @@ public class CreateUserRequestDTO {
     private String email;
     private String password;
     private String phoneNumber;
-    private List<RoleDTO> roleRequestDTOList;
+    private RoleDTO roleRequestDTO;
     private List<PaymentInfoRequestDTO> paymentInfoRequestDTOList;
     private BusinessRequestDTO businessRequestDTO;
     private List<ShiftRequestDTO> shifts;

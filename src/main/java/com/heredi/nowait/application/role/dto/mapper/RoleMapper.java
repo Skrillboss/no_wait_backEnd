@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 @Component
 public class RoleMapper {
 
-    private RoleDTO toRoleDTO(Role role){
+    public RoleDTO toRoleDTO(Role role){
         if(role == null){
             return null;
         }
@@ -19,7 +19,7 @@ public class RoleMapper {
         return roleDTO;
     }
 
-    private Role toRole(RoleDTO roleRequestDTO){
+    public Role toRole(RoleDTO roleRequestDTO){
         if(roleRequestDTO == null){
             return null;
         }
@@ -28,25 +28,5 @@ public class RoleMapper {
         role.setName(roleRequestDTO.getName());
 
         return role;
-    }
-
-    public List<Role> toRoleList(List<RoleDTO> roleRequestDTOList){
-        if(roleRequestDTOList == null){
-            return null;
-        }
-
-        return roleRequestDTOList.stream()
-                .map(this::toRole)
-                .collect(Collectors.toList());
-    }
-
-    public List<RoleDTO> toRoleDTOList(List<Role> roleList){
-        if(roleList == null){
-            return null;
-        }
-
-        return roleList.stream()
-                .map(this::toRoleDTO)
-                .collect(Collectors.toList());
     }
 }

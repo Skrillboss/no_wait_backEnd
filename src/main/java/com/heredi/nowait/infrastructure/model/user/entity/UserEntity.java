@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,21 +42,22 @@ public class UserEntity {
     @Column(nullable = false)
     private String phoneNumber;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @Column(nullable = false)
-    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
-    inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "role_id"))
-    private List<RoleEntity> roleEntityList = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "role_id", referencedColumnName = "role_id", nullable = false)
+    private RoleEntity roleEntity;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_payment_info_id")
+    @JoinColumn(name = "payment_info_id")
+    @ToString.Exclude
     private List<PaymentInfoEntity> paymentInfoEntityList;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_business_id")
+    @JoinColumn(name = "business_id")
+    @ToString.Exclude
     private BusinessEntity business;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_shifts_id")
+    @JoinColumn(name = "shifts_id")
+    @ToString.Exclude
     private List<ShiftEntity> shifts;
 }
