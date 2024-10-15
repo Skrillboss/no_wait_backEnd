@@ -45,6 +45,7 @@ public class UserServiceImpl implements UserService {
         return new LoginUserResponseDTO(userResponseDTO, accessToken, refreshToken);
     }
 
+    @Transactional
     @Override
     public UserResponseDTO loginUserWithToken(String authorizationHeader) {
         String accessToken = authorizationHeader.replace("Bearer ", "");
