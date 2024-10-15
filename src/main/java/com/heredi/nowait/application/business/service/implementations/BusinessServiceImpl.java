@@ -7,6 +7,7 @@ import com.heredi.nowait.application.business.dto.out.AddItemResponseDTO;
 import com.heredi.nowait.application.business.mapper.BusinessMapper;
 import com.heredi.nowait.application.business.service.interfaces.BusinessService;
 import com.heredi.nowait.application.item.dto.in.ItemRequestDTO;
+import com.heredi.nowait.application.item.dto.out.ItemResponseDTO;
 import com.heredi.nowait.application.item.mapper.ItemMapper;
 import com.heredi.nowait.application.email.service.interfaces.MailSenderService;
 import com.heredi.nowait.application.email.dto.EmailDTO;
@@ -62,7 +63,7 @@ public class BusinessServiceImpl implements BusinessService {
     public boolean saveItemIdToMail(String businessId, String itemId) throws IOException, WriterException, MessagingException {
         try{
             Business business = businessRepository.getBusiness(Long.parseLong(businessId));
-            Item item = this.itemService.getItem(Long.parseLong(itemId));
+            ItemResponseDTO item = this.itemService.getItem(itemId);
 
             String path = "itemId.png";
             String charset = "UTF-8";

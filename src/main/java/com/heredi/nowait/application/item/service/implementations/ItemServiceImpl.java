@@ -8,6 +8,7 @@ import com.heredi.nowait.domain.item.model.Item;
 import com.heredi.nowait.domain.item.port.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ItemServiceImpl implements ItemService {
@@ -21,14 +22,10 @@ public class ItemServiceImpl implements ItemService {
         this.itemMapper = itemMapper;
     }
 
+    @Transactional
     @Override
-    public Item getItem(Long itemId) {
-        return this.itemRepository.getItemById(itemId);
-    }
-
-    @Override
-    public ItemResponseDTO createItem(ItemRequestDTO createItemRequestDTO) {
-        Item createdItem = this.itemRepository.createItem(itemMapper.toItem(createItemRequestDTO));
-        return itemMapper.toItemResponseDTO(createdItem);
+    public ItemResponseDTO getItem(String itemId) {
+        Item obteinedItem = itemRepository.getItemById(Long.parseLong(itemId));
+        return itemMapper.toItemResponseDTO(obteinedItem);
     }
 }
