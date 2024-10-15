@@ -5,7 +5,7 @@ import com.heredi.nowait.application.paymentInfo.mapper.PaymentInfoMapper;
 import com.heredi.nowait.application.role.dto.mapper.RoleMapper;
 import com.heredi.nowait.application.shift.mapper.ShiftMapper;
 import com.heredi.nowait.application.user.dto.in.CreateUserRequestDTO;
-import com.heredi.nowait.application.user.dto.out.CreateUserResponseDTO;
+import com.heredi.nowait.application.user.dto.out.UserResponseDTO;
 import com.heredi.nowait.domain.user.model.Users;
 import org.springframework.stereotype.Component;
 
@@ -24,12 +24,12 @@ public class UserMapper {
         this.shiftMapper = shiftMapper;
     }
 
-    public CreateUserResponseDTO toCreateUserResponseDTO(Users user) {
+    public UserResponseDTO toUserResponseDTO(Users user) {
         if (user == null) {
             return null;
         }
 
-        CreateUserResponseDTO dto = new CreateUserResponseDTO();
+        UserResponseDTO dto = new UserResponseDTO();
         dto.setName(user.getName());
         dto.setNickName(user.getNickName());
         dto.setEmail(user.getEmail());

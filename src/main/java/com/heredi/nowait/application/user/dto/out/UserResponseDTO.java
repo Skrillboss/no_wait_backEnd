@@ -8,7 +8,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class CreateUserResponseDTO {
+public class UserResponseDTO {
 
     private String name;
     private String nickName;

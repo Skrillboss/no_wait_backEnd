@@ -29,7 +29,7 @@ public class AuthJwtImpl implements AuthRepository {
     public String generateToken(Long userId, String username) throws NoSuchAlgorithmException, InvalidKeySpecException {
         Map<String, Object> claims = new HashMap<>();
         //TODO: AUMENTAR EL TIEMPO DE SESION DEL JWT
-        long EXPIRATION_TIME = 1 * 60 * 1000; // 10 minutos en milisegundos
+        long EXPIRATION_TIME = 1 * 60 * 1000; // 1 minutos en milisegundos
         return Jwts.builder()
                 .setClaims(claims)
                 .claim("token_type", "ACCESS")
