@@ -7,6 +7,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface ItemService {
-    Item getItem(Long itemId);
-    ItemResponseDTO createItem(ItemRequestDTO createItemRequestDTO);
+    ItemResponseDTO getItem(String itemId);
 }
