@@ -34,6 +34,7 @@ public class UserServiceImpl implements UserService {
         return userMapper.toUserResponseDTO(createdUser);
     }
 
+    @Transactional
     @Override
     public LoginUserResponseDTO loginUser(String nickName, String password) {
         Users obtainedUser = this.userRepository.getUser(nickName, password);
