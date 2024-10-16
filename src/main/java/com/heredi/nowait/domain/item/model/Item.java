@@ -1,5 +1,6 @@
 package com.heredi.nowait.domain.item.model;
 
+import com.heredi.nowait.domain.queue.model.Queue;
 import com.heredi.nowait.domain.shift.model.Shift;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,19 +14,14 @@ import java.util.List;
 @AllArgsConstructor
 public class Item {
 
-    private String id;
+    private Long id;
     private String name;
     private String description;
-    private int numberPeopleWaiting;
-    private int peoplePerShift;
-    private int numberShiftsWaiting;
     private Double rating;
     private String mainImagePath;
     private String secondaryImagePath;
-    private Duration currentWaitingDuration;
-    private Duration durationPerShifts;
     private ItemStatus status;
-    private List<Shift> shifts;
+    private Queue queue;
 
     public enum ItemStatus {
         ACTIVE,
