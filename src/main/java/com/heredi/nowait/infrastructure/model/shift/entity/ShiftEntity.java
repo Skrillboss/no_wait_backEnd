@@ -20,10 +20,10 @@ public class ShiftEntity {
     private Long id; // Identificador autogenerado
 
     @Column(nullable = false)
-    private String itemName; // nombre del producto o servicio
+    private String itemName; //TODO: este nombre lo debe heredar de su padre ItemEntity
 
     @Column(nullable = false)
-    private String businessName; // nombre del negocio
+    private String businessName; //TODO: este nombre lo debe heredar de su abuelo BusinessEntity
 
     @Column(nullable = false)
     private LocalDateTime shiftTime; // cuando tarda aproximadamente turno a turno
@@ -44,14 +44,14 @@ public class ShiftEntity {
     private LocalDateTime expirationTime; // tiempo de expiración del turno
 
     @Column(nullable = false)
-    private Duration estimatedArrivalTime; // tiempo estimado de llegada al negocio
+    private Duration estimatedArrivalTime; // TODO: este valor lo debe tener cada uno de los usuario de manera infividual, no el propio turno.
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ShiftStatus status; // estado del turno
 
     @Column(nullable = false)
-    private int shiftNumber; // número de turno
+    private int shiftNumber; // TODO: este valor lo debe tener cada uno de los usuarios de manera individual, no el propio turno.
 
     public enum ShiftStatus {
         ACTIVE, INACTIVE, EXPIRED, POSTPONED, ERROR

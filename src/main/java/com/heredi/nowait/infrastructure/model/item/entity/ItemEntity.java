@@ -54,7 +54,7 @@ public class ItemEntity {
     private ItemStatus status;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_shifts_id")
+    @JoinColumn(name = "shifts_id")
     private List<ShiftEntity> shifts;
 
     public enum ItemStatus {
