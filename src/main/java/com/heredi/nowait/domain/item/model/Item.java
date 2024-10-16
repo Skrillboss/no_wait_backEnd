@@ -1,13 +1,9 @@
 package com.heredi.nowait.domain.item.model;
 
 import com.heredi.nowait.domain.queue.model.Queue;
-import com.heredi.nowait.domain.shift.model.Shift;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.Duration;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
