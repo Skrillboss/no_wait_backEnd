@@ -1,9 +1,9 @@
 package com.heredi.nowait.infrastructure.model.business.controller;
 
 import com.google.zxing.WriterException;
-import com.heredi.nowait.application.business.dto.out.AddItemResponseDTO;
-import com.heredi.nowait.application.business.service.interfaces.BusinessService;
-import com.heredi.nowait.application.item.dto.in.ItemRequestDTO;
+import com.heredi.nowait.application.model.business.dto.out.AddItemResponseDTO;
+import com.heredi.nowait.application.model.business.service.interfaces.BusinessService;
+import com.heredi.nowait.application.model.item.dto.in.ItemRequestDTO;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

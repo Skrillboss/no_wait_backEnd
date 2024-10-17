@@ -1,0 +1,35 @@
+package com.heredi.nowait.domain.queue.model;
+
+import com.heredi.nowait.infrastructure.model.shift.entity.ShiftEntity;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.Duration;
+import java.time.LocalTime;
+import java.util.List;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Queue {
+
+    private Long id;
+    private Duration currentWaitingDuration; // tiempo actual de espera para que sea tu turno
+    private LocalTime shiftDuration; // cuando tarda aproximadamente turno a turno
+    private LocalTime startTime;
+    private LocalTime endTime;
+    private int peoplePerShift;
+    private List<ShiftEntity> shifts;
+    private QueueStatus status; // estado del turno
+
+    public enum QueueStatus {
+        ACTIVE,
+        EMPTY,
+        FULL,
+        SUSPENDED,
+        INACTIVE,
+        ERROR
+    }
+
+}

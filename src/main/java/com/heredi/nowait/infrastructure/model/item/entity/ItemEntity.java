@@ -1,5 +1,6 @@
 package com.heredi.nowait.infrastructure.model.item.entity;
 
+import com.heredi.nowait.infrastructure.model.queue.entity.QueueEntity;
 import com.heredi.nowait.infrastructure.model.shift.entity.ShiftEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -27,15 +28,6 @@ public class ItemEntity {
     @Column(nullable = false)
     private String description;
 
-    @Column(nullable = false)
-    private int numberPeopleWaiting;
-
-    @Column(nullable = false)
-    private int peoplePerShift;
-
-    @Column(nullable = false)
-    private int numberShiftsWaiting;
-
     private Double rating; // Puede ser null
 
     @Column(nullable = false)
@@ -43,19 +35,13 @@ public class ItemEntity {
 
     private String secondaryImagePath; // Puede ser null
 
-    @Column(nullable = false)
-    private Duration currentWaitingDuration;
-
-    @Column(nullable = false)
-    private Duration durationPerShifts;
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ItemStatus status;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "shifts_id")
-    private List<ShiftEntity> shifts;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "queue")
+    private QueueEntity queue;
 
     public enum ItemStatus {
         ACTIVE,

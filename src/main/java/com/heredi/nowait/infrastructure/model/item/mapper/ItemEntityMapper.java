@@ -13,16 +13,11 @@ public interface ItemEntityMapper {
             @Mapping(source = "id", target = "id"),
             @Mapping(source = "name", target = "name"),
             @Mapping(source = "description", target = "description"),
-            @Mapping(source = "numberPeopleWaiting", target = "numberPeopleWaiting"),
-            @Mapping(source = "peoplePerShift", target = "peoplePerShift"),
-            @Mapping(source = "numberShiftsWaiting", target = "numberShiftsWaiting"),
             @Mapping(source = "rating", target = "rating"),
             @Mapping(source = "mainImagePath", target = "mainImagePath"),
             @Mapping(source = "secondaryImagePath", target = "secondaryImagePath"),
-            @Mapping(source = "currentWaitingDuration", target = "currentWaitingDuration"),
-            @Mapping(source = "durationPerShifts", target = "durationPerShifts"),
             @Mapping(source = "status", target = "status"),
-            @Mapping(source = "shifts", target = "shifts"),
+            @Mapping(source = "queue", target = "queue"),
     })
     Item toItem(ItemEntity itemEntity);
 

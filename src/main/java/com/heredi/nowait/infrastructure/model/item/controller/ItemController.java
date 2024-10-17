@@ -1,7 +1,7 @@
 package com.heredi.nowait.infrastructure.model.item.controller;
 
-import com.heredi.nowait.application.item.dto.out.ItemResponseDTO;
-import com.heredi.nowait.application.item.service.interfaces.ItemService;
+import com.heredi.nowait.application.model.item.dto.out.ItemResponseDTO;
+import com.heredi.nowait.application.model.item.service.interfaces.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
