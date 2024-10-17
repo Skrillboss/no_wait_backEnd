@@ -1,10 +1,10 @@
 package com.heredi.nowait.infrastructure.model.user.controller;
 
-import com.heredi.nowait.application.user.dto.in.CreateUserRequestDTO;
-import com.heredi.nowait.application.user.dto.out.LoginUserResponseDTO;
-import com.heredi.nowait.application.user.dto.out.UserResponseDTO;
-import com.heredi.nowait.application.user.dto.out.RefreshTokenResponseDTO;
-import com.heredi.nowait.application.user.service.interfaces.UserService;
+import com.heredi.nowait.application.model.user.dto.in.CreateUserRequestDTO;
+import com.heredi.nowait.application.model.user.dto.out.LoginUserResponseDTO;
+import com.heredi.nowait.application.model.user.dto.out.UserResponseDTO;
+import com.heredi.nowait.application.model.user.dto.out.RefreshTokenResponseDTO;
+import com.heredi.nowait.application.model.user.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
