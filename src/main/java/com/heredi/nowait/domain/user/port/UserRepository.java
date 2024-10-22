@@ -3,6 +3,8 @@ package com.heredi.nowait.domain.user.port;
 import com.heredi.nowait.domain.user.model.Users;
 
 public interface UserRepository {
+    Users getUserById(Long userId);
+
     // Crear un nuevo usuario
     Users createUser(Users user);
 

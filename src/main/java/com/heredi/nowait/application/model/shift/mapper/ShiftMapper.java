@@ -13,16 +13,12 @@ import java.util.stream.Collectors;
 
 @Component
 public class ShiftMapper {
-    private ShiftResponseDTO toShiftDTO(Shift shift){
+    public ShiftResponseDTO toShiftDTO(Shift shift){
         if(shift == null){
             return null;
         }
         ShiftResponseDTO dto = new ShiftResponseDTO();
         dto.setId(shift.getId());
-        dto.setItemName(shift.getItemName());
-        dto.setBusinessName(shift.getBusinessName());
-        dto.setShiftTime(shift.getShiftTime().toString());
-        dto.setPeopleInShift(shift.getPeopleInShift());
         dto.setCreateAt(shift.getCreateAt().toString());
         dto.setNotifyTime(shift.getNotifyTime().toString());
         dto.setCurrentWaitingDuration(shift.getCurrentWaitingDuration().toMinutes());
@@ -44,16 +40,12 @@ public class ShiftMapper {
                 .collect(Collectors.toList());
     }
 
-    private Shift toShift(ShiftRequestDTO dto) {
+    public Shift toShift(ShiftRequestDTO dto) {
         if (dto == null) {
             return null;
         }
 
         Shift shift = new Shift();
-        shift.setItemName(dto.getItemName());
-        shift.setBusinessName(dto.getBusinessName());
-        shift.setShiftTime(LocalDateTime.parse(dto.getShiftTime()));
-        shift.setPeopleInShift(dto.getPeopleInShift());
         shift.setCreateAt(LocalDateTime.parse(dto.getCreateAt()));
         shift.setNotifyTime(LocalDateTime.parse(dto.getNotifyTime()));
         shift.setCurrentWaitingDuration(Duration.ofMinutes((long) dto.getCurrentWaitingDuration()));

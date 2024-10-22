@@ -13,10 +13,6 @@ import java.time.Duration;
 public class Shift {
 
     private String id; // Identificador del turno
-    private String itemName; // Nombre del producto o servicio que vas a reclamar por el turno
-    private String businessName; // Nombre del negocio
-    private LocalDateTime shiftTime; // Cuánto tarda aproximadamente turno a turno
-    private int peopleInShift; // Cantidad de personas esperando actualmente su turno
     private LocalDateTime createAt; // Fecha de creación del turno
     private LocalDateTime notifyTime; // Tiempo para notificar al usuario
     private Duration currentWaitingDuration; // Tiempo de duración actual para que sea tu turno
@@ -27,6 +23,7 @@ public class Shift {
 
     public enum ShiftStatus {
         ACTIVE,
+        CREATING,
         INACTIVE,
         EXPIRED,
         POSTPONED,

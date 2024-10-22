@@ -2,6 +2,8 @@ package com.heredi.nowait.infrastructure.model.user.adapter;
 
 import com.heredi.nowait.domain.user.model.Users;
 import com.heredi.nowait.domain.user.port.UserRepository;
+import com.heredi.nowait.infrastructure.model.role.entity.RoleEntity;
+import com.heredi.nowait.infrastructure.model.shift.entity.ShiftEntity;
 import com.heredi.nowait.infrastructure.model.user.entity.UserEntity;
 import com.heredi.nowait.infrastructure.model.user.jpa.UserJPARepository;
 import com.heredi.nowait.infrastructure.model.user.mapper.UserEntityMapper;
@@ -10,7 +12,9 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
@@ -25,6 +29,12 @@ public class UserRepositoryImpl implements UserRepository {
 
     public UserRepositoryImpl(@Lazy UserJPARepository userJPARepository) {
         this.userJPARepository = userJPARepository;
+    }
+
+    @Override
+    public Users getUserById(Long userId) {
+        return this.userEntityMapper.toUser(this.userJPARepository.findById(userId)
+                .orElseThrow(() -> new NoSuchElementException("User not found")));
     }
 
     @Override
@@ -53,7 +63,7 @@ public class UserRepositoryImpl implements UserRepository {
                 .orElseThrow(() -> new NoSuchElementException("User not found"));
 
         // Compara con Id
-        if(!userEntity.getId().equals(userId)){
+        if (!userEntity.getId().equals(userId)) {
             throw new NoSuchElementException("Invalid Id");
         }
 
@@ -64,13 +74,34 @@ public class UserRepositoryImpl implements UserRepository {
     public void saveUUID(String randomUUID, Long userId) {
         UserEntity userEntity = userJPARepository.findById(userId).
                 orElseThrow(() -> new NoSuchElementException("User not found"));
-            userEntity.setRefreshToken(randomUUID);
-            userJPARepository.save(userEntity);
-    }
-
-    @Override
-    public void updateUser(Users user) {
-        UserEntity userEntity = userEntityMapper.toUserEntity(user);
+        userEntity.setRefreshToken(randomUUID);
         userJPARepository.save(userEntity);
     }
+
+    //no estoy actualizando all el usuario
+    @Override
+    public void updateUser(Users user) {
+        UserEntity userEntity = userJPARepository.findById(user.getId())
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+
+        userEntity.setRefreshToken(user.getRefreshToken());
+        userEntity.setName(user.getName());
+        userEntity.setNickName(user.getNickName());
+        userEntity.setEmail(user.getEmail());
+        userEntity.setPassword(user.getPassword());
+        userEntity.setPhoneNumber(user.getPhoneNumber());
+
+        if (user.getShifts() != null) {
+            List<ShiftEntity> shiftEntities = user.getShifts().stream()
+                    .map(shift -> {
+                        // Lógica para convertir Shift a ShiftEntity
+                        return new ShiftEntity(); // Reemplaza esto con la conversión real
+                    })
+                    .collect(Collectors.toList());
+            userEntity.setShifts(shiftEntities);
+        }
+
+        userJPARepository.save(userEntity);
+    }
+
 }

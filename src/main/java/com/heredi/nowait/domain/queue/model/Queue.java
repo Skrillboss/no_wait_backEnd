@@ -1,5 +1,6 @@
 package com.heredi.nowait.domain.queue.model;
 
+import com.heredi.nowait.domain.shift.model.Shift;
 import com.heredi.nowait.infrastructure.model.shift.entity.ShiftEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,7 +21,7 @@ public class Queue {
     private LocalTime startTime;
     private LocalTime endTime;
     private int peoplePerShift;
-    private List<ShiftEntity> shifts;
+    private List<Shift> shifts;
     private QueueStatus status; // estado del turno
 
     public enum QueueStatus {

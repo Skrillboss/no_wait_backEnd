@@ -9,7 +9,6 @@ public class ShiftResponseDTO {
     private String itemName; // Nombre del producto o servicio
     private String businessName; // Nombre del negocio
     private String shiftTime; // Tiempo aproximado del turno
-    private int peopleInShift; // Número de personas en la cola del turno
     private String createAt; // Fecha y hora de creación del turno
     private String notifyTime; // Tiempo para notificar al usuario
     private double currentWaitingDuration; // Duración actual de la espera

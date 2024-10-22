@@ -20,34 +20,23 @@ public class ShiftEntity {
     private Long id; // Identificador autogenerado
 
     @Column(nullable = false)
-    private LocalDateTime shiftTime; // cuando tarda aproximadamente turno a turno
-
-    @Column(nullable = false)
-    private int peopleInShift; // cantidad de personas esperando su turno
-
-    @Column(nullable = false)
     private LocalDateTime createAt; // fecha de creación
 
-    @Column(nullable = false)
     private LocalDateTime notifyTime; // tiempo para notificar al usuario
 
-    @Column(nullable = false)
     private Duration currentWaitingDuration; // tiempo actual de espera para que sea tu turno
 
-    @Column(nullable = false)
     private LocalDateTime expirationTime; // tiempo de expiración del turno
 
-    @Column(nullable = false)
     private Duration estimatedArrivalTime;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ShiftStatus status; // estado del turno
 
-    @Column(nullable = false)
     private int shiftNumber;
 
     public enum ShiftStatus {
-        ACTIVE, INACTIVE, EXPIRED, POSTPONED, ERROR
+        ACTIVE, CREATING, INACTIVE, EXPIRED, POSTPONED, ERROR
     }
 }
