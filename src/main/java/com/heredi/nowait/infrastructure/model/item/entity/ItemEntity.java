@@ -1,14 +1,10 @@
 package com.heredi.nowait.infrastructure.model.item.entity;
 
 import com.heredi.nowait.infrastructure.model.queue.entity.QueueEntity;
-import com.heredi.nowait.infrastructure.model.shift.entity.ShiftEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.Duration;
-import java.util.List;
 
 @Entity
 @Table(name = "item")
