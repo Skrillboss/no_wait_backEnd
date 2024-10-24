@@ -10,7 +10,9 @@ import com.heredi.nowait.domain.shift.port.ShiftRepository;
 import com.heredi.nowait.domain.user.model.Users;
 import com.heredi.nowait.domain.user.port.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class QueueServiceImpl implements QueueService {
 
     private final QueueRepository queueRepository;

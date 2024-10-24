@@ -7,9 +7,11 @@ import com.heredi.nowait.infrastructure.model.shift.entity.ShiftEntity;
 import com.heredi.nowait.infrastructure.model.shift.jpa.ShiftJPARepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 
+@Repository
 public class ShiftRepositoryImpl implements ShiftRepository {
 
     private final ShiftJPARepository shiftJPARepository;

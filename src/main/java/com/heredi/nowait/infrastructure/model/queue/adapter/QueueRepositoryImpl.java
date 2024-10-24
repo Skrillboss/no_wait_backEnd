@@ -8,10 +8,12 @@ import com.heredi.nowait.infrastructure.model.queue.jpa.QueueJPARepository;
 import com.heredi.nowait.infrastructure.model.queue.mapper.QueueEntityMapper;
 import com.heredi.nowait.infrastructure.model.shift.entity.ShiftEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Repository
 public class QueueRepositoryImpl implements QueueRepository {
 
     private final QueueJPARepository queueJPARepository;
