@@ -21,7 +21,7 @@ public class QueueController {
         this.queueService = queueService;
     }
 
-    @PostMapping("/generateShift/{queueId}/{userId}")
+    @PostMapping("/generateShift/{queueId}")
     public ResponseEntity<ShiftResponseDTO> generateShift(@PathVariable String queueId, @PathVariable String userId) {
         return new ResponseEntity<ShiftResponseDTO>(queueService.generateShift(queueId, userId), HttpStatus.OK);
     }

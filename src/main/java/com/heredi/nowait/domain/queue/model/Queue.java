@@ -17,9 +17,9 @@ public class Queue {
 
     private Long id;
     private Duration currentWaitingDuration; // tiempo actual de espera para que sea tu turno
-    private LocalTime shiftDuration; // cuando tarda aproximadamente turno a turno
-    private LocalTime startTime;
-    private LocalTime endTime;
+    private Duration shiftDuration; // cuando tarda aproximadamente turno a turno
+    private LocalTime startTimeHour;
+    private LocalTime endTimeHour;
     private int peoplePerShift;
     private List<Shift> shifts;
     private QueueStatus status; // estado del turno

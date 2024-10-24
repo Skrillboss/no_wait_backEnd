@@ -33,8 +33,8 @@ public class QueueRepositoryImpl implements QueueRepository {
 
         queueEntity.setCurrentWaitingDuration(queue.getCurrentWaitingDuration());
         queueEntity.setShiftDuration(queue.getShiftDuration());
-        queueEntity.setStartTime(queue.getStartTime());
-        queueEntity.setEndTime(queue.getEndTime());
+        queueEntity.setStartTimeHour(queue.getStartTimeHour());
+        queueEntity.setEndTimeHour(queue.getEndTimeHour());
         queueEntity.setPeoplePerShift(queue.getPeoplePerShift());
 
         if (queue.getShifts() != null) {

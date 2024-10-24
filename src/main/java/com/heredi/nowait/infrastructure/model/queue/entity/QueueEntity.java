@@ -25,13 +25,13 @@ public class QueueEntity {
     private Duration currentWaitingDuration; // tiempo actual de espera para que sea tu turno
 
     @Column(nullable = false)
-    private LocalTime shiftDuration; // cuando tarda aproximadamente turno a turno
+    private Duration shiftDuration; // cuando tarda aproximadamente turno a turno
 
     @Column
-    private LocalTime startTime;
+    private LocalTime startTimeHour;
 
     @Column
-    private LocalTime endTime;
+    private LocalTime endTimeHour;
 
     @Column(nullable = false)
     private int peoplePerShift;

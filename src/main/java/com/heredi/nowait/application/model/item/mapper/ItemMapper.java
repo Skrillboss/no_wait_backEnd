@@ -2,7 +2,7 @@ package com.heredi.nowait.application.model.item.mapper;
 
 import com.heredi.nowait.application.model.item.dto.in.ItemRequestDTO;
 import com.heredi.nowait.application.model.item.dto.out.ItemResponseDTO;
-import com.heredi.nowait.application.model.shift.mapper.ShiftMapper;
+import com.heredi.nowait.application.model.queue.mapper.QueueMapper;
 import com.heredi.nowait.domain.item.model.Item;
 import com.heredi.nowait.domain.item.model.Item.ItemStatus;
 import org.springframework.stereotype.Component;
@@ -13,10 +13,10 @@ import java.util.stream.Collectors;
 @Component
 public class ItemMapper {
 
-    private final ShiftMapper shiftMapper;
+    private final QueueMapper queueMapper;
 
-    public ItemMapper(ShiftMapper shiftMapper){
-        this.shiftMapper = shiftMapper;
+    public ItemMapper(QueueMapper queueMapper){
+        this.queueMapper = queueMapper;
     }
 
     // Convierte de Item a ItemDTO
@@ -33,6 +33,8 @@ public class ItemMapper {
         dto.setMainImagePath(item.getMainImagePath());
         dto.setSecondaryImagePath(item.getSecondaryImagePath());
         dto.setStatus(item.getStatus().name());
+        dto.setQueueResponseDTO(queueMapper.toQueueResponseDTO(item.getQueue()));
+
 
         return dto;
     }
@@ -60,6 +62,7 @@ public class ItemMapper {
         item.setMainImagePath(dto.getMainImagePath());
         item.setSecondaryImagePath(dto.getSecondaryImagePath());
         item.setStatus(ItemStatus.valueOf(dto.getStatus()));
+        item.setQueue(queueMapper.toQueue(dto.getQueueRequestDTO()));
 
         return item;
     }

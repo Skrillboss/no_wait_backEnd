@@ -1,5 +1,6 @@
 package com.heredi.nowait.application.model.item.dto.in;
 
+import com.heredi.nowait.application.model.queue.dto.in.QueueRequestDTO;
 import lombok.Data;
 
 @Data
@@ -10,6 +11,6 @@ public class ItemRequestDTO {
     private int peoplePerShift;
     private String mainImagePath;
     private String secondaryImagePath;
-    private int durationPerShifts;
     private String status;
+    private QueueRequestDTO queueRequestDTO;
 }
