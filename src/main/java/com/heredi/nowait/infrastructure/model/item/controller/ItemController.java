@@ -19,7 +19,7 @@ public class ItemController {
     }
 
     @GetMapping("/{itemId}")
-    public ResponseEntity<ItemResponseDTO> createItem(@PathVariable String itemId) {
+    public ResponseEntity<ItemResponseDTO> getItem(@PathVariable String itemId) {
         return new ResponseEntity<ItemResponseDTO>(itemService.getItem(itemId), HttpStatus.OK);
     }
 }
