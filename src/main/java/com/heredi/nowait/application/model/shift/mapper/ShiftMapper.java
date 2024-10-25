@@ -20,17 +20,19 @@ public class ShiftMapper {
         ShiftResponseDTO dto = new ShiftResponseDTO();
         dto.setId(shift.getId());
         dto.setCreateAt(shift.getCreateAt().toString());
-        dto.setNotifyTime(shift.getNotifyTime().toString());
-        dto.setCurrentWaitingDuration(shift.getCurrentWaitingDuration().toMinutes());
-        dto.setExpirationTime(shift.getExpirationTime().toString());
-        dto.setEstimatedArrivalTime(shift.getEstimatedArrivalTime().toMinutes());
+        dto.setNotifyTime(shift.getNotifyTime() != null ? shift.getNotifyTime().toString() : null);
+        dto.setCurrentWaitingDuration(shift.getCurrentWaitingDuration() != null ? shift.getCurrentWaitingDuration().toMinutes() : 0.0);
+        dto.setExpirationTime(shift.getExpirationTime() != null ? shift.getExpirationTime().toString() : null);
+        dto.setEstimatedArrivalTime(shift.getEstimatedArrivalTime() != null ? shift.getEstimatedArrivalTime().toMinutes() : 0.0);
+        dto.setItemName(shift.getItemName());
+        dto.setItemImageUrl(shift.getItemImageUrl());
         dto.setStatus(shift.getStatus().name());
         dto.setShiftNumber(shift.getShiftNumber());
 
         return dto;
     }
 
-    public List<ShiftResponseDTO> toShiftsDTO(List<Shift> shifts){
+    public List<ShiftResponseDTO> shiftResponseDTOList(List<Shift> shifts){
         if(shifts == null){
             return new ArrayList<>();
         }

@@ -42,6 +42,6 @@ public class BusinessEntity {
 
     @Lob
     @OneToMany
-    @JoinColumn(name = "business_item_id")
+    @JoinColumn(name = "business_id")
     private List<ItemEntity> items;
 }

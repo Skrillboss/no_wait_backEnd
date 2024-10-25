@@ -7,10 +7,12 @@ import com.heredi.nowait.infrastructure.model.queue.entity.QueueEntity;
 import com.heredi.nowait.infrastructure.model.queue.jpa.QueueJPARepository;
 import com.heredi.nowait.infrastructure.model.queue.mapper.QueueEntityMapper;
 import com.heredi.nowait.infrastructure.model.shift.entity.ShiftEntity;
+import com.heredi.nowait.infrastructure.model.shift.mapper.ShiftEntityMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Repository
@@ -20,6 +22,9 @@ public class QueueRepositoryImpl implements QueueRepository {
 
     @Autowired
     private QueueEntityMapper queueEntityMapper;
+
+    @Autowired
+    private ShiftEntityMapper shiftEntityMapper;
 
     public QueueRepositoryImpl(QueueJPARepository queueJPARepository) {
         this.queueJPARepository = queueJPARepository;
@@ -39,9 +44,7 @@ public class QueueRepositoryImpl implements QueueRepository {
 
         if (queue.getShifts() != null) {
             List<ShiftEntity> shiftEntities = queue.getShifts().stream()
-                    .map(shift -> {
-                        return new ShiftEntity();
-                    })
+                    .map(shift -> shiftEntityMapper.toShiftEntity(shift))
                     .collect(Collectors.toList());
             queueEntity.setShifts(shiftEntities);
         }
@@ -52,7 +55,8 @@ public class QueueRepositoryImpl implements QueueRepository {
 
     @Override
     public Queue getQueueById(Long queueId) {
-        return null;
+        return this.queueEntityMapper.toQueue(this.queueJPARepository.findById(queueId)
+                .orElseThrow(() -> new NoSuchElementException("User not found")));
     }
 
     @Override

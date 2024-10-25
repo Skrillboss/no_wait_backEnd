@@ -1,5 +1,6 @@
 package com.heredi.nowait.infrastructure.model.queue.entity;
 
+import com.heredi.nowait.infrastructure.model.item.entity.ItemEntity;
 import com.heredi.nowait.infrastructure.model.shift.entity.ShiftEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -36,8 +37,12 @@ public class QueueEntity {
     @Column(nullable = false)
     private int peoplePerShift;
 
+    @OneToOne
+    @JoinColumn(name = "item_id")
+    private ItemEntity item;
+
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "shifts_id")
+    @JoinColumn(name = "queue_id")
     private List<ShiftEntity> shifts;
 
     @Enumerated(EnumType.STRING)

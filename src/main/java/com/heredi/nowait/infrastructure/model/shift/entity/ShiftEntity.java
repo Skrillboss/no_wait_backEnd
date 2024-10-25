@@ -1,9 +1,11 @@
 package com.heredi.nowait.infrastructure.model.shift.entity;
 
+import com.heredi.nowait.infrastructure.model.queue.entity.QueueEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -19,6 +21,7 @@ public class ShiftEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // Identificador autogenerado
 
+    @CreationTimestamp
     @Column(nullable = false)
     private LocalDateTime createAt; // fecha de creación
 
@@ -30,13 +33,25 @@ public class ShiftEntity {
 
     private Duration estimatedArrivalTime;
 
+    @ManyToOne
+    @JoinColumn(name = "queue_id")
+    private QueueEntity queue;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ShiftStatus status; // estado del turno
 
+    @Column(nullable = false)
     private int shiftNumber;
 
     public enum ShiftStatus {
         ACTIVE, CREATING, INACTIVE, EXPIRED, POSTPONED, ERROR
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        if (status == null) {
+            this.status = ShiftStatus.ACTIVE;
+        }
     }
 }

@@ -38,16 +38,4 @@ public class BusinessRepositoryImpl implements BusinessRepository {
 
         return this.businessEntityMapper.toBusiness(businessEntity);
     }
-
-    @Override
-    public Business addItem(Long businessId, Item item) {
-        BusinessEntity businessEntity = this.businessJPARepository.findById(businessId).
-                orElseThrow(() -> new NoSuchElementException("Business not found"));
-
-        ItemEntity itemEntity = itemJPARepository.save(itemEntityMapper.toItemEntity(item));
-
-        businessEntity.getItems().add(itemEntity);
-
-        return businessEntityMapper.toBusiness(this.businessJPARepository.save(businessEntity));
-    }
 }
