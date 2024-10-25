@@ -7,10 +7,13 @@ import com.heredi.nowait.infrastructure.model.business.jpa.BusinessJPARepository
 import com.heredi.nowait.infrastructure.model.item.entity.ItemEntity;
 import com.heredi.nowait.infrastructure.model.item.jpa.ItemJPARepository;
 import com.heredi.nowait.infrastructure.model.item.mapper.ItemEntityMapper;
+import com.heredi.nowait.infrastructure.model.queue.jpa.QueueJPARepository;
+import com.heredi.nowait.infrastructure.model.queue.mapper.QueueEntityMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public class ItemRepositoryImpl implements ItemRepository {
@@ -22,18 +25,24 @@ public class ItemRepositoryImpl implements ItemRepository {
     @Autowired
     private ItemEntityMapper itemEntityMapper;
 
-    ItemRepositoryImpl(BusinessJPARepository businessJPARepository, @Lazy ItemJPARepository itemJPARepository) {
+    @Autowired
+    private QueueEntityMapper queueEntityMapper;
+
+    ItemRepositoryImpl(BusinessJPARepository businessJPARepository, @Lazy ItemJPARepository itemJPARepository, QueueJPARepository queueJPARepository) {
         this.businessJPARepository = businessJPARepository;
         this.itemJPARepository = itemJPARepository;
     }
 
 
+    @Transactional
     @Override
     public Item create(Long businessId, Item item) {
         BusinessEntity businessEntity = this.businessJPARepository.findById(businessId)
                 .orElseThrow(() -> new UsernameNotFoundException("Business not found by Id: " + businessId));
 
         ItemEntity itemEntity = itemEntityMapper.toItemEntity(item);
+
+        itemEntity.getQueue().setItem(itemEntity);
 
         businessEntity.getItems().add(itemEntity);
 
