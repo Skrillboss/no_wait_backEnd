@@ -7,6 +7,7 @@ import com.heredi.nowait.domain.shift.model.Shift;
 import com.heredi.nowait.domain.shift.port.ShiftRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 
@@ -24,6 +25,7 @@ public class ShiftServiceImpl implements ShiftService {
     }
 
 
+    @Transactional
     @Override
     public ShiftResponseDTO create(String queueId, Long userId) {
 
