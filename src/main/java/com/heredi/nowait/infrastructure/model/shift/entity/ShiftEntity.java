@@ -41,6 +41,7 @@ public class ShiftEntity {
     @Column(nullable = false)
     private ShiftStatus status; // estado del turno
 
+    @Column(nullable = false)
     private int shiftNumber;
 
     public enum ShiftStatus {

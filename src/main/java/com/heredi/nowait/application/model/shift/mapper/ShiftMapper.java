@@ -24,6 +24,8 @@ public class ShiftMapper {
         dto.setCurrentWaitingDuration(shift.getCurrentWaitingDuration() != null ? shift.getCurrentWaitingDuration().toMinutes() : 0.0);
         dto.setExpirationTime(shift.getExpirationTime() != null ? shift.getExpirationTime().toString() : null);
         dto.setEstimatedArrivalTime(shift.getEstimatedArrivalTime() != null ? shift.getEstimatedArrivalTime().toMinutes() : 0.0);
+        dto.setItemName(shift.getItemName());
+        dto.setItemImageUrl(shift.getItemImageUrl());
         dto.setStatus(shift.getStatus().name());
         dto.setShiftNumber(shift.getShiftNumber());
 

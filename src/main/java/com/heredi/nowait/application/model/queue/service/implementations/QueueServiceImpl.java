@@ -27,6 +27,7 @@ public class QueueServiceImpl implements QueueService {
     private final AuthService authService;
 
 
+    @Deprecated
     public QueueServiceImpl(QueueRepository queueRepository, ShiftRepository shiftRepository, UserRepository userRepository, ShiftMapper shiftMapper, AuthService authService) {
         this.queueRepository = queueRepository;
         this.shiftRepository = shiftRepository;
@@ -37,18 +38,6 @@ public class QueueServiceImpl implements QueueService {
 
     @Override
     public ShiftResponseDTO generateShift(String itemId, String queueId, String authorizationHeader) {
-        String accessToken = authorizationHeader.replace("Bearer ", "");
-        Long userId = authService.extractUserId(accessToken);
-        Shift obteinedShift = shiftRepository.createShift();
-        Queue obteinedQueue = queueRepository.getQueueById(Long.parseLong(queueId));
-        Users obteinedUser = userRepository.getUserById(userId);
-
-        obteinedQueue.getShifts().add(obteinedShift);
-        obteinedUser.getShifts().add(obteinedShift);
-
-        queueRepository.save(obteinedQueue);
-        userRepository.updateUser(obteinedUser);
-
-        return shiftMapper.toShiftDTO(obteinedShift);
+        return null;
     }
 }

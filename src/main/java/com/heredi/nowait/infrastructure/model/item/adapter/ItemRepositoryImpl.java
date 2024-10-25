@@ -15,6 +15,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.NoSuchElementException;
+
 @Repository
 public class ItemRepositoryImpl implements ItemRepository {
 
@@ -38,7 +40,7 @@ public class ItemRepositoryImpl implements ItemRepository {
     @Override
     public Item create(Long businessId, Item item) {
         BusinessEntity businessEntity = this.businessJPARepository.findById(businessId)
-                .orElseThrow(() -> new UsernameNotFoundException("Business not found by Id: " + businessId));
+                .orElseThrow(() -> new NoSuchElementException("Business not found by Id: " + businessId));
 
         ItemEntity itemEntity = itemEntityMapper.toItemEntity(item);
 

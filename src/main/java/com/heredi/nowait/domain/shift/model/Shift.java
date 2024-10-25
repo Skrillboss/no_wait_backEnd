@@ -12,14 +12,16 @@ import java.time.Duration;
 @AllArgsConstructor
 public class Shift {
 
-    private String id; // Identificador del turno
-    private LocalDateTime createAt; // Fecha de creación del turno
-    private LocalDateTime notifyTime; // Tiempo para notificar al usuario
-    private Duration currentWaitingDuration; // Tiempo de duración actual para que sea tu turno
-    private LocalDateTime expirationTime; // Tiempo de expiración del turno
-    private Duration estimatedArrivalTime; // Tiempo estimado de llegada al negocio para reclamar tu turno
-    private ShiftStatus status; // Estado del turno
-    private int shiftNumber; // Número de turno
+    private String id;
+    private LocalDateTime createAt;
+    private LocalDateTime notifyTime;
+    private Duration currentWaitingDuration;
+    private LocalDateTime expirationTime;
+    private Duration estimatedArrivalTime;
+    private String itemName;
+    private String itemImageUrl;
+    private ShiftStatus status;
+    private int shiftNumber;
 
     public enum ShiftStatus {
         ACTIVE,
