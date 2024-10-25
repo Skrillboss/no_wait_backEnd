@@ -1,5 +1,6 @@
 package com.heredi.nowait.infrastructure.model.shift.entity;
 
+import com.heredi.nowait.infrastructure.model.queue.entity.QueueEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,6 +32,10 @@ public class ShiftEntity {
     private LocalDateTime expirationTime; // tiempo de expiración del turno
 
     private Duration estimatedArrivalTime;
+
+    @ManyToOne
+    @JoinColumn(name = "queue_id")
+    private QueueEntity queue;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

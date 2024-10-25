@@ -23,11 +23,6 @@ public class BusinessController {
         this.businessService = businessService;
     }
 
-    @PostMapping("{businessId}/item/add")
-    public ResponseEntity<AddItemResponseDTO> addItem(@PathVariable String businessId, @RequestBody ItemRequestDTO itemRequestDTO) throws IOException, WriterException {
-        return new ResponseEntity<AddItemResponseDTO>(businessService.addItem(businessId, itemRequestDTO), HttpStatus.CREATED);
-    }
-
     @PostMapping("/item/{businessId}/{itemId}/sendQR/mail")
     public boolean sendQRToMail(@PathVariable String businessId, @PathVariable String itemId) throws MessagingException, IOException, WriterException {
         return businessService.saveItemIdToMail(businessId, itemId);

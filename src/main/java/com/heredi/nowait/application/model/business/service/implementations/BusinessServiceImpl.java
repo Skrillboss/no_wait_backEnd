@@ -48,22 +48,10 @@ public class BusinessServiceImpl implements BusinessService {
 
     @Transactional
     @Override
-    public AddItemResponseDTO addItem(String businessId, ItemRequestDTO itemRequestDTO) throws IOException, WriterException {
-        Item item = itemMapper.toItem(itemRequestDTO);
-        Long longBusinessId = Long.parseLong(businessId);
-        Business business = businessRepository.addItem(longBusinessId, item);
-        List<Item> itemList = business.getItems();
-        Item itemAdded = itemList.get(itemList.size() -1);
-
-        return new AddItemResponseDTO(business.getId(), itemMapper.toItemResponseDTO(itemAdded));
-    }
-
-    @Transactional
-    @Override
     public boolean saveItemIdToMail(String businessId, String itemId) throws IOException, WriterException, MessagingException {
         try{
             Business business = businessRepository.getBusiness(Long.parseLong(businessId));
-            ItemResponseDTO item = this.itemService.getItem(itemId);
+            ItemResponseDTO item = this.itemService.get(itemId);
 
             String path = "itemId.png";
             String charset = "UTF-8";
