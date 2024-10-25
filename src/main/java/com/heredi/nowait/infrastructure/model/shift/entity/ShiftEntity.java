@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -19,6 +20,7 @@ public class ShiftEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // Identificador autogenerado
 
+    @CreationTimestamp
     @Column(nullable = false)
     private LocalDateTime createAt; // fecha de creación
 
@@ -38,5 +40,12 @@ public class ShiftEntity {
 
     public enum ShiftStatus {
         ACTIVE, CREATING, INACTIVE, EXPIRED, POSTPONED, ERROR
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        if (status == null) {
+            this.status = ShiftStatus.ACTIVE;
+        }
     }
 }

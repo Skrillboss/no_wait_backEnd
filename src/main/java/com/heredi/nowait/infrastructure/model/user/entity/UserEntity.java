@@ -46,7 +46,7 @@ public class UserEntity {
     private RoleEntity roleEntity;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "payment_info_id")
+    @JoinColumn(name = "user_id")
     @ToString.Exclude
     private List<PaymentInfoEntity> paymentInfoEntityList;
 
@@ -56,7 +56,7 @@ public class UserEntity {
     private BusinessEntity business;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "shifts_id")
+    @JoinColumn(name = "user_id")
     @ToString.Exclude
     private List<ShiftEntity> shifts;
 }

@@ -48,7 +48,7 @@ public class QueueMapper {
         dto.setStartTimeHour(queue.getStartTimeHour().toString());
         dto.setEndTimeHour(queue.getEndTimeHour().toString());
         dto.setPeoplePerShift(queue.getPeoplePerShift());
-        dto.setShiftResponseDTOList(shiftMapper.toShiftsDTO(queue.getShifts()));
+        dto.setShiftResponseDTOList(shiftMapper.shiftResponseDTOList(queue.getShifts()));
         dto.setStatus(queue.getStatus().name());
 
         return dto;

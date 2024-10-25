@@ -1,5 +1,6 @@
 package com.heredi.nowait.application.model.queue.service.implementations;
 
+import com.heredi.nowait.application.auth.AuthService;
 import com.heredi.nowait.application.model.queue.service.interfaces.QueueService;
 import com.heredi.nowait.application.model.shift.dto.out.ShiftResponseDTO;
 import com.heredi.nowait.application.model.shift.mapper.ShiftMapper;
@@ -23,18 +24,24 @@ public class QueueServiceImpl implements QueueService {
     @Autowired
     private final ShiftMapper shiftMapper;
 
-    public QueueServiceImpl(QueueRepository queueRepository, ShiftRepository shiftRepository, UserRepository userRepository, ShiftMapper shiftMapper) {
+    private final AuthService authService;
+
+
+    public QueueServiceImpl(QueueRepository queueRepository, ShiftRepository shiftRepository, UserRepository userRepository, ShiftMapper shiftMapper, AuthService authService) {
         this.queueRepository = queueRepository;
         this.shiftRepository = shiftRepository;
         this.userRepository = userRepository;
         this.shiftMapper = shiftMapper;
+        this.authService = authService;
     }
 
     @Override
-    public ShiftResponseDTO generateShift(String queueId, String userId) {
+    public ShiftResponseDTO generateShift(String itemId, String queueId, String authorizationHeader) {
+        String accessToken = authorizationHeader.replace("Bearer ", "");
+        Long userId = authService.extractUserId(accessToken);
         Shift obteinedShift = shiftRepository.createShift();
         Queue obteinedQueue = queueRepository.getQueueById(Long.parseLong(queueId));
-        Users obteinedUser = userRepository.getUserById(Long.parseLong(userId));
+        Users obteinedUser = userRepository.getUserById(userId);
 
         obteinedQueue.getShifts().add(obteinedShift);
         obteinedUser.getShifts().add(obteinedShift);

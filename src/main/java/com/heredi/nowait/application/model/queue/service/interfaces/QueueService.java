@@ -5,5 +5,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface QueueService {
-    ShiftResponseDTO generateShift(String queueId, String userId);
+    ShiftResponseDTO generateShift(String itemId, String queueId, String authorizationHeader);
 }
