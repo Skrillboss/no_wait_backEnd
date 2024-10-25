@@ -11,7 +11,6 @@ import com.heredi.nowait.infrastructure.model.queue.jpa.QueueJPARepository;
 import com.heredi.nowait.infrastructure.model.queue.mapper.QueueEntityMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 

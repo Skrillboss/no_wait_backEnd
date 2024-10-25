@@ -35,6 +35,6 @@ public class ShiftServiceImpl implements ShiftService {
         shift.setCurrentWaitingDuration(Duration.ofMinutes(5));
         shift.setShiftNumber(1);
 
-        return this.shiftMapper.toShiftDTO(this.shiftRepository.createShift(Long.parseLong(queueId), shift));
+        return this.shiftMapper.toShiftDTO(this.shiftRepository.createShift(Long.parseLong(queueId), userId, shift));
     }
 }

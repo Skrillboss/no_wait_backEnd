@@ -42,7 +42,7 @@ public class QueueEntity {
     private ItemEntity item;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "shifts_id")
+    @JoinColumn(name = "queue_id")
     private List<ShiftEntity> shifts;
 
     @Enumerated(EnumType.STRING)
