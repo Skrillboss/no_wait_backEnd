@@ -23,7 +23,7 @@ public class BusinessMapper {
         }
 
         BusinessResponseDTO dto = new BusinessResponseDTO();
-        dto.setId(business.getId());
+        dto.setId(business.getId().toString());
         dto.setCif(business.getCif());
         dto.setName(business.getName());
         dto.setImageUrl(business.getImageUrl());

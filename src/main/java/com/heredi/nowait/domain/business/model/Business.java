@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor // Constructor con todos los atributos
 public class Business {
 
-    private String id;
+    private Long id;
     private String cif;
     private String name;
     private String imageUrl;

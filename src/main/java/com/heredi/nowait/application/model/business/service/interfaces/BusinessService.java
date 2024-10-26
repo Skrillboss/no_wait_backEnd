@@ -10,5 +10,4 @@ import java.io.IOException;
 
 @Service
 public interface BusinessService {
-    boolean saveItemIdToMail(String businessId, String itemId) throws IOException, WriterException, MessagingException;
 }
