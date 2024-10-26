@@ -23,7 +23,7 @@ public class BusinessController {
         this.businessService = businessService;
     }
 
-    @PostMapping("/item/{businessId}/{itemId}/sendQR/mail")
+    @PostMapping("/{businessId}/item/{itemId}/sendQR/mail")
     public boolean sendQRToMail(@PathVariable String businessId, @PathVariable String itemId) throws MessagingException, IOException, WriterException {
         return businessService.saveItemIdToMail(businessId, itemId);
     }
