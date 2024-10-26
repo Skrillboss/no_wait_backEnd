@@ -88,6 +88,18 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public void getUserByNickNameAndEmail(String nickName, String email) {
+
+        UserEntity userEntity = this.userJPARepository.findByNickName(nickName)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+
+        if(email.equals(userEntity.getEmail())){
+            userEntity.setStatus(UserEntity.UserStatus.ACTIVE);
+            userJPARepository.save(userEntity);
+        }
+    }
+
+    @Override
     public Users getUserFromIdAndNickName(Long userId, String nickName) {
         UserEntity userEntity = this.userJPARepository.findByNickName(nickName)
                 .orElseThrow(() -> new NoSuchElementException("User not found"));

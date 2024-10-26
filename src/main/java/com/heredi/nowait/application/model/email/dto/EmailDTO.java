@@ -11,6 +11,7 @@ public class EmailDTO {
     private String addressee;
     private String affair;
     private String message;
+    private String nickName;
     private String attachmentFileName;
     private File fileImage;
 }

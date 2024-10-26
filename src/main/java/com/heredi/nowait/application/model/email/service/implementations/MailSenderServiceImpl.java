@@ -35,6 +35,8 @@ public class MailSenderServiceImpl implements MailSenderService {
             helper.addAttachment(emailDTO.getAttachmentFileName(), emailDTO.getFileImage());
             Context context = new Context();
             context.setVariable("message", emailDTO.getMessage());
+            context.setVariable("nickName", emailDTO.getNickName());
+            context.setVariable("email", emailDTO.getAddressee());
             String contentHTML = templateEngine.process(template, context);
 
             helper.setText(contentHTML, true);

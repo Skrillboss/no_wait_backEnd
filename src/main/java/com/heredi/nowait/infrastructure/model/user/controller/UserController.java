@@ -37,6 +37,11 @@ public class UserController {
         return new ResponseEntity<>(userService.createUser(createUserRequestDTO), HttpStatus.CREATED);
     }
 
+    @GetMapping("/verifyEmail/{nickName}/{email}")
+    public void verifyEmail(@PathVariable String nickName, @PathVariable String email){
+        userService.verifyNickNameAndEmail(nickName, email);
+    }
+
     @PostMapping("/login")
     public ResponseEntity<LoginUserResponseDTO> loginUser(@RequestParam String nickName, String password) {
         try {

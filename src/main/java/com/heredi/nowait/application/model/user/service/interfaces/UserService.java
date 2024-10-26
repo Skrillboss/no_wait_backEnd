@@ -14,6 +14,7 @@ public interface UserService {
 
     UserResponseDTO createUser(CreateUserRequestDTO userDTO) throws MessagingException;
     UpdatedUserResponseDTO updateUser(Long userId, UpdateUserRequestDTO updateUserRequestDTO);
+    void verifyNickNameAndEmail(String nickName, String email);
     LoginUserResponseDTO loginUser(String nickName, String password);
     UserResponseDTO loginUserWithToken(String authorizationHeader);
     RefreshTokenResponseDTO refreshTokens(String authorizationHeader, String accessToken);

@@ -28,7 +28,9 @@ public class SecurityConfiguration {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/user/register", "/user/login").permitAll()
+                        .requestMatchers("/user/register",
+                                "/user/login",
+                                "/user/verifyEmail/**").permitAll()
                         .requestMatchers(HttpMethod.POST,
                                 "/business/**",
                                 "/item/{itemId}/sendQR/mail",

@@ -84,6 +84,7 @@ public class ItemServiceImpl implements ItemService {
                     "NoWait: Id " + item.getName(),
                     "Item description: " + item.getDescription() +"\n \nEste es el QR generado, te recomendamos " +
                             "Imprimirlo y colocarlo en el lugar donde proporcionaras el producto o servicio",
+                    user.getNickName(),
                     itemId,
                     file
             );

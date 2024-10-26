@@ -48,6 +48,7 @@ public class UserServiceImpl implements UserService {
                 createUserRequestDTO.getEmail(),
                 "NoWait: verificación de correo electronico",
                 "",
+                createdUser.getNickName(),
                 "Logo NoWait",
                 new File("logoNoWait.png")
         );
@@ -76,6 +77,11 @@ public class UserServiceImpl implements UserService {
         responseDTO.setToken(this.authService.generateToken(userId, user.getNickName()));
 
         return responseDTO;
+    }
+
+    @Override
+    public void verifyNickNameAndEmail(String nickName, String email) {
+        this.userRepository.getUserByNickNameAndEmail(nickName, email);
     }
 
     private void validateRoleSpecificInfo(CreateUserRequestDTO createUserRequestDTO) {
