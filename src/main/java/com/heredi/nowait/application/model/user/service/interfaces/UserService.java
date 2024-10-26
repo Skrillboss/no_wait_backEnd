@@ -6,12 +6,13 @@ import com.heredi.nowait.application.model.user.dto.out.LoginUserResponseDTO;
 import com.heredi.nowait.application.model.user.dto.out.UpdatedUserResponseDTO;
 import com.heredi.nowait.application.model.user.dto.out.UserResponseDTO;
 import com.heredi.nowait.application.model.user.dto.out.RefreshTokenResponseDTO;
+import jakarta.mail.MessagingException;
 import org.springframework.stereotype.Service;
 
 @Service
 public interface UserService {
 
-    UserResponseDTO createUser(CreateUserRequestDTO userDTO);
+    UserResponseDTO createUser(CreateUserRequestDTO userDTO) throws MessagingException;
     UpdatedUserResponseDTO updateUser(Long userId, UpdateUserRequestDTO updateUserRequestDTO);
     LoginUserResponseDTO loginUser(String nickName, String password);
     UserResponseDTO loginUserWithToken(String authorizationHeader);

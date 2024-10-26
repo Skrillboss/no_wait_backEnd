@@ -8,6 +8,7 @@ import com.heredi.nowait.application.model.user.dto.out.UserResponseDTO;
 import com.heredi.nowait.application.model.user.dto.out.RefreshTokenResponseDTO;
 import com.heredi.nowait.application.model.user.service.interfaces.UserService;
 import com.heredi.nowait.infrastructure.auth.jwt.AuthJwtImpl;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponseDTO> createUser(@RequestBody CreateUserRequestDTO createUserRequestDTO) {
+    public ResponseEntity<UserResponseDTO> createUser(@RequestBody CreateUserRequestDTO createUserRequestDTO) throws MessagingException {
         return new ResponseEntity<>(userService.createUser(createUserRequestDTO), HttpStatus.CREATED);
     }
 

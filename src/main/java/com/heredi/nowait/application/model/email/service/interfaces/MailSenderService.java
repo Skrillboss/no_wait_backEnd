@@ -6,5 +6,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface MailSenderService {
-    public void sendNewMail(EmailDTO emailDTO) throws MessagingException;
+    public void sendNewMail(String template, EmailDTO emailDTO) throws MessagingException;
 }
