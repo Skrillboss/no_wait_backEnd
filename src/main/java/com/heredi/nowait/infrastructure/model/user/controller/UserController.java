@@ -23,13 +23,8 @@ public class UserController {
         this.userService = userService;
     }
 
-    //TODO: este if ADMIN es completamente provicional.
     @PostMapping("/register")
     public ResponseEntity<UserResponseDTO> createUser(@RequestBody CreateUserRequestDTO createUserRequestDTO) {
-        if (!"ADMIN".equalsIgnoreCase(createUserRequestDTO.getRoleRequestDTO().getName())) {
-            createUserRequestDTO.setPaymentInfoRequestDTOList(null);
-            createUserRequestDTO.setBusinessRequestDTO(null);
-        }
         return new ResponseEntity<>(userService.createUser(createUserRequestDTO), HttpStatus.CREATED);
     }
 
