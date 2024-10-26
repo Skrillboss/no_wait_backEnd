@@ -43,6 +43,7 @@ public class UserRepositoryImpl implements UserRepository {
 
         UserEntity userEntity = this.userEntityMapper.toUserEntity(user);
         userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
+        userEntity.setStatus(UserEntity.UserStatus.EMAIL_UNVERIFIED);
         return this.userEntityMapper.toUser(this.userJPARepository.save(userEntity));
     }
 

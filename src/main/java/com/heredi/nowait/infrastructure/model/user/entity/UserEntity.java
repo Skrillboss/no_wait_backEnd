@@ -41,6 +41,10 @@ public class UserEntity {
     @Column(nullable = false)
     private String phoneNumber;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserStatus status;
+
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "role_id", referencedColumnName = "role_id", nullable = false)
     private RoleEntity roleEntity;
@@ -59,4 +63,11 @@ public class UserEntity {
     @JoinColumn(name = "user_id")
     @ToString.Exclude
     private List<ShiftEntity> shifts;
+
+    public enum UserStatus{
+        ACTIVE,
+        EMAIL_UNVERIFIED,
+        SUSPENDED,
+        UNHANDLED_ERROR
+    }
 }
