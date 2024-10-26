@@ -27,7 +27,7 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/user/register", "/user/login").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/business/addItem").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/business/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .userDetailsService(userDetailsService) // Aquí le decimos a Spring que use tu CustomUserDetailsService

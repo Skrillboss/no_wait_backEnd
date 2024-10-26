@@ -74,7 +74,7 @@ public class BusinessServiceImpl implements BusinessService {
             mailSenderService.sendNewMail(emailDTO);
             return true;
         }catch (Exception e){
-            throw new RuntimeException("Error al mandar el correo: " + e.toString(), e);
+            throw new RuntimeException("Error sending the email: " + e.toString(), e);
         }
     }
 }
