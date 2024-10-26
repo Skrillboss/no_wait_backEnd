@@ -39,6 +39,15 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Users createUser(Users user) {
+        if(this.userJPARepository.existsByNickName(user.getNickName())){
+            throw new IllegalArgumentException("NickName from User try to register already exist");
+        }
+        if(this.userJPARepository.existsByEmail(user.getEmail())){
+            throw new IllegalArgumentException("Email from User try to register already exist");
+        }
+        if(this.userJPARepository.existsByPhoneNumber(user.getPhoneNumber())){
+            throw new IllegalArgumentException("PhoneNumber from User try to register already exist");
+        }
         UserEntity userEntity = this.userEntityMapper.toUserEntity(user);
         userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
         return this.userEntityMapper.toUser(this.userJPARepository.save(userEntity));

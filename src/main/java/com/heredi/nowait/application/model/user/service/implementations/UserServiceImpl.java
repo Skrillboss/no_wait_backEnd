@@ -30,8 +30,23 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDTO createUser(CreateUserRequestDTO createUserRequestDTO) {
+        validateRoleSpecificInfo(createUserRequestDTO);
+
         Users createdUser = this.userRepository.createUser(userMapper.toUser(createUserRequestDTO));
         return userMapper.toUserResponseDTO(createdUser);
+    }
+
+    private void validateRoleSpecificInfo(CreateUserRequestDTO createUserRequestDTO) {
+        boolean isAdmin = "ADMIN".equals(createUserRequestDTO.getRoleRequestDTO().getName());
+        boolean hasBusinessInfo = createUserRequestDTO.getBusinessRequestDTO() != null;
+        boolean hasPaymentInfo = createUserRequestDTO.getPaymentInfoRequestDTOList() != null;
+
+        if (isAdmin && (!hasBusinessInfo || !hasPaymentInfo)) {
+            throw new IllegalArgumentException("'ADMIN' roles need both payment and business information");
+        }
+        if (!isAdmin && (hasBusinessInfo || hasPaymentInfo)) {
+            throw new IllegalArgumentException("Only 'ADMIN' roles can record payment or business information");
+        }
     }
 
     @Transactional
