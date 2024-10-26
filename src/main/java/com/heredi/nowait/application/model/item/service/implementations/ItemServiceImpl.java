@@ -46,32 +46,36 @@ public class ItemServiceImpl implements ItemService {
         this.itemMapper = itemMapper;
     }
 
+    @Transactional
     @Override
-    public AddItemResponseDTO create(String businessId, ItemRequestDTO itemRequestDTO) {
-        Item item = itemMapper.toItem(itemRequestDTO);
-        Long longBusinessId = Long.parseLong(businessId);
-        item = itemRepository.create(longBusinessId, item);
+    public AddItemResponseDTO create(Long userId, ItemRequestDTO itemRequestDTO) {
+        Long businessId = this.userRepository.getUserById(userId).getBusiness().getId();
+        Item item = itemRepository.create(businessId, itemMapper.toItem(itemRequestDTO));
 
-        return new AddItemResponseDTO(businessId, itemMapper.toItemResponseDTO(item));
+        return new AddItemResponseDTO(businessId.toString(), itemMapper.toItemResponseDTO(item));
     }
 
     @Transactional
     @Override
     public void saveItemIdQrToMail(Long userId, String itemId) throws IOException, WriterException, MessagingException {
         Users user = this.userRepository.getUserById(userId);
+        Long longItemId = Long.parseLong(itemId);
 
+        boolean userHasItem = user.getBusiness().getItems().stream()
+                .anyMatch(item -> item.getId().equals(longItemId));
 
-        try{
-            Item item = this.itemRepository.getItemById(Long.parseLong(itemId));
+        if(!userHasItem){
+            throw new IllegalArgumentException("The user's business does not own any items with this ID:" + itemId);
+        }
+
+        try {
+            Item item = this.itemRepository.getItemById(longItemId);
 
             String path = "itemId.png";
             String charset = "UTF-8";
-            Map<EncodeHintType, ErrorCorrectionLevel> hashMap
-                    = new HashMap<EncodeHintType,
-                    ErrorCorrectionLevel>();
+            Map<EncodeHintType, ErrorCorrectionLevel> hashMap = new HashMap<>();
 
-            hashMap.put(EncodeHintType.ERROR_CORRECTION,
-                    ErrorCorrectionLevel.L);
+            hashMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
 
             createQR(itemId, path, charset, hashMap, 200, 200);
             File file = new File(path);
@@ -83,10 +87,9 @@ public class ItemServiceImpl implements ItemService {
                     file
             );
             mailSenderService.sendNewMail(emailDTO);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException("Error sending the email: " + e.toString(), e);
         }
-
     }
 
     @Transactional

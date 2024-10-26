@@ -11,7 +11,7 @@ import java.io.IOException;
 
 @Service
 public interface ItemService {
-    AddItemResponseDTO create(String businessId, ItemRequestDTO itemRequestDTO);
+    AddItemResponseDTO create(Long userId, ItemRequestDTO itemRequestDTO);
     void saveItemIdQrToMail(Long userId, String itemId) throws IOException, WriterException, MessagingException;
     ItemResponseDTO get(String itemId);
 }

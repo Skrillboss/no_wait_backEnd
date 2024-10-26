@@ -31,9 +31,11 @@ public class ItemController {
         this.authJwt = authJwt;
     }
 
-    @PostMapping("/create/{businessId}")
-    public ResponseEntity<AddItemResponseDTO> createItem(@PathVariable String businessId, @RequestBody ItemRequestDTO itemRequestDTO) throws IOException, WriterException {
-        return new ResponseEntity<AddItemResponseDTO>(itemService.create(businessId, itemRequestDTO), HttpStatus.CREATED);
+    @PostMapping("/create")
+    public ResponseEntity<AddItemResponseDTO> createItem(@RequestHeader("Authorization") String authorizationHeader, @RequestBody ItemRequestDTO itemRequestDTO) throws IOException, WriterException, NoSuchAlgorithmException, InvalidKeySpecException {
+        String accessToken = authorizationHeader.replace("Bearer ", "");
+        Long userId = authJwt.extractUserId(accessToken);
+        return new ResponseEntity<AddItemResponseDTO>(itemService.create(userId, itemRequestDTO), HttpStatus.CREATED);
     }
 
     @GetMapping("/{itemId}")
