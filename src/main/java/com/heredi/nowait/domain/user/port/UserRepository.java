@@ -8,12 +8,12 @@ public interface UserRepository {
     // Crear un nuevo usuario
     Users createUser(Users user);
 
+    void updateUser(Users user);
+
     // Obtener un usuario por email/nickname y password para login
     Users getUser(String nickName, String password);
 
     Users getUserFromIdAndNickName(Long userId, String nickName);
 
     void saveUUID(String randomUUID, Long userId);
-
-    void updateUser(Users user);
 }

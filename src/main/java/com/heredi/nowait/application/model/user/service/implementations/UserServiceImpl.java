@@ -2,7 +2,9 @@ package com.heredi.nowait.application.model.user.service.implementations;
 
 import com.heredi.nowait.application.auth.AuthService;
 import com.heredi.nowait.application.model.user.dto.in.CreateUserRequestDTO;
+import com.heredi.nowait.application.model.user.dto.in.UpdateUserRequestDTO;
 import com.heredi.nowait.application.model.user.dto.out.LoginUserResponseDTO;
+import com.heredi.nowait.application.model.user.dto.out.UpdatedUserResponseDTO;
 import com.heredi.nowait.application.model.user.dto.out.UserResponseDTO;
 import com.heredi.nowait.application.model.user.dto.out.RefreshTokenResponseDTO;
 import com.heredi.nowait.application.model.user.mapper.UserMapper;
@@ -34,6 +36,27 @@ public class UserServiceImpl implements UserService {
 
         Users createdUser = this.userRepository.createUser(userMapper.toUser(createUserRequestDTO));
         return userMapper.toUserResponseDTO(createdUser);
+    }
+
+    @Override
+    public UpdatedUserResponseDTO updateUser(Long userId, UpdateUserRequestDTO updateUserRequestDTO) {
+
+        Users user = new Users();
+
+        user.setId(userId);
+        user.setName(updateUserRequestDTO.getName());
+        user.setNickName(updateUserRequestDTO.getNickName());
+        user.setEmail(updateUserRequestDTO.getEmail());
+        user.setPhoneNumber(updateUserRequestDTO.getPhoneNumber());
+
+        this.userRepository.updateUser(user);
+
+        UpdatedUserResponseDTO responseDTO = new UpdatedUserResponseDTO();
+
+        responseDTO.setUpdateUserRequestDTO(updateUserRequestDTO);
+        responseDTO.setToken(this.authService.generateToken(userId, user.getNickName()));
+
+        return responseDTO;
     }
 
     private void validateRoleSpecificInfo(CreateUserRequestDTO createUserRequestDTO) {
