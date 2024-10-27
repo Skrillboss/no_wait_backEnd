@@ -1,11 +1,14 @@
 package com.heredi.nowait.infrastructure.model.queue.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.heredi.nowait.infrastructure.model.item.entity.ItemEntity;
 import com.heredi.nowait.infrastructure.model.shift.entity.ShiftEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.mapstruct.ap.internal.util.IgnoreJRERequirement;
 
 import java.time.Duration;
 import java.time.LocalTime;
@@ -42,7 +45,6 @@ public class QueueEntity {
     private ItemEntity item;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "queue_id")
     private List<ShiftEntity> shifts;
 
     @Enumerated(EnumType.STRING)

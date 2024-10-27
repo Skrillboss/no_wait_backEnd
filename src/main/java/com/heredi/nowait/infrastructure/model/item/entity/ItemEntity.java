@@ -41,7 +41,6 @@ public class ItemEntity {
     private BusinessEntity business;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "queue_id", nullable = false)
     private QueueEntity queue;
 
     public enum ItemStatus {

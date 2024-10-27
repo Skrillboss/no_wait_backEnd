@@ -14,6 +14,6 @@ public class QueueResponseDTO {
     private String startTimeHour;
     private String endTimeHour;
     private int peoplePerShift;
-    private List<ShiftResponseDTO> shiftResponseDTOList;
+    private int activeShifts;
     private String status;
 }

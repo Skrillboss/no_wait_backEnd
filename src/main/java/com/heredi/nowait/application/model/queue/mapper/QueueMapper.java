@@ -15,12 +15,12 @@ public class QueueMapper {
 
     private final ShiftMapper shiftMapper;
 
-    public QueueMapper(ShiftMapper shiftMapper){
+    public QueueMapper(ShiftMapper shiftMapper) {
         this.shiftMapper = shiftMapper;
     }
 
-    public Queue toQueue(QueueRequestDTO dto){
-        if(dto == null){
+    public Queue toQueue(QueueRequestDTO dto) {
+        if (dto == null) {
             return null;
         }
 
@@ -35,8 +35,8 @@ public class QueueMapper {
         return queue;
     }
 
-    public QueueResponseDTO toQueueResponseDTO(Queue queue){
-        if(queue == null){
+    public QueueResponseDTO toQueueResponseDTO(Queue queue) {
+        if (queue == null) {
             return null;
         }
 
@@ -48,7 +48,7 @@ public class QueueMapper {
         dto.setStartTimeHour(queue.getStartTimeHour().toString());
         dto.setEndTimeHour(queue.getEndTimeHour().toString());
         dto.setPeoplePerShift(queue.getPeoplePerShift());
-        dto.setShiftResponseDTOList(shiftMapper.shiftResponseDTOList(queue.getShifts()));
+        dto.setActiveShifts(queue.getShifts() != null ? queue.getShifts().size() : 0);
         dto.setStatus(queue.getStatus().name());
 
         return dto;
