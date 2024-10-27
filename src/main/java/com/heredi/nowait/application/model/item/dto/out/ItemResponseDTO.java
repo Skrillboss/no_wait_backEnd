@@ -12,10 +12,11 @@ public class ItemResponseDTO {
     private String id;
     private String name;
     private String description;
+    private String businessId;
+    private String businessName;
     private Double rating;
     private String mainImagePath;
     private String secondaryImagePath;
-    private String status; // Representa el ItemStatus como String
-    private List<ShiftResponseDTO> shifts;
+    private String status;
     private QueueResponseDTO queueResponseDTO;
 }

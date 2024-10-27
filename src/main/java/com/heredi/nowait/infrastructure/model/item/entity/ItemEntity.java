@@ -1,5 +1,6 @@
 package com.heredi.nowait.infrastructure.model.item.entity;
 
+import com.heredi.nowait.infrastructure.model.business.entity.BusinessEntity;
 import com.heredi.nowait.infrastructure.model.queue.entity.QueueEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -34,6 +35,10 @@ public class ItemEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ItemStatus status;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "business_id")
+    private BusinessEntity business;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "queue_id", nullable = false)

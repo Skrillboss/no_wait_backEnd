@@ -1,7 +1,6 @@
 package com.heredi.nowait.infrastructure.model.item.controller;
 
 import com.google.zxing.WriterException;
-import com.heredi.nowait.application.model.business.dto.out.AddItemResponseDTO;
 import com.heredi.nowait.application.model.item.dto.in.ItemRequestDTO;
 import com.heredi.nowait.application.model.item.dto.out.ItemResponseDTO;
 import com.heredi.nowait.application.model.item.service.interfaces.ItemService;
@@ -10,7 +9,6 @@ import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -32,10 +30,10 @@ public class ItemController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<AddItemResponseDTO> createItem(@RequestHeader("Authorization") String authorizationHeader, @RequestBody ItemRequestDTO itemRequestDTO) throws IOException, WriterException, NoSuchAlgorithmException, InvalidKeySpecException {
+    public ResponseEntity<ItemResponseDTO> createItem(@RequestHeader("Authorization") String authorizationHeader, @RequestBody ItemRequestDTO itemRequestDTO) throws IOException, WriterException, NoSuchAlgorithmException, InvalidKeySpecException {
         String accessToken = authorizationHeader.replace("Bearer ", "");
         Long userId = authJwt.extractUserId(accessToken);
-        return new ResponseEntity<AddItemResponseDTO>(itemService.create(userId, itemRequestDTO), HttpStatus.CREATED);
+        return new ResponseEntity<ItemResponseDTO>(itemService.create(userId, itemRequestDTO), HttpStatus.CREATED);
     }
 
     @GetMapping("/{itemId}")

@@ -17,6 +17,7 @@ public interface ItemEntityMapper {
             @Mapping(source = "mainImagePath", target = "mainImagePath"),
             @Mapping(source = "secondaryImagePath", target = "secondaryImagePath"),
             @Mapping(source = "status", target = "status"),
+            @Mapping(source = "business", target = "business"),
             @Mapping(source = "queue", target = "queue"),
     })
     Item toItem(ItemEntity itemEntity);

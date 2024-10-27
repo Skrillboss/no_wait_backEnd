@@ -3,7 +3,6 @@ package com.heredi.nowait.application.model.item.service.implementations;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
-import com.heredi.nowait.application.model.business.dto.out.AddItemResponseDTO;
 import com.heredi.nowait.application.model.email.dto.EmailDTO;
 import com.heredi.nowait.application.model.email.service.interfaces.MailSenderService;
 import com.heredi.nowait.application.model.item.dto.in.ItemRequestDTO;
@@ -16,7 +15,6 @@ import com.heredi.nowait.domain.user.model.Users;
 import com.heredi.nowait.domain.user.port.UserRepository;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,11 +46,11 @@ public class ItemServiceImpl implements ItemService {
 
     @Transactional
     @Override
-    public AddItemResponseDTO create(Long userId, ItemRequestDTO itemRequestDTO) {
+    public ItemResponseDTO create(Long userId, ItemRequestDTO itemRequestDTO) {
         Long businessId = this.userRepository.getUserById(userId).getBusiness().getId();
         Item item = itemRepository.create(businessId, itemMapper.toItem(itemRequestDTO));
 
-        return new AddItemResponseDTO(businessId.toString(), itemMapper.toItemResponseDTO(item));
+        return itemMapper.toItemResponseDTO(item);
     }
 
     @Transactional

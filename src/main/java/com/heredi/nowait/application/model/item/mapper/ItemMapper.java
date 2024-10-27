@@ -29,6 +29,8 @@ public class ItemMapper {
         dto.setId(item.getId().toString());
         dto.setName(item.getName());
         dto.setDescription(item.getDescription());
+        dto.setBusinessId(item.getBusiness().getId().toString());
+        dto.setBusinessName(item.getBusiness().getName());
         dto.setRating(item.getRating());
         dto.setMainImagePath(item.getMainImagePath());
         dto.setSecondaryImagePath(item.getSecondaryImagePath());

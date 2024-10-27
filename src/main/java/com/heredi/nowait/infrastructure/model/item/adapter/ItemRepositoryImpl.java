@@ -43,15 +43,9 @@ public class ItemRepositoryImpl implements ItemRepository {
 
         ItemEntity itemEntity = itemEntityMapper.toItemEntity(item);
 
-        itemEntity.getQueue().setItem(itemEntity);
+        itemEntity.setBusiness(businessEntity);
 
-        businessEntity.getItems().add(itemEntity);
-
-        itemEntity = this.itemJPARepository.save(itemEntity);
-
-        this.businessJPARepository.save(businessEntity);
-
-        return this.itemEntityMapper.toItem(itemEntity);
+        return this.itemEntityMapper.toItem(this.itemJPARepository.save(itemEntity));
     }
 
     @Override

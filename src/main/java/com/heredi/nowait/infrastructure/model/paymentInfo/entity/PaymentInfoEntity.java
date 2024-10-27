@@ -1,5 +1,6 @@
 package com.heredi.nowait.infrastructure.model.paymentInfo.entity;
 
+import com.heredi.nowait.infrastructure.model.user.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,10 @@ public class PaymentInfoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity userEntity;
 
     @Column(nullable = false)
     private String cardNumber;

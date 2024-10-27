@@ -41,7 +41,6 @@ public class BusinessEntity {
     private String createdAt;
 
     @Lob
-    @OneToMany
-    @JoinColumn(name = "business_id")
+    @OneToMany(fetch = FetchType.LAZY)
     private List<ItemEntity> items;
 }

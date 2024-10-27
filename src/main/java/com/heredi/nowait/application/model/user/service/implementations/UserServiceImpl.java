@@ -139,5 +139,4 @@ public class UserServiceImpl implements UserService {
         }
         throw new IllegalStateException("Invalid refresh token.");
     }
-
 }
