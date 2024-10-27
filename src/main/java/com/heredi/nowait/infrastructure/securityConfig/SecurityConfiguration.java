@@ -1,8 +1,11 @@
 package com.heredi.nowait.infrastructure.securityConfig;
 
+import com.heredi.nowait.infrastructure.model.role.entity.AuthorityEntity;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authorization.AuthorityAuthorizationManager;
+import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -34,10 +37,18 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST,
                                 "/business/**",
                                 "/item/{itemId}/sendQR/mail",
-                                "/item/create").hasRole("ADMIN")
-                        .anyRequest().authenticated()
+                                "/item/create").access((authentication, object) -> {
+                                    boolean hasAdminRole = authentication.get().getAuthorities().stream()
+                                            .anyMatch(grantedAuthority -> grantedAuthority.
+                                                    getAuthority().equals("ROLE_ADMIN"));
+                                    boolean hasStatusActive = authentication.get().getAuthorities().stream()
+                                            .anyMatch(grantedAuthority -> grantedAuthority.
+                                                    getAuthority().equals("STATUS_ACTIVE"));
+                                    return new AuthorizationDecision(hasAdminRole && hasStatusActive);
+                        })
+                        .anyRequest().hasAuthority("STATUS_ACTIVE")
                 )
-                .userDetailsService(userDetailsService) // Aquí le decimos a Spring que use tu CustomUserDetailsService
+                .userDetailsService(userDetailsService)
                 .httpBasic(withDefaults());
         http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

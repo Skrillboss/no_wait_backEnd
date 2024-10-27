@@ -2,8 +2,7 @@ package com.heredi.nowait.infrastructure.model.user.adapter;
 
 import com.heredi.nowait.domain.user.model.Users;
 import com.heredi.nowait.domain.user.port.UserRepository;
-import com.heredi.nowait.infrastructure.model.role.entity.RoleEntity;
-import com.heredi.nowait.infrastructure.model.shift.entity.ShiftEntity;
+import com.heredi.nowait.infrastructure.model.role.entity.AuthorityEntity;
 import com.heredi.nowait.infrastructure.model.user.entity.UserEntity;
 import com.heredi.nowait.infrastructure.model.user.jpa.UserJPARepository;
 import com.heredi.nowait.infrastructure.model.user.mapper.UserEntityMapper;
@@ -12,9 +11,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
@@ -43,7 +40,7 @@ public class UserRepositoryImpl implements UserRepository {
 
         UserEntity userEntity = this.userEntityMapper.toUserEntity(user);
         userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
-        userEntity.setStatus(UserEntity.UserStatus.EMAIL_UNVERIFIED);
+        userEntity.getAuthorityEntity().setStatus(AuthorityEntity.UserStatus.EMAIL_UNVERIFIED);
         return this.userEntityMapper.toUser(this.userJPARepository.save(userEntity));
     }
 
@@ -94,7 +91,7 @@ public class UserRepositoryImpl implements UserRepository {
                 .orElseThrow(() -> new NoSuchElementException("User not found"));
 
         if(email.equals(userEntity.getEmail())){
-            userEntity.setStatus(UserEntity.UserStatus.ACTIVE);
+            userEntity.getAuthorityEntity().setStatus(AuthorityEntity.UserStatus.ACTIVE);
             userJPARepository.save(userEntity);
         }
     }

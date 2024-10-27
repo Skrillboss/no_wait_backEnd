@@ -1,29 +1,29 @@
 package com.heredi.nowait.application.model.role.dto.mapper;
 
 import com.heredi.nowait.application.model.role.dto.RoleDTO;
-import com.heredi.nowait.domain.role.model.Role;
+import com.heredi.nowait.domain.role.model.Authority;
 import org.springframework.stereotype.Component;
 
 @Component
 public class RoleMapper {
 
-    public RoleDTO toRoleDTO(Role role){
-        if(role == null){
+    public RoleDTO toRoleDTO(Authority authority){
+        if(authority == null){
             return null;
         }
         RoleDTO roleDTO = new RoleDTO();
-        roleDTO.setName(role.getName());
+        roleDTO.setName(authority.getRole().name());
         return roleDTO;
     }
 
-    public Role toRole(RoleDTO roleRequestDTO){
+    public Authority toRole(RoleDTO roleRequestDTO){
         if(roleRequestDTO == null){
             return null;
         }
 
-        Role role = new Role();
-        role.setName(roleRequestDTO.getName());
+        Authority authority = new Authority();
+        authority.setRole(Authority.RoleUser.valueOf(roleRequestDTO.getName().toUpperCase()));
 
-        return role;
+        return authority;
     }
 }

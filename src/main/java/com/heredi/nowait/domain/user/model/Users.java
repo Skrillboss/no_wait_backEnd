@@ -2,7 +2,7 @@ package com.heredi.nowait.domain.user.model;
 
 import com.heredi.nowait.domain.business.model.Business;
 import com.heredi.nowait.domain.paymentInfo.model.PaymentInfo;
-import com.heredi.nowait.domain.role.model.Role;
+import com.heredi.nowait.domain.role.model.Authority;
 import com.heredi.nowait.domain.shift.model.Shift;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,7 +29,7 @@ public class Users {
 
     private String phoneNumber;
 
-    private Role role;
+    private Authority authority;
 
     private List<PaymentInfo> paymentInfoList;
 

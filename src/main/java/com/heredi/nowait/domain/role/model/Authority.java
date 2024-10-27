@@ -7,10 +7,23 @@ import lombok.NoArgsConstructor;
 @Data // Genera getters, setters, toString, equals, y hashCode automáticamente
 @NoArgsConstructor // Constructor sin argumentos
 @AllArgsConstructor // Constructor con todos los atributos
-
-public class Role {
+public class Authority {
 
     private Long id;
 
-    private String name;
+    private RoleUser role;
+
+    private UserStatus status;
+
+    public enum RoleUser {
+        ADMIN,
+        USER
+    }
+
+    public enum UserStatus {
+        ACTIVE,
+        EMAIL_UNVERIFIED,
+        SUSPENDED,
+        UNHANDLED_ERROR
+    }
 }
