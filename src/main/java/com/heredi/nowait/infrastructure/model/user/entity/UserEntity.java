@@ -2,7 +2,7 @@ package com.heredi.nowait.infrastructure.model.user.entity;
 
 import com.heredi.nowait.infrastructure.model.business.entity.BusinessEntity;
 import com.heredi.nowait.infrastructure.model.paymentInfo.entity.PaymentInfoEntity;
-import com.heredi.nowait.infrastructure.model.role.entity.RoleEntity;
+import com.heredi.nowait.infrastructure.model.role.entity.AuthorityEntity;
 import com.heredi.nowait.infrastructure.model.shift.entity.ShiftEntity;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -14,9 +14,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
-@Data // Genera getters, setters, toString, equals, y hashCode automáticamente
-@NoArgsConstructor // Constructor sin argumentos
-@AllArgsConstructor // Constructor con todos los atributos
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserEntity {
 
     @Id
@@ -42,8 +42,8 @@ public class UserEntity {
     private String phoneNumber;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "role_id", referencedColumnName = "role_id", nullable = false)
-    private RoleEntity roleEntity;
+    @JoinColumn(name = "authority_id", referencedColumnName = "authority_id", nullable = false)
+    private AuthorityEntity authorityEntity;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

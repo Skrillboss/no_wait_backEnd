@@ -2,8 +2,7 @@ package com.heredi.nowait.infrastructure.model.user.adapter;
 
 import com.heredi.nowait.domain.user.model.Users;
 import com.heredi.nowait.domain.user.port.UserRepository;
-import com.heredi.nowait.infrastructure.model.role.entity.RoleEntity;
-import com.heredi.nowait.infrastructure.model.shift.entity.ShiftEntity;
+import com.heredi.nowait.infrastructure.model.role.entity.AuthorityEntity;
 import com.heredi.nowait.infrastructure.model.user.entity.UserEntity;
 import com.heredi.nowait.infrastructure.model.user.jpa.UserJPARepository;
 import com.heredi.nowait.infrastructure.model.user.mapper.UserEntityMapper;
@@ -12,9 +11,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
@@ -39,18 +36,39 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Users createUser(Users user) {
-        if(this.userJPARepository.existsByNickName(user.getNickName())){
-            throw new IllegalArgumentException("NickName from User try to register already exist");
-        }
-        if(this.userJPARepository.existsByEmail(user.getEmail())){
-            throw new IllegalArgumentException("Email from User try to register already exist");
-        }
-        if(this.userJPARepository.existsByPhoneNumber(user.getPhoneNumber())){
-            throw new IllegalArgumentException("PhoneNumber from User try to register already exist");
-        }
+        validateUniqueFields(user);
+
         UserEntity userEntity = this.userEntityMapper.toUserEntity(user);
         userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
+        userEntity.getAuthorityEntity().setStatus(AuthorityEntity.UserStatus.EMAIL_UNVERIFIED);
         return this.userEntityMapper.toUser(this.userJPARepository.save(userEntity));
+    }
+
+    @Override
+    public void updateUser(Users user) {
+        validateUniqueFields(user);
+
+        UserEntity userEntity = userJPARepository.findById(user.getId())
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+
+        userEntity.setName(user.getName());
+        userEntity.setNickName(user.getNickName());
+        userEntity.setEmail(user.getEmail());
+        userEntity.setPhoneNumber(user.getPhoneNumber());
+
+        userJPARepository.save(userEntity);
+    }
+
+    private void validateUniqueFields(Users user) {
+        if (this.userJPARepository.existsByNickName(user.getNickName())) {
+            throw new IllegalArgumentException("NickName from User trying to register already exists");
+        }
+        if (this.userJPARepository.existsByEmail(user.getEmail())) {
+            throw new IllegalArgumentException("Email from User trying to register already exists");
+        }
+        if (this.userJPARepository.existsByPhoneNumber(user.getPhoneNumber())) {
+            throw new IllegalArgumentException("PhoneNumber from User trying to register already exists");
+        }
     }
 
     @Override
@@ -64,6 +82,18 @@ public class UserRepositoryImpl implements UserRepository {
         }
 
         return userEntityMapper.toUser(userEntity);
+    }
+
+    @Override
+    public void getUserByNickNameAndEmail(String nickName, String email) {
+
+        UserEntity userEntity = this.userJPARepository.findByNickName(nickName)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+
+        if(email.equals(userEntity.getEmail())){
+            userEntity.getAuthorityEntity().setStatus(AuthorityEntity.UserStatus.ACTIVE);
+            userJPARepository.save(userEntity);
+        }
     }
 
     @Override
@@ -86,31 +116,4 @@ public class UserRepositoryImpl implements UserRepository {
         userEntity.setRefreshToken(randomUUID);
         userJPARepository.save(userEntity);
     }
-
-    //no estoy actualizando all el usuario
-    @Override
-    public void updateUser(Users user) {
-        UserEntity userEntity = userJPARepository.findById(user.getId())
-                .orElseThrow(() -> new NoSuchElementException("User not found"));
-
-        userEntity.setRefreshToken(user.getRefreshToken());
-        userEntity.setName(user.getName());
-        userEntity.setNickName(user.getNickName());
-        userEntity.setEmail(user.getEmail());
-        userEntity.setPassword(user.getPassword());
-        userEntity.setPhoneNumber(user.getPhoneNumber());
-
-        if (user.getShifts() != null) {
-            List<ShiftEntity> shiftEntities = user.getShifts().stream()
-                    .map(shift -> {
-                        // Lógica para convertir Shift a ShiftEntity
-                        return new ShiftEntity(); // Reemplaza esto con la conversión real
-                    })
-                    .collect(Collectors.toList());
-            userEntity.setShifts(shiftEntities);
-        }
-
-        userJPARepository.save(userEntity);
-    }
-
 }

@@ -10,7 +10,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -23,15 +22,14 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String nickName) throws UsernameNotFoundException {
-        // Cargar el usuario desde la base de datos usando el repositorio
         UserEntity userEntity = userRepository.findByNickName(nickName)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado con el nickName: " + nickName));
 
-        // Obtener el rol directamente del usuario
-        String roleName = userEntity.getRoleEntity().getName();
-        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + roleName)); // Solo un rol
+        List<GrantedAuthority> authorities = List.of(
+                new SimpleGrantedAuthority("ROLE_" + userEntity.getAuthorityEntity().getRole().name()),
+                new SimpleGrantedAuthority("STATUS_" + userEntity.getAuthorityEntity().getStatus().name())
+        );
 
-        // Crear un UserDetails de Spring con los detalles del usuario
         return new User(
                 userEntity.getNickName(),
                 userEntity.getPassword(),

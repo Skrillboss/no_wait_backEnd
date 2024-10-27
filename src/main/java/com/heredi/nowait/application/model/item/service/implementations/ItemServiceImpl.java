@@ -82,11 +82,13 @@ public class ItemServiceImpl implements ItemService {
             EmailDTO emailDTO = new EmailDTO(
                     user.getBusiness().getEmail(),
                     "NoWait: Id " + item.getName(),
-                    "Item description: " + item.getDescription(),
+                    "Item description: " + item.getDescription() +"\n \nEste es el QR generado, te recomendamos " +
+                            "Imprimirlo y colocarlo en el lugar donde proporcionaras el producto o servicio",
+                    user.getNickName(),
                     itemId,
                     file
             );
-            mailSenderService.sendNewMail(emailDTO);
+            mailSenderService.sendNewMail("qr", emailDTO);
         } catch (Exception e) {
             throw new RuntimeException("Error sending the email: " + e.toString(), e);
         }

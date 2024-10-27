@@ -16,7 +16,7 @@ public interface UserEntityMapper {
             @Mapping(source = "email", target = "email"),
             @Mapping(source = "password", target = "password"),
             @Mapping(source = "phoneNumber", target = "phoneNumber"),
-            @Mapping(source = "roleEntity", target = "role"),
+            @Mapping(source = "authorityEntity", target = "authority"),
             @Mapping(source = "paymentInfoEntityList", target = "paymentInfoList"),
             @Mapping(source = "business", target = "business")
     })

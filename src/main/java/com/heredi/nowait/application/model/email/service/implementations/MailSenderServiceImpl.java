@@ -25,7 +25,7 @@ public class MailSenderServiceImpl implements MailSenderService {
     }
 
     @Override
-    public void sendNewMail(EmailDTO emailDTO) throws MessagingException {
+    public void sendNewMail(String template, EmailDTO emailDTO) throws MessagingException {
         try{
             MimeMessage message = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
@@ -35,7 +35,9 @@ public class MailSenderServiceImpl implements MailSenderService {
             helper.addAttachment(emailDTO.getAttachmentFileName(), emailDTO.getFileImage());
             Context context = new Context();
             context.setVariable("message", emailDTO.getMessage());
-            String contentHTML = templateEngine.process("email", context);
+            context.setVariable("nickName", emailDTO.getNickName());
+            context.setVariable("email", emailDTO.getAddressee());
+            String contentHTML = templateEngine.process(template, context);
 
             helper.setText(contentHTML, true);
             javaMailSender.send(message);
