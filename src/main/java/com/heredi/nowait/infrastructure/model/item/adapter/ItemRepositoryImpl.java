@@ -11,7 +11,6 @@ import com.heredi.nowait.infrastructure.model.queue.entity.QueueEntity;
 import com.heredi.nowait.infrastructure.model.queue.jpa.QueueJPARepository;
 import com.heredi.nowait.infrastructure.model.queue.mapper.QueueEntityMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,10 +31,10 @@ public class ItemRepositoryImpl implements ItemRepository {
     @Autowired
     private QueueEntityMapper queueEntityMapper;
 
-    ItemRepositoryImpl(BusinessJPARepository businessJPARepository, @Lazy ItemJPARepository itemJPARepository, QueueJPARepository queueJPARepository, QueueJPARepository queueJPARepository1) {
+    ItemRepositoryImpl(BusinessJPARepository businessJPARepository, ItemJPARepository itemJPARepository, QueueJPARepository queueJPARepository) {
         this.businessJPARepository = businessJPARepository;
         this.itemJPARepository = itemJPARepository;
-        this.queueJPARepository = queueJPARepository1;
+        this.queueJPARepository = queueJPARepository;
     }
 
 
