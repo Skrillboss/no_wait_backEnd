@@ -21,7 +21,7 @@ public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Genera un valor único para el ID
-    @Column(name = "user_id")
+    @Column(name = "id")
     private Long id;
 
     private String refreshToken;
@@ -42,7 +42,7 @@ public class UserEntity {
     private String phoneNumber;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "authority_id", referencedColumnName = "authority_id", nullable = false)
+    @JoinColumn(name = "authority_id", referencedColumnName = "id", nullable = false)
     private AuthorityEntity authorityEntity;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)

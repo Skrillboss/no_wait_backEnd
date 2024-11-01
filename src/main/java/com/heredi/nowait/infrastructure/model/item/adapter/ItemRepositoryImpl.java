@@ -7,6 +7,7 @@ import com.heredi.nowait.infrastructure.model.business.jpa.BusinessJPARepository
 import com.heredi.nowait.infrastructure.model.item.entity.ItemEntity;
 import com.heredi.nowait.infrastructure.model.item.jpa.ItemJPARepository;
 import com.heredi.nowait.infrastructure.model.item.mapper.ItemEntityMapper;
+import com.heredi.nowait.infrastructure.model.queue.entity.QueueEntity;
 import com.heredi.nowait.infrastructure.model.queue.jpa.QueueJPARepository;
 import com.heredi.nowait.infrastructure.model.queue.mapper.QueueEntityMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,15 +24,18 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     private final ItemJPARepository itemJPARepository;
 
+    private final QueueJPARepository queueJPARepository;
+
     @Autowired
     private ItemEntityMapper itemEntityMapper;
 
     @Autowired
     private QueueEntityMapper queueEntityMapper;
 
-    ItemRepositoryImpl(BusinessJPARepository businessJPARepository, @Lazy ItemJPARepository itemJPARepository, QueueJPARepository queueJPARepository) {
+    ItemRepositoryImpl(BusinessJPARepository businessJPARepository, @Lazy ItemJPARepository itemJPARepository, QueueJPARepository queueJPARepository, QueueJPARepository queueJPARepository1) {
         this.businessJPARepository = businessJPARepository;
         this.itemJPARepository = itemJPARepository;
+        this.queueJPARepository = queueJPARepository1;
     }
 
 
@@ -43,7 +47,12 @@ public class ItemRepositoryImpl implements ItemRepository {
 
         ItemEntity itemEntity = itemEntityMapper.toItemEntity(item);
 
+        QueueEntity queueEntity = queueEntityMapper.toQueueEntity(item.getQueue());
+
+        queueEntity.setItem(itemEntity);
+
         itemEntity.setBusiness(businessEntity);
+        itemEntity.setQueue(queueEntity);
 
         return this.itemEntityMapper.toItem(this.itemJPARepository.save(itemEntity));
     }

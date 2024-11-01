@@ -46,14 +46,9 @@ public class ShiftRepositoryImpl implements ShiftRepository {
         ShiftEntity shiftEntity = this.shiftEntityMapper.toShiftEntity(shift);
 
         shiftEntity.setQueue(queueEntity);
+        shiftEntity.setUserEntity(userEntity);
 
         ShiftEntity savedShiftEntity = this.shiftJPARepository.save(shiftEntity);
-
-        queueEntity.getShifts().add(savedShiftEntity);
-        userEntity.getShifts().add(savedShiftEntity);
-
-        this.queueJPARepository.save(queueEntity);
-        this.userJPARepository.save(userEntity);
 
         return this.shiftEntityMapper.toShift(savedShiftEntity);
     }
