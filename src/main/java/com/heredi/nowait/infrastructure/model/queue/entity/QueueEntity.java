@@ -47,7 +47,7 @@ public class QueueEntity {
     @ToString.Exclude
     private ItemEntity item;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ShiftEntity> shifts;
 
     @Enumerated(EnumType.STRING)

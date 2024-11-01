@@ -6,5 +6,4 @@ import com.heredi.nowait.domain.shift.model.Shift;
 public interface QueueRepository {
     void save(Queue queue);
     Queue getQueueById(Long queueId);
-    Shift addShift(Long shiftId);
 }

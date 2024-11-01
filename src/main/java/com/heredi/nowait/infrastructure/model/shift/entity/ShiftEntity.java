@@ -1,5 +1,6 @@
 package com.heredi.nowait.infrastructure.model.shift.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.heredi.nowait.infrastructure.model.queue.entity.QueueEntity;
 import com.heredi.nowait.infrastructure.model.user.entity.UserEntity;
 import jakarta.persistence.*;
@@ -36,11 +37,12 @@ public class ShiftEntity {
     private Duration estimatedArrivalTime;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserEntity userEntity;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "queue_id", referencedColumnName = "id")
+    @JsonIgnore
     private QueueEntity queue;
 
     @Enumerated(EnumType.STRING)
