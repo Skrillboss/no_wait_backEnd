@@ -2,7 +2,7 @@ package com.heredi.nowait.infrastructure.model.user.adapter;
 
 import com.heredi.nowait.domain.user.model.Users;
 import com.heredi.nowait.domain.user.port.UserRepository;
-import com.heredi.nowait.infrastructure.model.role.entity.AuthorityEntity;
+import com.heredi.nowait.infrastructure.model.role.authority.AuthorityEntity;
 import com.heredi.nowait.infrastructure.model.user.entity.UserEntity;
 import com.heredi.nowait.infrastructure.model.user.jpa.UserJPARepository;
 import com.heredi.nowait.infrastructure.model.user.mapper.UserEntityMapper;

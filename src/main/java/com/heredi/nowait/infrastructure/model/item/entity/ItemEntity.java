@@ -1,5 +1,7 @@
 package com.heredi.nowait.infrastructure.model.item.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.heredi.nowait.infrastructure.model.business.entity.BusinessEntity;
 import com.heredi.nowait.infrastructure.model.queue.entity.QueueEntity;
 import jakarta.persistence.*;
@@ -16,6 +18,7 @@ public class ItemEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id; // Identificador autogenerado
 
     @Column(nullable = false)
@@ -41,6 +44,7 @@ public class ItemEntity {
     private BusinessEntity business;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "queue_id", referencedColumnName = "id", nullable = false)
     private QueueEntity queue;
 
     public enum ItemStatus {

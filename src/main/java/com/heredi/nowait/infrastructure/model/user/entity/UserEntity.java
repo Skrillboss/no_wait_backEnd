@@ -2,7 +2,7 @@ package com.heredi.nowait.infrastructure.model.user.entity;
 
 import com.heredi.nowait.infrastructure.model.business.entity.BusinessEntity;
 import com.heredi.nowait.infrastructure.model.paymentInfo.entity.PaymentInfoEntity;
-import com.heredi.nowait.infrastructure.model.role.entity.AuthorityEntity;
+import com.heredi.nowait.infrastructure.model.role.authority.AuthorityEntity;
 import com.heredi.nowait.infrastructure.model.shift.entity.ShiftEntity;
 import jakarta.persistence.*;
 import lombok.Data;

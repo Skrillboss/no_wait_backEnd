@@ -55,7 +55,7 @@ public class UserMapper {
         user.setAuthority(roleMapper.toRole(createUserRequestDTO.getRoleRequestDTO()));
         user.setPaymentInfoList(paymentInfoMapper.toPaymentInfoList(createUserRequestDTO.getPaymentInfoRequestDTOList()));
         user.setBusiness(businessMapper.toBusiness(createUserRequestDTO.getBusinessRequestDTO()));
-        user.setShifts(shiftMapper.toShifts(createUserRequestDTO.getShifts()));
+        user.setShifts(shiftMapper.toShiftList(createUserRequestDTO.getShifts()));
 
         return user;
     }

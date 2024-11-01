@@ -59,7 +59,9 @@ public class ItemRepositoryImpl implements ItemRepository {
 
     @Override
     public Item getItemById(Long itemId){
-        return this.itemEntityMapper.toItem(this.itemJPARepository.findById(itemId)
-                .orElseThrow(() -> new NoSuchElementException("Item not found by Id: " + itemId)));
+        ItemEntity itemEntity = this.itemJPARepository.findById(itemId)
+                .orElseThrow(() -> new NoSuchElementException("Item not found by Id: " + itemId));
+
+        return this.itemEntityMapper.toItem(itemEntity);
     }
 }

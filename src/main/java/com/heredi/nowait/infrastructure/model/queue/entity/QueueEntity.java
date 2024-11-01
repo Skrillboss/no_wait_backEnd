@@ -1,11 +1,15 @@
 package com.heredi.nowait.infrastructure.model.queue.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.heredi.nowait.infrastructure.model.item.entity.ItemEntity;
 import com.heredi.nowait.infrastructure.model.shift.entity.ShiftEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.hibernate.annotations.Formula;
 
 import java.time.Duration;
 import java.time.LocalTime;
@@ -20,6 +24,7 @@ public class QueueEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id; // Identificador autogenerado
 
     @Column(nullable = false)
@@ -38,7 +43,8 @@ public class QueueEntity {
     private int peoplePerShift;
 
     @OneToOne
-    @JoinColumn(name = "item_id")
+    @JoinColumn(name = "item_id", referencedColumnName = "id")
+    @ToString.Exclude
     private ItemEntity item;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)

@@ -32,7 +32,7 @@ public class ShiftMapper {
         return dto;
     }
 
-    public List<ShiftResponseDTO> shiftResponseDTOList(List<Shift> shifts){
+    public List<ShiftResponseDTO> toShiftResponseDTOList(List<Shift> shifts){
         if(shifts == null){
             return new ArrayList<>();
         }
@@ -59,7 +59,7 @@ public class ShiftMapper {
         return shift;
     }
 
-    public List<Shift> toShifts(List<ShiftRequestDTO> shiftsDTO){
+    public List<Shift> toShiftList(List<ShiftRequestDTO> shiftsDTO){
         if(shiftsDTO == null){
             return null;
         }

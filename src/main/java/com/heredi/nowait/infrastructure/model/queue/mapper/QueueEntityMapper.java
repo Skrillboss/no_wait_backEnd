@@ -16,6 +16,7 @@ public interface QueueEntityMapper {
             @Mapping(source = "startTimeHour", target = "startTimeHour"),
             @Mapping(source = "endTimeHour", target = "endTimeHour"),
             @Mapping(source = "peoplePerShift", target = "peoplePerShift"),
+            @Mapping(source = "shifts", target = "shifts"),
             @Mapping(source = "status", target = "status"),
     })
     Queue toQueue(QueueEntity queueEntity);

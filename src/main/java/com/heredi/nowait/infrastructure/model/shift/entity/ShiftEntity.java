@@ -20,6 +20,7 @@ public class ShiftEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id; // Identificador autogenerado
 
     @CreationTimestamp
@@ -39,7 +40,7 @@ public class ShiftEntity {
     private UserEntity userEntity;
 
     @ManyToOne
-    @JoinColumn(name = "queue_id")
+    @JoinColumn(name = "queue_id", referencedColumnName = "id")
     private QueueEntity queue;
 
     @Enumerated(EnumType.STRING)
