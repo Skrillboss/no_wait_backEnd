@@ -30,7 +30,7 @@ public class ItemController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ItemResponseDTO> createItem(@RequestHeader("Authorization") String authorizationHeader, @RequestBody ItemRequestDTO itemRequestDTO) throws IOException, WriterException, NoSuchAlgorithmException, InvalidKeySpecException {
+    public ResponseEntity<ItemResponseDTO> createItem(@RequestHeader("Authorization") String authorizationHeader, @RequestBody ItemRequestDTO itemRequestDTO) throws NoSuchAlgorithmException, InvalidKeySpecException {
         String accessToken = authorizationHeader.replace("Bearer ", "");
         Long userId = authJwt.extractUserId(accessToken);
         return new ResponseEntity<ItemResponseDTO>(itemService.create(userId, itemRequestDTO), HttpStatus.CREATED);
