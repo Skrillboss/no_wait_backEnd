@@ -7,6 +7,8 @@ import com.heredi.nowait.application.model.paymentInfo.service.interfaces.Paymen
 import com.heredi.nowait.domain.paymentInfo.model.PaymentInfo;
 import com.heredi.nowait.domain.paymentInfo.port.PaymentInfoRepository;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -29,6 +31,17 @@ public class PaymentInfoServiceImpl implements PaymentInfoService {
 
     @Override
     public PaymentInfoResponseDTO updatePaymentInfo(String paymentInfoId, PaymentInfoRequestDTO paymentInfoRequestDTO, Long userId) {
-        return null;
+
+        PaymentInfo paymentInfo = new PaymentInfo(
+                Long.parseLong(paymentInfoId),
+                paymentInfoRequestDTO.getCardNumber(),
+                paymentInfoRequestDTO.getCardHolderName(),
+                LocalDate.parse(paymentInfoRequestDTO.getExpiryDate()),
+                paymentInfoRequestDTO.getCardType(),
+                paymentInfoRequestDTO.getCvv()
+        );
+
+        paymentInfo = this.paymentInfoRepository.updatePaymentInfo(userId, paymentInfo);
+        return this.paymentInfoMapper.toPaymentInfoResponseDTO(paymentInfo);
     }
 }

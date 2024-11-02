@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface PaymentInfoRepository {
     List<PaymentInfo> getPaymentInfoByUserId(Long userId);
+    PaymentInfo updatePaymentInfo(Long userId, PaymentInfo paymentInfo);
 }

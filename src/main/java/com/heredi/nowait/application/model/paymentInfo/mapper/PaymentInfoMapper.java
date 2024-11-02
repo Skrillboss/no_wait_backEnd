@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @Component
 public class PaymentInfoMapper {
 
-    private PaymentInfoResponseDTO toPaymentInfoResponseDTO(PaymentInfo paymentInfo) {
+    public PaymentInfoResponseDTO toPaymentInfoResponseDTO(PaymentInfo paymentInfo) {
         if (paymentInfo == null) {
             return null;
         }

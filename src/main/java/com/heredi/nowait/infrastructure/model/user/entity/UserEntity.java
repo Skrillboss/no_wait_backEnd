@@ -46,7 +46,6 @@ public class UserEntity {
     private AuthorityEntity authorityEntity;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @ToString.Exclude
     private List<PaymentInfoEntity> paymentInfoEntityList;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)

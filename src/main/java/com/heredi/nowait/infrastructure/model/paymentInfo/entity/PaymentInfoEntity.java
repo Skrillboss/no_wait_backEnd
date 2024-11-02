@@ -20,7 +20,7 @@ public class PaymentInfoEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserEntity userEntity;
 
     @Column(nullable = false)

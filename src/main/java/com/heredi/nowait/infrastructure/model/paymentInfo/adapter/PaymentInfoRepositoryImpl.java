@@ -38,4 +38,23 @@ public class PaymentInfoRepositoryImpl implements PaymentInfoRepository {
                 .map(paymentInfoEntity -> this.paymentInfoEntityMapper.toPaymentInfo(paymentInfoEntity))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public PaymentInfo updatePaymentInfo(Long userId, PaymentInfo paymentInfo) {
+
+        PaymentInfoEntity paymentInfoEntity = this.paymentInfoJPARepository.findById(paymentInfo.getId())
+                .orElseThrow(() -> new NoSuchElementException("User not found by Id: " + userId));
+
+        if(!paymentInfoEntity.getUserEntity().getId().equals(userId)){
+            throw new IllegalArgumentException("Payment information does not belong to the user with Id: " + userId);
+        }
+
+        paymentInfoEntity.setCardNumber(paymentInfo.getCardNumber());
+        paymentInfoEntity.setCardHolderName(paymentInfo.getCardHolderName());
+        paymentInfoEntity.setExpiryDate(paymentInfo.getExpiryDate());
+        paymentInfoEntity.setCardType(paymentInfo.getCardType());
+        paymentInfoEntity.setCvv(paymentInfo.getCvv());
+
+        return this.paymentInfoEntityMapper.toPaymentInfo(this.paymentInfoJPARepository.save(paymentInfoEntity));
+    }
 }
