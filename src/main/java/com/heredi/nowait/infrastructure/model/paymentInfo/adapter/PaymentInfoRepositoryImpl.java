@@ -14,11 +14,11 @@ public class PaymentInfoRepositoryImpl implements PaymentInfoRepository {
 
     private final PaymentInfoJPARepository paymentInfoJPARepository;
 
-    private final PaymentInfoEntityMapper paymentInfoEntityMapper;
+    @Autowired
+    private PaymentInfoEntityMapper paymentInfoEntityMapper;
 
-    PaymentInfoRepositoryImpl(PaymentInfoJPARepository paymentInfoJPARepository, PaymentInfoEntityMapper paymentInfoEntityMapper){
+    PaymentInfoRepositoryImpl(PaymentInfoJPARepository paymentInfoJPARepository){
         this.paymentInfoJPARepository = paymentInfoJPARepository;
-        this.paymentInfoEntityMapper = paymentInfoEntityMapper;
     }
 
     @Override
