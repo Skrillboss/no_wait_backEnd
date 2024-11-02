@@ -1,4 +1,4 @@
-package com.heredi.nowait.infrastructure.model.role.authority;
+package com.heredi.nowait.infrastructure.model.authority.authority;
 
 
 import jakarta.persistence.*;
