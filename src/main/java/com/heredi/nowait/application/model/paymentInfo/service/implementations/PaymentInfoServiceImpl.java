@@ -1,5 +1,6 @@
 package com.heredi.nowait.application.model.paymentInfo.service.implementations;
 
+import com.heredi.nowait.application.model.paymentInfo.dto.in.PaymentInfoRequestDTO;
 import com.heredi.nowait.application.model.paymentInfo.dto.out.PaymentInfoResponseDTO;
 import com.heredi.nowait.application.model.paymentInfo.mapper.PaymentInfoMapper;
 import com.heredi.nowait.application.model.paymentInfo.service.interfaces.PaymentInfoService;
@@ -24,5 +25,10 @@ public class PaymentInfoServiceImpl implements PaymentInfoService {
     public List<PaymentInfoResponseDTO> getPaymentInfo(Long userId) {
         List<PaymentInfo> paymentInfoList = paymentInfoRepository.getPaymentInfoByUserId(userId);
         return paymentInfoMapper.toPaymentInfoListResponseDTO(paymentInfoList);
+    }
+
+    @Override
+    public PaymentInfoResponseDTO updatePaymentInfo(String paymentInfoId, PaymentInfoRequestDTO paymentInfoRequestDTO, Long userId) {
+        return null;
     }
 }
