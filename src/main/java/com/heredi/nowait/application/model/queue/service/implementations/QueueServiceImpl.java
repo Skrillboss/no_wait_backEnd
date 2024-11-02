@@ -1,40 +1,30 @@
 package com.heredi.nowait.application.model.queue.service.implementations;
 
-import com.heredi.nowait.application.auth.AuthService;
+import com.heredi.nowait.application.model.queue.dto.out.QueueResponseDTO;
+import com.heredi.nowait.application.model.queue.mapper.QueueMapper;
 import com.heredi.nowait.application.model.queue.service.interfaces.QueueService;
-import com.heredi.nowait.application.model.shift.dto.out.ShiftResponseDTO;
-import com.heredi.nowait.application.model.shift.mapper.ShiftMapper;
+import com.heredi.nowait.domain.queue.model.Queue;
 import com.heredi.nowait.domain.queue.port.QueueRepository;
-import com.heredi.nowait.domain.shift.port.ShiftRepository;
-import com.heredi.nowait.domain.user.port.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class QueueServiceImpl implements QueueService {
 
     private final QueueRepository queueRepository;
 
-    private final ShiftRepository shiftRepository;
-
-    private final UserRepository userRepository;
-    @Autowired
-    private final ShiftMapper shiftMapper;
-
-    private final AuthService authService;
-
+    private final QueueMapper queueMapper;
 
     @Deprecated
-    public QueueServiceImpl(QueueRepository queueRepository, ShiftRepository shiftRepository, UserRepository userRepository, ShiftMapper shiftMapper, AuthService authService) {
+    public QueueServiceImpl(QueueRepository queueRepository, QueueMapper queueMapper) {
         this.queueRepository = queueRepository;
-        this.shiftRepository = shiftRepository;
-        this.userRepository = userRepository;
-        this.shiftMapper = shiftMapper;
-        this.authService = authService;
+        this.queueMapper = queueMapper;
     }
 
+    @Transactional
     @Override
-    public ShiftResponseDTO generateShift(String itemId, String queueId, String authorizationHeader) {
-        return null;
+    public QueueResponseDTO get(String queueId) {
+        Queue obteinedQueue = queueRepository.getQueueById(Long.parseLong(queueId));
+        return queueMapper.toQueueResponseDTO(obteinedQueue);
     }
 }

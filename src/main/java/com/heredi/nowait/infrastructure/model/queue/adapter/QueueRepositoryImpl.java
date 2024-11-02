@@ -2,7 +2,6 @@ package com.heredi.nowait.infrastructure.model.queue.adapter;
 
 import com.heredi.nowait.domain.queue.model.Queue;
 import com.heredi.nowait.domain.queue.port.QueueRepository;
-import com.heredi.nowait.domain.shift.model.Shift;
 import com.heredi.nowait.infrastructure.model.queue.entity.QueueEntity;
 import com.heredi.nowait.infrastructure.model.queue.jpa.QueueJPARepository;
 import com.heredi.nowait.infrastructure.model.queue.mapper.QueueEntityMapper;
@@ -57,10 +56,5 @@ public class QueueRepositoryImpl implements QueueRepository {
     public Queue getQueueById(Long queueId) {
         return this.queueEntityMapper.toQueue(this.queueJPARepository.findById(queueId)
                 .orElseThrow(() -> new NoSuchElementException("User not found")));
-    }
-
-    @Override
-    public Shift addShift(Long shiftId) {
-        return null;
     }
 }
