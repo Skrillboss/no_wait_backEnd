@@ -5,10 +5,7 @@ import com.heredi.nowait.infrastructure.model.paymentInfo.entity.PaymentInfoEnti
 import com.heredi.nowait.infrastructure.model.authority.authority.AuthorityEntity;
 import com.heredi.nowait.infrastructure.model.shift.entity.ShiftEntity;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.List;
 

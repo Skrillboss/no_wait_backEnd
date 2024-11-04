@@ -57,17 +57,17 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public void saveItemIdQrToMail(Long userId, String itemId) throws IOException, WriterException, MessagingException {
         Users user = this.userRepository.getUserById(userId);
-        Long longItemId = Long.parseLong(itemId);
+        Item item = this.itemRepository.getItemById(Long.parseLong(itemId));
 
-        boolean userHasItem = user.getBusiness().getItems().stream()
-                .anyMatch(item -> item.getId().equals(longItemId));
+        boolean userHasItem = user.getBusiness().getId().equals(
+                item.getBusiness().getId()
+        );
 
         if(!userHasItem){
             throw new IllegalArgumentException("The user's business does not own any items with this ID:" + itemId);
         }
 
         try {
-            Item item = this.itemRepository.getItemById(longItemId);
 
             String path = "itemId.png";
             String charset = "UTF-8";

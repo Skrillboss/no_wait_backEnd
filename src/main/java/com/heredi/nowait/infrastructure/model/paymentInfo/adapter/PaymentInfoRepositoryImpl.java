@@ -19,23 +19,37 @@ public class PaymentInfoRepositoryImpl implements PaymentInfoRepository {
 
     private final PaymentInfoJPARepository paymentInfoJPARepository;
 
-    private final UserJPARepository userJPARepository;
-
     @Autowired
     private PaymentInfoEntityMapper paymentInfoEntityMapper;
 
-    PaymentInfoRepositoryImpl(PaymentInfoJPARepository paymentInfoJPARepository, UserJPARepository userJPARepository) {
+    PaymentInfoRepositoryImpl(PaymentInfoJPARepository paymentInfoJPARepository) {
         this.paymentInfoJPARepository = paymentInfoJPARepository;
-        this.userJPARepository = userJPARepository;
     }
 
     @Override
     public List<PaymentInfo> getPaymentInfoByUserId(Long userId) {
-        UserEntity userEntity = userJPARepository.findById(userId)
-                .orElseThrow(() -> new NoSuchElementException("User not found by Id: " + userId));
-        List<PaymentInfoEntity> PaymentInfoEntityList = userEntity.getPaymentInfoEntityList();
+        List<PaymentInfoEntity> PaymentInfoEntityList = this.paymentInfoJPARepository.findByUserEntityId(userId);
         return PaymentInfoEntityList.stream()
                 .map(paymentInfoEntity -> this.paymentInfoEntityMapper.toPaymentInfo(paymentInfoEntity))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public PaymentInfo updatePaymentInfo(Long userId, PaymentInfo paymentInfo) {
+
+        PaymentInfoEntity paymentInfoEntity = this.paymentInfoJPARepository.findById(paymentInfo.getId())
+                .orElseThrow(() -> new NoSuchElementException("User not found by Id: " + userId));
+
+        if(!paymentInfoEntity.getUserEntity().getId().equals(userId)){
+            throw new IllegalArgumentException("Payment information does not belong to the user with Id: " + userId);
+        }
+
+        paymentInfoEntity.setCardNumber(paymentInfo.getCardNumber());
+        paymentInfoEntity.setCardHolderName(paymentInfo.getCardHolderName());
+        paymentInfoEntity.setExpiryDate(paymentInfo.getExpiryDate());
+        paymentInfoEntity.setCardType(paymentInfo.getCardType());
+        paymentInfoEntity.setCvv(paymentInfo.getCvv());
+
+        return this.paymentInfoEntityMapper.toPaymentInfo(this.paymentInfoJPARepository.save(paymentInfoEntity));
     }
 }
