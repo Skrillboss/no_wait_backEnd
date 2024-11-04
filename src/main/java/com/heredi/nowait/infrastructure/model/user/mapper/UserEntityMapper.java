@@ -22,6 +22,16 @@ public interface UserEntityMapper {
     })
     Users toUser(UserEntity userEntity);
 
-    @InheritInverseConfiguration
+    @Mappings({
+            @Mapping(source = "id", target = "id"),
+            @Mapping(source = "refreshToken", target = "refreshToken"),
+            @Mapping(source = "name", target = "name"),
+            @Mapping(source = "nickName", target = "nickName"),
+            @Mapping(source = "email", target = "email"),
+            @Mapping(source = "password", target = "password"),
+            @Mapping(source = "phoneNumber", target = "phoneNumber"),
+            @Mapping(source = "authority", target = "authorityEntity"),
+            @Mapping(source = "business", target = "business")
+    })
     UserEntity toUserEntity(Users user);
 }

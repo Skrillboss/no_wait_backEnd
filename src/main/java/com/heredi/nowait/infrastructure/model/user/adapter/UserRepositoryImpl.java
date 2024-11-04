@@ -3,6 +3,9 @@ package com.heredi.nowait.infrastructure.model.user.adapter;
 import com.heredi.nowait.domain.user.model.Users;
 import com.heredi.nowait.domain.user.port.UserRepository;
 import com.heredi.nowait.infrastructure.model.authority.authority.AuthorityEntity;
+import com.heredi.nowait.infrastructure.model.paymentInfo.entity.PaymentInfoEntity;
+import com.heredi.nowait.infrastructure.model.paymentInfo.jpa.PaymentInfoJPARepository;
+import com.heredi.nowait.infrastructure.model.paymentInfo.mapper.PaymentInfoEntityMapper;
 import com.heredi.nowait.infrastructure.model.user.entity.UserEntity;
 import com.heredi.nowait.infrastructure.model.user.jpa.UserJPARepository;
 import com.heredi.nowait.infrastructure.model.user.mapper.UserEntityMapper;
@@ -11,12 +14,16 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
 
     private final UserJPARepository userJPARepository;
+
+    private final PaymentInfoJPARepository paymentInfoJPARepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -24,8 +31,12 @@ public class UserRepositoryImpl implements UserRepository {
     @Autowired
     private UserEntityMapper userEntityMapper;
 
-    public UserRepositoryImpl(@Lazy UserJPARepository userJPARepository) {
+    @Autowired
+    private PaymentInfoEntityMapper paymentInfoEntityMapper;
+
+    public UserRepositoryImpl(@Lazy UserJPARepository userJPARepository, PaymentInfoJPARepository paymentInfoJPARepository) {
         this.userJPARepository = userJPARepository;
+        this.paymentInfoJPARepository = paymentInfoJPARepository;
     }
 
     @Override
@@ -41,7 +52,19 @@ public class UserRepositoryImpl implements UserRepository {
         UserEntity userEntity = this.userEntityMapper.toUserEntity(user);
         userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
         userEntity.getAuthorityEntity().setStatus(AuthorityEntity.UserStatus.EMAIL_UNVERIFIED);
-        return this.userEntityMapper.toUser(this.userJPARepository.save(userEntity));
+        UserEntity savedUserEntity = this.userJPARepository.save(userEntity);
+
+        List<PaymentInfoEntity> paymentInfoEntityList = user.getPaymentInfoList().stream()
+                .map(paymentInfo -> {
+                    PaymentInfoEntity paymentInfoCollected = this.paymentInfoEntityMapper.toPaymentInfoEntity(paymentInfo);
+                    paymentInfoCollected.setUserEntity(savedUserEntity); // Asigna el usuario ya persistido.
+                    return this.paymentInfoJPARepository.save(paymentInfoCollected);
+                })
+                .toList();
+
+        savedUserEntity.setPaymentInfoEntityList(paymentInfoEntityList);
+
+        return this.userEntityMapper.toUser(savedUserEntity);
     }
 
     @Override
