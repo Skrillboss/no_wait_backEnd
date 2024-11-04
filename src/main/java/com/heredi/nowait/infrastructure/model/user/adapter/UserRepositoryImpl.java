@@ -16,7 +16,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
@@ -99,10 +98,10 @@ public class UserRepositoryImpl implements UserRepository {
         UserEntity userEntity = this.userJPARepository.findByNickName(nickName)
                 .orElseThrow(() -> new NoSuchElementException("User not found"));
 
-        // Compara usando el passwordEncoder
         if (!passwordEncoder.matches(password, userEntity.getPassword())) {
             throw new NoSuchElementException("Invalid password");
         }
+        userEntity.setPaymentInfoEntityList(this.paymentInfoJPARepository.findByUserEntityId(userEntity.getId()));
 
         return userEntityMapper.toUser(userEntity);
     }
