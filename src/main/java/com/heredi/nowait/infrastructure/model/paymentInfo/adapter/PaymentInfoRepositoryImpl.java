@@ -31,9 +31,7 @@ public class PaymentInfoRepositoryImpl implements PaymentInfoRepository {
 
     @Override
     public List<PaymentInfo> getPaymentInfoByUserId(Long userId) {
-        UserEntity userEntity = userJPARepository.findById(userId)
-                .orElseThrow(() -> new NoSuchElementException("User not found by Id: " + userId));
-        List<PaymentInfoEntity> PaymentInfoEntityList = userEntity.getPaymentInfoEntityList();
+        List<PaymentInfoEntity> PaymentInfoEntityList = this.paymentInfoJPARepository.findByUserEntityId(userId);
         return PaymentInfoEntityList.stream()
                 .map(paymentInfoEntity -> this.paymentInfoEntityMapper.toPaymentInfo(paymentInfoEntity))
                 .collect(Collectors.toList());
