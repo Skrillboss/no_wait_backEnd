@@ -27,6 +27,11 @@ public class PaymentInfoRepositoryImpl implements PaymentInfoRepository {
     }
 
     @Override
+    public PaymentInfo createPaymentInfo(Long userId, PaymentInfo paymentInfo) {
+        return null;
+    }
+
+    @Override
     public List<PaymentInfo> getPaymentInfoByUserId(Long userId) {
         List<PaymentInfoEntity> PaymentInfoEntityList = this.paymentInfoJPARepository.findByUserEntityId(userId);
         return PaymentInfoEntityList.stream()

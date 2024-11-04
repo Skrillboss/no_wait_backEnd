@@ -25,7 +25,8 @@ public class PaymentInfoServiceImpl implements PaymentInfoService {
 
     @Override
     public PaymentInfoResponseDTO createPaymentInfo(Long userId, PaymentInfoRequestDTO paymentInfoRequestDTO) {
-        return null;
+        PaymentInfo paymentInfo = this.paymentInfoRepository.createPaymentInfo(userId, paymentInfoMapper.toPaymentInfo(paymentInfoRequestDTO));
+        return this.paymentInfoMapper.toPaymentInfoResponseDTO(paymentInfo);
     }
 
     @Override
