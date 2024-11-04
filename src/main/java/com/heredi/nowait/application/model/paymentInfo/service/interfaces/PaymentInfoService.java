@@ -8,6 +8,7 @@ import java.util.List;
 
 @Service
 public interface PaymentInfoService {
+    PaymentInfoResponseDTO createPaymentInfo(Long userId, PaymentInfoRequestDTO paymentInfoRequestDTO);
     List<PaymentInfoResponseDTO> getPaymentInfo(Long userId);
     PaymentInfoResponseDTO updatePaymentInfo(String paymentInfoId, PaymentInfoRequestDTO paymentInfoRequestDTO, Long userId);
 }

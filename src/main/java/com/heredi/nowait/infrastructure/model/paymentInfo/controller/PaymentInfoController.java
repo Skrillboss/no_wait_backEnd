@@ -25,6 +25,13 @@ public class PaymentInfoController {
         this.authJwt = authJwt;
     }
 
+    @PostMapping("/create")
+    public ResponseEntity<PaymentInfoResponseDTO> createPaymentInfo(@RequestHeader("Authorization") String authorizationHeader, PaymentInfoRequestDTO paymentInfoRequestDTO) throws NoSuchAlgorithmException, InvalidKeySpecException{
+        String accessToken = authorizationHeader.replace("Bearer ", "");
+        Long userId = authJwt.extractUserId(accessToken);
+        return new ResponseEntity<PaymentInfoResponseDTO>(paymentInfoService.createPaymentInfo(userId, paymentInfoRequestDTO), HttpStatus.OK);
+    }
+
     @GetMapping
     public ResponseEntity<List<PaymentInfoResponseDTO>> getPaymentInfo(@RequestHeader("Authorization") String authorizationHeader) throws NoSuchAlgorithmException, InvalidKeySpecException {
         String accessToken = authorizationHeader.replace("Bearer ", "");
