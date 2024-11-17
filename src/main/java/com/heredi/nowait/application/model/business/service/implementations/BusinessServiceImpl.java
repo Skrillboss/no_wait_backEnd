@@ -51,7 +51,7 @@ public class BusinessServiceImpl implements BusinessService {
     }
 
     @Override
-    public BusinessResponseDTO updateBusiness(BusinessRequestDTO businessRequestDTO, Long userId) {
+    public BusinessResponseDTO updateBusiness(String businessId, BusinessRequestDTO businessRequestDTO, Long userId) {
         return null;
     }
 }

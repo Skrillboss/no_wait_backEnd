@@ -8,5 +8,5 @@ import org.springframework.stereotype.Service;
 public interface BusinessService {
     BusinessResponseDTO getBusiness(String businessId);
 
-    BusinessResponseDTO updateBusiness(BusinessRequestDTO businessRequestDTO, Long userId);
+    BusinessResponseDTO updateBusiness(String businessId, BusinessRequestDTO businessRequestDTO, Long userId);
 }
