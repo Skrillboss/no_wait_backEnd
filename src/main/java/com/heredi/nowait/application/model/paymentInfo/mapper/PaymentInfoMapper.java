@@ -36,7 +36,7 @@ public class PaymentInfoMapper {
                 .collect(Collectors.toList());
     }
 
-    private PaymentInfo toPaymentInfo(PaymentInfoRequestDTO paymentInfoDTO) {
+    public PaymentInfo toPaymentInfo(PaymentInfoRequestDTO paymentInfoDTO) {
         if (paymentInfoDTO == null) {
             return null;
         }

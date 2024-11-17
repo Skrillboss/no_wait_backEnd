@@ -24,6 +24,12 @@ public class PaymentInfoServiceImpl implements PaymentInfoService {
     }
 
     @Override
+    public PaymentInfoResponseDTO createPaymentInfo(Long userId, PaymentInfoRequestDTO paymentInfoRequestDTO) {
+        PaymentInfo paymentInfo = this.paymentInfoRepository.createPaymentInfo(userId, paymentInfoMapper.toPaymentInfo(paymentInfoRequestDTO));
+        return this.paymentInfoMapper.toPaymentInfoResponseDTO(paymentInfo);
+    }
+
+    @Override
     public List<PaymentInfoResponseDTO> getPaymentInfo(Long userId) {
         List<PaymentInfo> paymentInfoList = paymentInfoRepository.getPaymentInfoByUserId(userId);
         return paymentInfoMapper.toPaymentInfoListResponseDTO(paymentInfoList);
