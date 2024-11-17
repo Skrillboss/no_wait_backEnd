@@ -19,20 +19,30 @@ public class PaymentInfoRepositoryImpl implements PaymentInfoRepository {
 
     private final PaymentInfoJPARepository paymentInfoJPARepository;
 
+    private final UserJPARepository userJPARepository;
+
     @Autowired
     private PaymentInfoEntityMapper paymentInfoEntityMapper;
 
-    PaymentInfoRepositoryImpl(PaymentInfoJPARepository paymentInfoJPARepository) {
+    PaymentInfoRepositoryImpl(PaymentInfoJPARepository paymentInfoJPARepository, UserJPARepository userJPARepository) {
         this.paymentInfoJPARepository = paymentInfoJPARepository;
+        this.userJPARepository = userJPARepository;
     }
 
     @Override
     public PaymentInfo createPaymentInfo(Long userId, PaymentInfo paymentInfo) {
-        return null;
+        UserEntity userEntity = this.userJPARepository.getReferenceById(userId);
+        PaymentInfoEntity paymentInfoEntity = this.paymentInfoEntityMapper.toPaymentInfoEntity(paymentInfo);
+        paymentInfoEntity.setUserEntity(userEntity);
+        return this.paymentInfoEntityMapper.toPaymentInfo(this.paymentInfoJPARepository.save(paymentInfoEntity));
     }
 
     @Override
     public List<PaymentInfo> getPaymentInfoByUserId(Long userId) {
+        //TODO: se deben realizar pruebas para verificar si funciona bien en caso de no encontrar informacion de pago
+        //en este usuario (es decir que no tenga informacion de pago, ya de por si no deberia poder acceder
+        //un usuario normal, por lo tanto no deberia no existir el caso de que el usuario que acceda a esta funcionalidad
+        //no tenga un informacion de pago pero hay que verificarlo por si acaso.
         List<PaymentInfoEntity> PaymentInfoEntityList = this.paymentInfoJPARepository.findByUserEntityId(userId);
         return PaymentInfoEntityList.stream()
                 .map(paymentInfoEntity -> this.paymentInfoEntityMapper.toPaymentInfo(paymentInfoEntity))
@@ -45,7 +55,7 @@ public class PaymentInfoRepositoryImpl implements PaymentInfoRepository {
         PaymentInfoEntity paymentInfoEntity = this.paymentInfoJPARepository.findById(paymentInfo.getId())
                 .orElseThrow(() -> new NoSuchElementException("User not found by Id: " + userId));
 
-        if(!paymentInfoEntity.getUserEntity().getId().equals(userId)){
+        if (!paymentInfoEntity.getUserEntity().getId().equals(userId)) {
             throw new IllegalArgumentException("Payment information does not belong to the user with Id: " + userId);
         }
 
