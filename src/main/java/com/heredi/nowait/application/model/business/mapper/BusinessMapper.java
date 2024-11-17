@@ -48,6 +48,7 @@ public class BusinessMapper {
         business.setPhone(businessDTO.getPhone());
         business.setAddress(businessDTO.getAddress());
         business.setEmail(businessDTO.getEmail());
+        //TODO: aqui no debe estar el controlador de cuando se crea un nuevo negocio.
         business.setCreatedAt(LocalDate.now().toString());
         business.setItems(itemMapper.toItems(businessDTO.getItems()));
 

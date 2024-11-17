@@ -52,6 +52,8 @@ public class BusinessServiceImpl implements BusinessService {
 
     @Override
     public BusinessResponseDTO updateBusiness(String businessId, BusinessRequestDTO businessRequestDTO, Long userId) {
-        return null;
+        Business business = this.businessMapper.toBusiness(businessRequestDTO);
+        business.setId(Long.parseLong(businessId));
+        return this.businessMapper.toBusinessDTO(this.businessRepository.updateBusiness(userId, business));
     }
 }

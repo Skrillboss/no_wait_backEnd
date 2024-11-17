@@ -7,4 +7,5 @@ import org.springframework.stereotype.Service;
 @Service
 public interface BusinessRepository {
     Business getBusiness(Long businessId);
+    Business updateBusiness(Long userId, Business business);
 }

@@ -38,4 +38,9 @@ public class BusinessRepositoryImpl implements BusinessRepository {
 
         return this.businessEntityMapper.toBusiness(businessEntity);
     }
+
+    @Override
+    public Business updateBusiness(Long userId, Business business) {
+        return null;
+    }
 }
