@@ -53,7 +53,7 @@ public class PaymentInfoRepositoryImpl implements PaymentInfoRepository {
     public PaymentInfo updatePaymentInfo(Long userId, PaymentInfo paymentInfo) {
 
         PaymentInfoEntity paymentInfoEntity = this.paymentInfoJPARepository.findById(paymentInfo.getId())
-                .orElseThrow(() -> new NoSuchElementException("User not found by Id: " + userId));
+                .orElseThrow(() -> new NoSuchElementException("PaymentInfo not found by UserId: " + userId));
 
         if (!paymentInfoEntity.getUserEntity().getId().equals(userId)) {
             throw new IllegalArgumentException("Payment information does not belong to the user with Id: " + userId);
