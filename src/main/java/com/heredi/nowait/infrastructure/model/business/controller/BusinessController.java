@@ -31,7 +31,7 @@ public class BusinessController {
         return new ResponseEntity<BusinessResponseDTO>(this.businessService.getBusiness(businessId), HttpStatus.OK);
     }
 
-    @PatchMapping("/update")
+    @PatchMapping("/update/{businessId}")
     public ResponseEntity<BusinessResponseDTO> updateBusiness(@RequestHeader("Authorization") String authorizationHeader, @PathVariable String businessId, @RequestBody BusinessRequestDTO businessRequestDTO ) throws NoSuchAlgorithmException, InvalidKeySpecException {
         String accessToken = authorizationHeader.replace("Bearer ", "");
         Long userId = authJwt.extractUserId(accessToken);
