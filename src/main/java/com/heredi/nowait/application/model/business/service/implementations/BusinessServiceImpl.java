@@ -3,6 +3,7 @@ package com.heredi.nowait.application.model.business.service.implementations;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import com.heredi.nowait.application.model.business.dto.in.BusinessRequestDTO;
 import com.heredi.nowait.application.model.business.dto.out.BusinessResponseDTO;
 import com.heredi.nowait.application.model.business.mapper.BusinessMapper;
 import com.heredi.nowait.application.model.business.service.interfaces.BusinessService;
@@ -47,5 +48,10 @@ public class BusinessServiceImpl implements BusinessService {
     public BusinessResponseDTO getBusiness(String businessId) {
         Business business = this.businessRepository.getBusiness(Long.parseLong(businessId));
         return this.businessMapper.toBusinessDTO(business);
+    }
+
+    @Override
+    public BusinessResponseDTO updateBusiness(BusinessRequestDTO businessRequestDTO, Long userId) {
+        return null;
     }
 }
