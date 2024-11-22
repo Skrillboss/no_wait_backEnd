@@ -17,8 +17,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.function.Function;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
@@ -85,18 +87,39 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     private void validateUniqueFields(Users user) {
-        if (this.userJPARepository.existsByNickName(user.getNickName())) {
-            throw new AppException(AppErrorCode.USER_NOT_FOUND,
-                    "NickName from User trying to register already exists",
-                    HttpStatus.CONFLICT);
-        }
-        if (this.userJPARepository.existsByEmail(user.getEmail())) {
-            throw new IllegalArgumentException("Email from User trying to register already exists");
-        }
-        if (this.userJPARepository.existsByPhoneNumber(user.getPhoneNumber())) {
-            throw new IllegalArgumentException("PhoneNumber from User trying to register already exists");
+        List<AppErrorCode> errorCodes = new ArrayList<>();
+        StringBuilder errorDescription = new StringBuilder();
+
+        addValidationErrorIfExists(user.getNickName(), this.userJPARepository::existsByNickName,
+                AppErrorCode.NICKNAME_ALREADY_EXIST, "NickName from User trying to register already exists",
+                errorCodes, errorDescription);
+
+        addValidationErrorIfExists(user.getEmail(), this.userJPARepository::existsByEmail,
+                AppErrorCode.EMAIL_ALREADY_EXIST, "Email from User trying to register already exists",
+                errorCodes, errorDescription);
+
+        addValidationErrorIfExists(user.getPhoneNumber(), this.userJPARepository::existsByPhoneNumber,
+                AppErrorCode.PHONE_NUMBER_ALREADY_EXIST, "PhoneNumber from User trying to register already exists",
+                errorCodes, errorDescription);
+
+        if (!errorCodes.isEmpty()) {
+            throw new AppException(
+                    errorCodes,
+                    errorDescription.toString(),
+                    HttpStatus.CONFLICT
+            );
         }
     }
+
+    private void addValidationErrorIfExists(String field, Function<String, Boolean> existsFunction,
+                                            AppErrorCode errorCode, String errorMessage,
+                                            List<AppErrorCode> errorCodes, StringBuilder errorDescription) {
+        if (existsFunction.apply(field)) {
+            errorCodes.add(errorCode);
+            errorDescription.append("\n").append(errorMessage);
+        }
+    }
+
 
     @Override
     public Users getUser(String nickName, String password) {

@@ -4,11 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Setter
 @Getter
 @AllArgsConstructor
 public class ApiError {
     private int statusCode;
-    private String errorCode;
+    private List<String> errorCode;
     private String message;
 }
