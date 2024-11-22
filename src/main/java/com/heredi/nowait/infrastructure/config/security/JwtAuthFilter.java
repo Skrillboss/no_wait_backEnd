@@ -1,4 +1,4 @@
-package com.heredi.nowait.infrastructure.securityConfig;
+package com.heredi.nowait.infrastructure.config.security;
 
 
 import com.heredi.nowait.infrastructure.auth.jwt.AuthJwtImpl;

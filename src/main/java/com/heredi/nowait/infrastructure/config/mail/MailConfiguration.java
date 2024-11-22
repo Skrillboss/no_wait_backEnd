@@ -1,4 +1,4 @@
-package com.heredi.nowait.infrastructure.securityConfig;
+package com.heredi.nowait.infrastructure.config.mail;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
