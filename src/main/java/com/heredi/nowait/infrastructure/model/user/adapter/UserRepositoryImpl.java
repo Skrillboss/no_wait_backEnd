@@ -1,5 +1,7 @@
 package com.heredi.nowait.infrastructure.model.user.adapter;
 
+import com.heredi.nowait.application.exception.AppErrorCode;
+import com.heredi.nowait.application.exception.AppException;
 import com.heredi.nowait.domain.user.model.Users;
 import com.heredi.nowait.domain.user.port.UserRepository;
 import com.heredi.nowait.infrastructure.model.authority.authority.AuthorityEntity;
@@ -11,6 +13,7 @@ import com.heredi.nowait.infrastructure.model.user.jpa.UserJPARepository;
 import com.heredi.nowait.infrastructure.model.user.mapper.UserEntityMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
@@ -83,7 +86,9 @@ public class UserRepositoryImpl implements UserRepository {
 
     private void validateUniqueFields(Users user) {
         if (this.userJPARepository.existsByNickName(user.getNickName())) {
-            throw new IllegalArgumentException("NickName from User trying to register already exists");
+            throw new AppException(AppErrorCode.USER_NOT_FOUND,
+                    "NickName from User trying to register already exists",
+                    HttpStatus.CONFLICT);
         }
         if (this.userJPARepository.existsByEmail(user.getEmail())) {
             throw new IllegalArgumentException("Email from User trying to register already exists");
