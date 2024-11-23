@@ -18,11 +18,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiError> handleAppException(AppException ex) {
         List<String> errorCodes = ex.getErrorCodes().stream().map(AppErrorCode::getCode).toList();
         ApiError error = new ApiError(
-                HttpStatus.BAD_REQUEST.value(),
+                ex.getStatus().value(),
                 errorCodes,
                 ex.getMessage()
         );
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(error, ex.getStatus());
     }
 
     @ExceptionHandler(Exception.class)

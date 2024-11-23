@@ -20,7 +20,6 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.function.Function;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
@@ -78,48 +77,43 @@ public class UserRepositoryImpl implements UserRepository {
         UserEntity userEntity = userJPARepository.findById(user.getId())
                 .orElseThrow(() -> new NoSuchElementException("User not found"));
 
-        userEntity.setName(user.getName());
-        userEntity.setNickName(user.getNickName());
-        userEntity.setEmail(user.getEmail());
-        userEntity.setPhoneNumber(user.getPhoneNumber());
+
+        if(user.getNickName() != null) userEntity.setNickName(user.getNickName());
+        if(user.getEmail() != null) userEntity.setEmail(user.getEmail());
+        if(user.getPhoneNumber() != null) userEntity.setPhoneNumber(user.getPhoneNumber());
 
         userJPARepository.save(userEntity);
     }
 
     private void validateUniqueFields(Users user) {
         List<AppErrorCode> errorCodes = new ArrayList<>();
-        StringBuilder errorDescription = new StringBuilder();
 
-        addValidationErrorIfExists(user.getNickName(), this.userJPARepository::existsByNickName,
-                AppErrorCode.NICKNAME_ALREADY_EXIST, "NickName from User trying to register already exists",
-                errorCodes, errorDescription);
-
-        addValidationErrorIfExists(user.getEmail(), this.userJPARepository::existsByEmail,
-                AppErrorCode.EMAIL_ALREADY_EXIST, "Email from User trying to register already exists",
-                errorCodes, errorDescription);
-
-        addValidationErrorIfExists(user.getPhoneNumber(), this.userJPARepository::existsByPhoneNumber,
-                AppErrorCode.PHONE_NUMBER_ALREADY_EXIST, "PhoneNumber from User trying to register already exists",
-                errorCodes, errorDescription);
+        if (user.getId() == null) {
+            if (userJPARepository.existsByNickName(user.getNickName())) {
+                errorCodes.add(AppErrorCode.NICKNAME_ALREADY_EXIST);
+            }
+            if (userJPARepository.existsByEmail(user.getEmail())) {
+                errorCodes.add(AppErrorCode.EMAIL_ALREADY_EXIST);
+            }
+            if (userJPARepository.existsByPhoneNumber(user.getPhoneNumber())) {
+                errorCodes.add(AppErrorCode.PHONE_NUMBER_ALREADY_EXIST);
+            }
+        } else {
+            if (userJPARepository.existsByNickNameAndIdNot(user.getNickName(), user.getId())) {
+                errorCodes.add(AppErrorCode.NICKNAME_ALREADY_EXIST);
+            }
+            if (userJPARepository.existsByEmailAndIdNot(user.getEmail(), user.getId())) {
+                errorCodes.add(AppErrorCode.EMAIL_ALREADY_EXIST);
+            }
+            if (userJPARepository.existsByPhoneNumberAndIdNot(user.getPhoneNumber(), user.getId())) {
+                errorCodes.add(AppErrorCode.PHONE_NUMBER_ALREADY_EXIST);
+            }
+        }
 
         if (!errorCodes.isEmpty()) {
-            throw new AppException(
-                    errorCodes,
-                    errorDescription.toString(),
-                    HttpStatus.CONFLICT
-            );
+            throw new AppException(errorCodes, HttpStatus.CONFLICT);
         }
     }
-
-    private void addValidationErrorIfExists(String field, Function<String, Boolean> existsFunction,
-                                            AppErrorCode errorCode, String errorMessage,
-                                            List<AppErrorCode> errorCodes, StringBuilder errorDescription) {
-        if (existsFunction.apply(field)) {
-            errorCodes.add(errorCode);
-            errorDescription.append("\n").append(errorMessage);
-        }
-    }
-
 
     @Override
     public Users getUser(String nickName, String password) {

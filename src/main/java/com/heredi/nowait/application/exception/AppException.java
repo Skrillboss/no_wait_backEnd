@@ -10,15 +10,22 @@ public class AppException extends RuntimeException {
     private final List<AppErrorCode> errorCodes;
     private final HttpStatus status;
 
-    public AppException(AppErrorCode errorCode, String message, HttpStatus status) {
-        super(message);
+    public AppException(AppErrorCode errorCode, HttpStatus status) {
+        super(errorCode.getFormattedError());
         this.errorCodes = List.of(errorCode);
         this.status = status;
     }
 
-    public AppException(List<AppErrorCode> errorCodes, String message, HttpStatus status) {
-        super(message);
+    public AppException(List<AppErrorCode> errorCodes, HttpStatus status) {
+        super(generateMessage(errorCodes));
         this.errorCodes = errorCodes;
         this.status = status;
+    }
+
+    private static String generateMessage(List<AppErrorCode> errorCodes) {
+        return errorCodes.stream()
+                .map(AppErrorCode::getFormattedError)
+                .reduce((msg1, msg2) -> msg1 + " || " + msg2)
+                .orElse("Unknown error");
     }
 }

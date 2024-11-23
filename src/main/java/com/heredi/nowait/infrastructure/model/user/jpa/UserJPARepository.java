@@ -8,6 +8,11 @@ public interface UserJPARepository extends JpaRepository<UserEntity, Long> {
     boolean existsByPhoneNumber(String phoneNumber);
     boolean existsByEmail(String email);
     boolean existsByNickName(String nickName);
+
+    boolean existsByNickNameAndIdNot(String nickName, Long id);
+    boolean existsByEmailAndIdNot(String email, Long id);
+    boolean existsByPhoneNumberAndIdNot(String phoneNumber, Long id);
+
     Optional<UserEntity> findByNickName(String nickName);
     Optional<UserEntity> findByRefreshToken(String refreshToken);
 }
