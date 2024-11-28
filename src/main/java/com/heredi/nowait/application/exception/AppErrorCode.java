@@ -23,10 +23,9 @@ public enum AppErrorCode {
     //************* Authentication and Authorization (3000 - 3999) *************//
     //**************************************************************************//
 
-    USER_NOT_FOUND("APP-1001", "The specified user does not exist"),
-    INVALID_USER_ID("APP-1002", "The provided user ID is invalid"),
-    DUPLICATE_EMAIL("APP-1003", "The email is already associated with another user"),
-    DATABASE_ERROR("APP-2001", "A database error occurred"),
+    TOKEN_NOT_EXPIRED("APP-3002", "The provided token has not expired yet"),
+    INVALID_REFRESH_TOKEN("APP-3002", "The provided refresh token does not match the stored claim"),
+
     UNEXPECTED_ERROR("APP-9999", "An unexpected error occurred");
 
     private final String code;

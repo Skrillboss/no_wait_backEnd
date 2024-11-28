@@ -1,6 +1,8 @@
 package com.heredi.nowait.application.model.user.service.implementations;
 
 import com.heredi.nowait.application.auth.AuthService;
+import com.heredi.nowait.application.exception.AppErrorCode;
+import com.heredi.nowait.application.exception.AppException;
 import com.heredi.nowait.application.model.email.dto.EmailDTO;
 import com.heredi.nowait.application.model.email.service.interfaces.MailSenderService;
 import com.heredi.nowait.application.model.user.dto.in.CreateUserRequestDTO;
@@ -15,6 +17,7 @@ import com.heredi.nowait.domain.user.model.Users;
 import com.heredi.nowait.domain.user.port.UserRepository;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -132,11 +135,13 @@ public class UserServiceImpl implements UserService {
                 String newRefreshToken = authService.generateRefreshToken();
                 String newRandomUUID = authService.extractRandomUUID(newRefreshToken);
                 userRepository.saveUUID(newRandomUUID, userId);
-                return new RefreshTokenResponseDTO(authService.generateToken(obtainedUser.getId(), obtainedUser.getNickName()), newRefreshToken);
+                return new RefreshTokenResponseDTO(authService.generateToken(obtainedUser.getId(),
+                        obtainedUser.getNickName()), newRefreshToken);
+            }else{
+                throw new AppException(AppErrorCode.INVALID_REFRESH_TOKEN, HttpStatus.UNAUTHORIZED);
             }
         } else {
-            throw new IllegalStateException("The access token has not expired yet.");
+            throw new AppException(AppErrorCode.TOKEN_NOT_EXPIRED, HttpStatus.BAD_REQUEST);
         }
-        throw new IllegalStateException("Invalid refresh token.");
     }
 }
