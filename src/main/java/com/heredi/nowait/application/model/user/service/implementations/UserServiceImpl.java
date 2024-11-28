@@ -125,23 +125,21 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public RefreshTokenResponseDTO refreshTokens(String authorizationHeader, String accessToken) {
-        if (!authService.isNotExpiredToken(accessToken)) {
-            String nickName = authService.extractUsername(accessToken);
-            Long userId = authService.extractUserId(accessToken);
-            Users obtainedUser = this.userRepository.getUserFromIdAndNickName(userId, nickName);
-            String refreshToken = authorizationHeader.replace("Bearer ", "");
-
-            if (obtainedUser.getRefreshUUID().equals(authService.extractRandomUUID(refreshToken))) {
-                String newRefreshToken = authService.generateRefreshToken();
-                String newRandomUUID = authService.extractRandomUUID(newRefreshToken);
-                userRepository.saveUUID(newRandomUUID, userId);
-                return new RefreshTokenResponseDTO(authService.generateToken(obtainedUser.getId(),
-                        obtainedUser.getNickName()), newRefreshToken);
-            }else{
-                throw new AppException(AppErrorCode.INVALID_REFRESH_TOKEN, HttpStatus.UNAUTHORIZED);
-            }
-        } else {
+        if (authService.isNotExpiredToken(accessToken)) {
             throw new AppException(AppErrorCode.TOKEN_NOT_EXPIRED, HttpStatus.BAD_REQUEST);
         }
+        String nickName = authService.extractUsername(accessToken);
+        Long userId = authService.extractUserId(accessToken);
+        Users obtainedUser = this.userRepository.getUserFromIdAndNickName(userId, nickName);
+        String refreshToken = authorizationHeader.replace("Bearer ", "");
+
+        if (!authService.validateRefreshToken(refreshToken, obtainedUser.getRefreshUUID())) {
+            throw new AppException(AppErrorCode.INVALID_REFRESH_TOKEN, HttpStatus.UNAUTHORIZED);
+        }
+        String newRefreshToken = authService.generateRefreshToken();
+        String newRandomUUID = authService.extractRandomUUID(newRefreshToken);
+        userRepository.saveUUID(newRandomUUID, userId);
+        return new RefreshTokenResponseDTO(authService.generateToken(obtainedUser.getId(),
+                obtainedUser.getNickName()), newRefreshToken);
     }
 }

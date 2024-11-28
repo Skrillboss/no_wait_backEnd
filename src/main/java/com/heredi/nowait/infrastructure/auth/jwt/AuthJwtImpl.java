@@ -59,6 +59,23 @@ public class AuthJwtImpl implements AuthRepository {
                 .compact();
     }
 
+    public Claims extractAllClaims(String token) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        try {
+            // Intentamos extraer las claims normalmente
+            return Jwts.parserBuilder()
+                    .setSigningKey(getKeyFromPassword(SECRET_KEY, SALT))
+                    .build()
+                    .parseClaimsJws(token)  // Esto es lo que verifica la firma y la expiración
+                    .getBody();
+        } catch (ExpiredJwtException e) {
+            //TODO: mejorar por temas de seguridad.
+            // Si el token ha expirado, aún podemos obtener las claims desde e.getClaims()
+            return e.getClaims();  // Retornamos las claims incluso si está expirado
+        } catch (SignatureException e) {
+            throw new AppException(AppErrorCode.INVALID_TOKEN_SIGNATURE, HttpStatus.UNAUTHORIZED);
+        }
+    }
+
     public boolean validateRefreshToken(String refreshToken, String refreshUUID) throws NoSuchAlgorithmException, InvalidKeySpecException {
         final String extractedUUID = extractRandomUUID(refreshToken);
         return (extractedUUID.equals(refreshUUID) && isNotExpired(refreshToken));
@@ -87,23 +104,6 @@ public class AuthJwtImpl implements AuthRepository {
     @Override
     public String extractRandomUUID(String token) throws NoSuchAlgorithmException, InvalidKeySpecException {
         return extractAllClaims(token).get("randomUUID", String.class);
-    }
-
-    public Claims extractAllClaims(String token) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        try {
-            // Intentamos extraer las claims normalmente
-            return Jwts.parserBuilder()
-                    .setSigningKey(getKeyFromPassword(SECRET_KEY, SALT))
-                    .build()
-                    .parseClaimsJws(token)  // Esto es lo que verifica la firma y la expiración
-                    .getBody();
-        } catch (ExpiredJwtException e) {
-            //TODO: mejorar por temas de seguridad.
-            // Si el token ha expirado, aún podemos obtener las claims desde e.getClaims()
-            return e.getClaims();  // Retornamos las claims incluso si está expirado
-        } catch (SignatureException e) {
-            throw new AppException(AppErrorCode.INVALID_TOKEN_SIGNATURE, HttpStatus.UNAUTHORIZED);
-        }
     }
 
     public boolean isNotExpired(String token) throws NoSuchAlgorithmException, InvalidKeySpecException {
