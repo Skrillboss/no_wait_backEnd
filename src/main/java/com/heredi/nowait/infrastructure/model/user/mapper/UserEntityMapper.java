@@ -10,7 +10,7 @@ import org.mapstruct.Mapping;
 public interface UserEntityMapper {
     @Mappings({
             @Mapping(source = "id", target = "id"),
-            @Mapping(source = "refreshToken", target = "refreshToken"),
+            @Mapping(source = "refreshUUID", target = "refreshUUID"),
             @Mapping(source = "name", target = "name"),
             @Mapping(source = "nickName", target = "nickName"),
             @Mapping(source = "email", target = "email"),
@@ -24,7 +24,7 @@ public interface UserEntityMapper {
 
     @Mappings({
             @Mapping(source = "id", target = "id"),
-            @Mapping(source = "refreshToken", target = "refreshToken"),
+            @Mapping(source = "refreshUUID", target = "refreshUUID"),
             @Mapping(source = "name", target = "name"),
             @Mapping(source = "nickName", target = "nickName"),
             @Mapping(source = "email", target = "email"),

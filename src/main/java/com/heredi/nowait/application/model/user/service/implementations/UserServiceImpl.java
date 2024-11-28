@@ -131,7 +131,7 @@ public class UserServiceImpl implements UserService {
             Users obtainedUser = this.userRepository.getUserFromIdAndNickName(userId, nickName);
             String refreshToken = authorizationHeader.replace("Bearer ", "");
 
-            if (obtainedUser.getRefreshToken().equals(authService.extractRandomUUID(refreshToken))) {
+            if (obtainedUser.getRefreshUUID().equals(authService.extractRandomUUID(refreshToken))) {
                 String newRefreshToken = authService.generateRefreshToken();
                 String newRandomUUID = authService.extractRandomUUID(newRefreshToken);
                 userRepository.saveUUID(newRandomUUID, userId);

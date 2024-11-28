@@ -59,9 +59,9 @@ public class AuthJwtImpl implements AuthRepository {
                 .compact();
     }
 
-    public boolean validateRefreshToken(String token, String refreshUUID) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        final String extractedUUID = extractRandomUUID(token);
-        return (extractedUUID.equals(refreshUUID) && isNotExpired(token));
+    public boolean validateRefreshToken(String refreshToken, String refreshUUID) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        final String extractedUUID = extractRandomUUID(refreshToken);
+        return (extractedUUID.equals(refreshUUID) && isNotExpired(refreshToken));
     }
 
     @Override

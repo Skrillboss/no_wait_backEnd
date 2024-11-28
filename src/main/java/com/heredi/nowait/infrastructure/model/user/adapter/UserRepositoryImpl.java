@@ -163,7 +163,7 @@ public class UserRepositoryImpl implements UserRepository {
     public void saveUUID(String randomUUID, Long userId) {
         UserEntity userEntity = userJPARepository.findById(userId).
                 orElseThrow(() -> new NoSuchElementException("User not found"));
-        userEntity.setRefreshToken(randomUUID);
+        userEntity.setRefreshUUID(randomUUID);
         userJPARepository.save(userEntity);
     }
 }

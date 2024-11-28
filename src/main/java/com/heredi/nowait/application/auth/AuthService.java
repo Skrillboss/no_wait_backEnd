@@ -34,8 +34,8 @@ public class AuthService {
     }
 
     @SneakyThrows
-    public boolean validateRefreshToken(String token, String refreshUUID) {
-        return authRepository.validateRefreshToken(token, refreshUUID);
+    public boolean validateRefreshToken(String refreshToken, String refreshUUID) {
+        return authRepository.validateRefreshToken(refreshToken, refreshUUID);
     }
 
     @SneakyThrows
