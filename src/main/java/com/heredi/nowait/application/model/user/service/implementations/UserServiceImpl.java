@@ -126,7 +126,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public RefreshTokenResponseDTO refreshTokens(String authorizationHeader, String accessToken) {
         if (authService.isNotExpiredToken(accessToken)) {
-            throw new AppException(AppErrorCode.TOKEN_NOT_EXPIRED, HttpStatus.BAD_REQUEST);
+            throw new AppException(AppErrorCode.TOKEN_NOT_EXPIRED_YET, HttpStatus.BAD_REQUEST);
         }
         Users obtainedUser = this.userRepository.getUserFromIdAndNickName(
                 authService.extractUserId(accessToken),
