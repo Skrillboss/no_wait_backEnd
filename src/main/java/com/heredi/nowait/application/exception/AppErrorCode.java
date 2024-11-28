@@ -24,7 +24,8 @@ public enum AppErrorCode {
     //**************************************************************************//
 
     TOKEN_NOT_EXPIRED("APP-3002", "The provided token has not expired yet"),
-    INVALID_REFRESH_TOKEN("APP-3002", "The provided refresh token does not match the stored claim"),
+    INVALID_REFRESH_TOKEN("APP-3003", "The provided refresh token does not match the stored claim"),
+    INVALID_TOKEN_SIGNATURE("APP-3003", "The token signature is invalid"),
 
     UNEXPECTED_ERROR("APP-9999", "An unexpected error occurred");
 

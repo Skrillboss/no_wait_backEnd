@@ -1,11 +1,14 @@
 package com.heredi.nowait.infrastructure.auth.jwt;
 
+import com.heredi.nowait.application.exception.AppErrorCode;
+import com.heredi.nowait.application.exception.AppException;
 import com.heredi.nowait.domain.auth.port.AuthRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.SignatureException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -99,7 +102,7 @@ public class AuthJwtImpl implements AuthRepository {
             // Si el token ha expirado, aún podemos obtener las claims desde e.getClaims()
             return e.getClaims();  // Retornamos las claims incluso si está expirado
         } catch (SignatureException e) {
-            throw new IllegalArgumentException("Token signature invalid");
+            throw new AppException(AppErrorCode.INVALID_TOKEN_SIGNATURE, HttpStatus.UNAUTHORIZED);
         }
     }
 
