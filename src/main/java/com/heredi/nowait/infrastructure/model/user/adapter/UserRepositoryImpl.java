@@ -132,10 +132,20 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public Users getUser(String nickName, String password) {
         UserEntity userEntity = this.userJPARepository.findByNickName(nickName)
-                .orElseThrow(() -> new NoSuchElementException("User not found"));
+                .orElseThrow(() -> new AppException(
+                        AppErrorCode.USER_NOT_FOUND_BY_NICK_NAME,
+                        "getUser",
+                        "nickName: " + nickName,
+                        HttpStatus.NOT_FOUND
+                ));
 
         if (!passwordEncoder.matches(password, userEntity.getPassword())) {
-            throw new NoSuchElementException("Invalid password");
+            throw new AppException(
+                    AppErrorCode.INCORRECT_PASSWORD,
+                    "getUser",
+                    "nickName: " + nickName,
+                    HttpStatus.FORBIDDEN
+            );
         }
         userEntity.setPaymentInfoEntityList(this.paymentInfoJPARepository.findByUserEntityId(userEntity.getId()));
 
@@ -157,11 +167,20 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public Users getUserFromIdAndNickName(Long userId, String nickName) {
         UserEntity userEntity = this.userJPARepository.findByNickName(nickName)
-                .orElseThrow(() -> new NoSuchElementException("User not found"));
+                .orElseThrow(() -> new AppException(
+                        AppErrorCode.USER_NOT_FOUND_BY_NICK_NAME,
+                        "getUser",
+                        "nickName: " + nickName,
+                        HttpStatus.NOT_FOUND
+                ));
 
-        // Compara con Id
         if (!userEntity.getId().equals(userId)) {
-            throw new NoSuchElementException("Invalid Id");
+            throw new AppException(
+                    AppErrorCode.USER_NICKNAME_DOES_NOT_CORRESPOND_TO_ID,
+                    "getUserFromIdAndNickName",
+                    "userId: " + userId + " nickName: " + nickName,
+                    HttpStatus.BAD_REQUEST
+            );
         }
 
         return userEntityMapper.toUser(userEntity);
@@ -170,7 +189,12 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public void saveUUID(String randomUUID, Long userId) {
         UserEntity userEntity = userJPARepository.findById(userId).
-                orElseThrow(() -> new NoSuchElementException("User not found"));
+                orElseThrow(() -> new AppException(
+                        AppErrorCode.USER_NOT_FOUND_BY_ID,
+                        "saveUUID",
+                        "userId: " + userId,
+                        HttpStatus.BAD_REQUEST
+                ));
         userEntity.setRefreshUUID(randomUUID);
         userJPARepository.save(userEntity);
     }

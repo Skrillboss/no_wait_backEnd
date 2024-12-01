@@ -96,7 +96,12 @@ public class ItemServiceImpl implements ItemService {
             );
             mailSenderService.sendNewMail("qr", emailDTO);
         } catch (Exception e) {
-            throw new RuntimeException("Error sending the email: " + e.toString(), e);
+            throw new AppException(
+                    AppErrorCode.EMAIL_SENDING_FAILED,
+                    "saveItemIdQrToMail",
+                    "Exception: " + e + " message: " + e.getMessage(),
+                    HttpStatus. INTERNAL_SERVER_ERROR
+            );
         }
     }
 

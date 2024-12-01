@@ -93,10 +93,20 @@ public class UserServiceImpl implements UserService {
         boolean hasPaymentInfo = createUserRequestDTO.getPaymentInfoRequestDTOList() != null;
 
         if (isAdmin && (!hasBusinessInfo || !hasPaymentInfo)) {
-            throw new IllegalArgumentException("'ADMIN' roles need both payment and business information");
+            throw new AppException(
+                    AppErrorCode.ADMIN_ROLE_NEEDS_PAYMENT_AND_BUSINESS,
+                    "validateRoleSpecificInfo",
+                    "",
+                    HttpStatus.BAD_REQUEST
+                    );
         }
         if (!isAdmin && (hasBusinessInfo || hasPaymentInfo)) {
-            throw new IllegalArgumentException("Only 'ADMIN' roles can record payment or business information");
+            throw new AppException(
+                    AppErrorCode.ONLY_ADMIN_CAN_RECORD_PAYMENT_OR_BUSINESS,
+                    "validateRoleSpecificInfo",
+                    "",
+                    HttpStatus.FORBIDDEN
+            );
         }
     }
 
@@ -125,7 +135,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public RefreshTokenResponseDTO refreshTokens(String authorizationHeader, String accessToken) {
-        if (authService.isNotExpiredToken(accessToken)) {
+        if (!authService.isExpiredToken(accessToken)) {
             throw new AppException(
                     AppErrorCode.TOKEN_NOT_EXPIRED_YET,
                     "refreshTokens",

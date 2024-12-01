@@ -82,17 +82,12 @@ public class AuthJwtImpl implements AuthRepository {
 
     public boolean validateRefreshToken(String refreshToken, String refreshUUID) throws NoSuchAlgorithmException, InvalidKeySpecException {
         final String extractedUUID = extractRandomUUID(refreshToken);
-        return (extractedUUID.equals(refreshUUID) && isNotExpired(refreshToken));
+        return (extractedUUID.equals(refreshUUID) && !isExpired(refreshToken));
     }
 
     @Override
     public String extractTokenType(String token) throws NoSuchAlgorithmException, InvalidKeySpecException {
         return extractAllClaims(token).get("token_type", String.class);
-    }
-
-    public boolean validateToken(String token, String username) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        final String extractedUsername = extractUsername(token);
-        return (extractedUsername.equals(username) && isNotExpired(token));
     }
 
     @Override
@@ -110,9 +105,9 @@ public class AuthJwtImpl implements AuthRepository {
         return extractAllClaims(token).get("randomUUID", String.class);
     }
 
-    public boolean isNotExpired(String token) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public boolean isExpired(String token) throws NoSuchAlgorithmException, InvalidKeySpecException {
         try{
-            return !extractAllClaims(token).getExpiration().before(new Date());
+            return extractAllClaims(token).getExpiration().before(new Date());
         }catch (ExpiredJwtException e){
             return false;
         }

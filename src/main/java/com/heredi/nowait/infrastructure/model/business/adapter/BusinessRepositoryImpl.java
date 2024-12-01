@@ -1,19 +1,19 @@
 package com.heredi.nowait.infrastructure.model.business.adapter;
 
+import com.heredi.nowait.application.exception.AppErrorCode;
+import com.heredi.nowait.application.exception.AppException;
 import com.heredi.nowait.domain.business.model.Business;
 import com.heredi.nowait.domain.business.port.BusinessRepository;
 import com.heredi.nowait.infrastructure.model.business.entity.BusinessEntity;
 import com.heredi.nowait.infrastructure.model.business.jpa.BusinessJPARepository;
 import com.heredi.nowait.infrastructure.model.business.mapper.BusinessEntityMapper;
-import com.heredi.nowait.infrastructure.model.item.jpa.ItemJPARepository;
 import com.heredi.nowait.infrastructure.model.item.mapper.ItemEntityMapper;
 import com.heredi.nowait.infrastructure.model.user.entity.UserEntity;
 import com.heredi.nowait.infrastructure.model.user.jpa.UserJPARepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
-import java.util.NoSuchElementException;
 
 @Service
 public class BusinessRepositoryImpl implements BusinessRepository {
@@ -34,7 +34,12 @@ public class BusinessRepositoryImpl implements BusinessRepository {
     @Override
     public Business getBusiness(Long businessId) {
         BusinessEntity businessEntity = this.businessJPARepository.findById(businessId).
-                orElseThrow(() -> new NoSuchElementException("Business not found"));
+                orElseThrow(() -> new AppException(
+                        AppErrorCode.BUSINESS_NOT_FOUND_BY_ID,
+                        "getBusiness",
+                        "businessId: " + businessId,
+                        HttpStatus.NOT_FOUND
+                ));
 
         return this.businessEntityMapper.toBusiness(businessEntity);
     }
@@ -42,12 +47,21 @@ public class BusinessRepositoryImpl implements BusinessRepository {
     @Override
     public Business updateBusiness(Long userId, Business business) {
         BusinessEntity businessEntity = this.businessJPARepository.findById(business.getId())
-                .orElseThrow(() -> new NoSuchElementException("Business not found by Id: " + business.getId()));
+                .orElseThrow(() -> new AppException(
+                        AppErrorCode.BUSINESS_NOT_FOUND_BY_ID,
+                        "updateBusiness",
+                        "businessId: " + business.getId(),
+                        HttpStatus.NOT_FOUND
+                ));
 
         UserEntity userEntity = this.userJPARepository.getReferenceById(userId);
 
         if(!userEntity.getBusiness().getId().equals(businessEntity.getId())){
-            throw new IllegalArgumentException("Business does not belong to the user with Id: " + userId);
+            throw new AppException(
+                    AppErrorCode.BUSINESS_DOES_NOT_BELONG_TO_USER,
+                    "updateBusiness",
+                    "userId: " + userId + "BusinessId: " + businessEntity.getId(),
+                    HttpStatus.FORBIDDEN);
         }
         businessEntity.setCif(business.getCif());
         businessEntity.setName(business.getName());

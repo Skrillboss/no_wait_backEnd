@@ -14,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Repository
@@ -57,7 +56,7 @@ public class PaymentInfoRepositoryImpl implements PaymentInfoRepository {
 
         PaymentInfoEntity paymentInfoEntity = this.paymentInfoJPARepository.findById(paymentInfo.getId())
                 .orElseThrow(() -> new AppException(
-                        AppErrorCode.PAYMENT_INFO_NOT_FOUND,
+                        AppErrorCode.PAYMENT_INFO_NOT_FOUND_BY_ID,
                         "updatePaymentInfo",
                         "PaymentInfo Id Provided: " + paymentInfo.getId(),
                         HttpStatus.NOT_FOUND));

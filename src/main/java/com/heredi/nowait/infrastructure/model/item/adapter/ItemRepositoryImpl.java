@@ -63,7 +63,7 @@ public class ItemRepositoryImpl implements ItemRepository {
     public Item getItemById(Long itemId){
         ItemEntity itemEntity = this.itemJPARepository.findById(itemId)
                 .orElseThrow(() -> new AppException(
-                        AppErrorCode.ITEM_NOT_FOUND,
+                        AppErrorCode.ITEM_NOT_FOUND_BY_ID,
                         "getItemById",
                         "itemId: " + itemId,
                         HttpStatus.NOT_FOUND));

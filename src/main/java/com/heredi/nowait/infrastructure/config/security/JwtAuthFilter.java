@@ -1,6 +1,8 @@
 package com.heredi.nowait.infrastructure.config.security;
 
 
+import com.heredi.nowait.application.exception.AppErrorCode;
+import com.heredi.nowait.application.exception.AppException;
 import com.heredi.nowait.infrastructure.auth.jwt.AuthJwtImpl;
 import com.heredi.nowait.infrastructure.model.user.entity.UserEntity;
 import com.heredi.nowait.infrastructure.model.user.jpa.UserJPARepository;
@@ -9,6 +11,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.SneakyThrows;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -63,16 +66,29 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         // Si es accessToken, validamos por username
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-            boolean isValidated = jwtProvider.validateToken(token, username);
-
-            if (isValidated) {
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities());
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-                // Establece la autenticación en el contexto de seguridad de Spring
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+            boolean isExpired = jwtProvider.isExpired(token);
+            boolean isUserNameMatched = jwtProvider.extractUsername(token).matches(username);
+            if(isExpired){
+                throw new AppException(
+                        AppErrorCode.ACCESS_TOKEN_EXPIRED,
+                        "doFilterInternal",
+                        "",
+                        HttpStatus.UNAUTHORIZED
+                );
             }
+            if(!isUserNameMatched){
+                throw new AppException(
+                        AppErrorCode.USERNAME_IN_TOKEN_MISMATCH,
+                        "doFilterInternal",
+                        "",
+                        HttpStatus.UNAUTHORIZED
+                );
+            }
+            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                    userDetails, null, userDetails.getAuthorities());
+            authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+            SecurityContextHolder.getContext().setAuthentication(authToken);
         }
 
         // Si es refreshToken, validamos por UUID
