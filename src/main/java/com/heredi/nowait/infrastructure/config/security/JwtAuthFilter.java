@@ -78,7 +78,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         // Si es refreshToken, validamos por UUID
         else if (randomUUID != null) {
             // Consulta en la base de datos si el UUID del token coincide
-            UserEntity userEntity = userJPARepository.findByRefreshToken(randomUUID)
+            UserEntity userEntity = userJPARepository.findByRefreshUUID(randomUUID)
                     .orElseThrow(() -> new NoSuchElementException("User not found"));
 
             if (userEntity != null) {

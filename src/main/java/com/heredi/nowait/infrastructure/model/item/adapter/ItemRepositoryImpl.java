@@ -1,5 +1,7 @@
 package com.heredi.nowait.infrastructure.model.item.adapter;
 
+import com.heredi.nowait.application.exception.AppErrorCode;
+import com.heredi.nowait.application.exception.AppException;
 import com.heredi.nowait.domain.item.model.Item;
 import com.heredi.nowait.domain.item.port.ItemRepository;
 import com.heredi.nowait.infrastructure.model.business.entity.BusinessEntity;
@@ -11,6 +13,7 @@ import com.heredi.nowait.infrastructure.model.queue.entity.QueueEntity;
 import com.heredi.nowait.infrastructure.model.queue.jpa.QueueJPARepository;
 import com.heredi.nowait.infrastructure.model.queue.mapper.QueueEntityMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,7 +62,9 @@ public class ItemRepositoryImpl implements ItemRepository {
     @Override
     public Item getItemById(Long itemId){
         ItemEntity itemEntity = this.itemJPARepository.findById(itemId)
-                .orElseThrow(() -> new NoSuchElementException("Item not found by Id: " + itemId));
+                .orElseThrow(() -> new AppException(
+                        AppErrorCode.ITEM_NOT_FOUND.withDetails("Itemid provided : " + itemId),
+                        HttpStatus.NOT_FOUND));
 
         return this.itemEntityMapper.toItem(itemEntity);
     }

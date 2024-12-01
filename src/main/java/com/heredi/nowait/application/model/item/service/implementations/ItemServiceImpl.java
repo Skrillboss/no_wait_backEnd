@@ -3,6 +3,8 @@ package com.heredi.nowait.application.model.item.service.implementations;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import com.heredi.nowait.application.exception.AppErrorCode;
+import com.heredi.nowait.application.exception.AppException;
 import com.heredi.nowait.application.model.email.dto.EmailDTO;
 import com.heredi.nowait.application.model.email.service.interfaces.MailSenderService;
 import com.heredi.nowait.application.model.item.dto.in.ItemRequestDTO;
@@ -15,6 +17,7 @@ import com.heredi.nowait.domain.user.model.Users;
 import com.heredi.nowait.domain.user.port.UserRepository;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,7 +67,12 @@ public class ItemServiceImpl implements ItemService {
         );
 
         if(!userHasItem){
-            throw new IllegalArgumentException("The user's business does not own any items with this ID:" + itemId);
+            throw new AppException(
+                    AppErrorCode.ITEM_NOT_FOUND_IN_BUSINESS.withDetails(
+                            "ItemId: " + itemId + " BusinessId: " + user.getBusiness().getId()
+                    ),
+                    HttpStatus.NOT_FOUND
+            );
         }
 
         try {

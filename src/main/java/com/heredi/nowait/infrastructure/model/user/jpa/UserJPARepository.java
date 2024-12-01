@@ -14,5 +14,5 @@ public interface UserJPARepository extends JpaRepository<UserEntity, Long> {
     boolean existsByPhoneNumberAndIdNot(String phoneNumber, Long id);
 
     Optional<UserEntity> findByNickName(String nickName);
-    Optional<UserEntity> findByRefreshToken(String refreshToken);
+    Optional<UserEntity> findByRefreshUUID(String refreshToken);
 }
