@@ -87,6 +87,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     private void validateUniqueFields(Users user) {
         List<AppErrorCode> errorCodes = new ArrayList<>();
+        List<String> details = new ArrayList<>();
 
         //TODO: mejorar este condicional
         if (user.getId() == null) {
@@ -94,12 +95,15 @@ public class UserRepositoryImpl implements UserRepository {
             //debido a que aun no se habrá generado previamente un ID
             if (userJPARepository.existsByNickName(user.getNickName())) {
                 errorCodes.add(AppErrorCode.NICKNAME_ALREADY_EXIST);
+                details.add("nickName: " + user.getNickName());
             }
             if (userJPARepository.existsByEmail(user.getEmail())) {
                 errorCodes.add(AppErrorCode.EMAIL_ALREADY_EXIST);
+                details.add("email: " + user.getEmail());
             }
             if (userJPARepository.existsByPhoneNumber(user.getPhoneNumber())) {
                 errorCodes.add(AppErrorCode.PHONE_NUMBER_ALREADY_EXIST);
+                details.add("phoneNumber: " + user.getPhoneNumber());
             }
             //en este else entraran los que quieran actualizar los datos del usuario, ya que
             //comprobara si los datos que intenta actualizar ya existen a excepción de los que
@@ -117,7 +121,11 @@ public class UserRepositoryImpl implements UserRepository {
         }
 
         if (!errorCodes.isEmpty()) {
-            throw new AppException(errorCodes, HttpStatus.CONFLICT);
+            throw new AppException(
+                    errorCodes,
+                    "validateUniqueFields",
+                    details,
+                    HttpStatus.CONFLICT);
         }
     }
 

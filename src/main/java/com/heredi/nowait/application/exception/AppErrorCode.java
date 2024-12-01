@@ -2,7 +2,6 @@ package com.heredi.nowait.application.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 @AllArgsConstructor
@@ -19,6 +18,8 @@ public enum AppErrorCode {
     NICKNAME_ALREADY_EXIST("APP-2001", "The nickname already exists in the system"),
     EMAIL_ALREADY_EXIST("APP-2002", "The email is already registered"),
     PHONE_NUMBER_ALREADY_EXIST("APP-2003", "The phone number is already in use"),
+    ITEM_NOT_FOUND("APP-2004", "The item with the specified ID does not exist"),
+    PAYMENT_INFO_NOT_FOUND("APP-2005", "Payment information with the provided ID was not found"),
 
 
     //**************************************************************************//
@@ -33,8 +34,9 @@ public enum AppErrorCode {
     //****************** Business logic error (4000 - 4999) ********************//
     //**************************************************************************//
 
-    ITEM_NOT_FOUND("APP-4001", "The item with the specified ID does not exist"),
     ITEM_NOT_FOUND_IN_BUSINESS("APP-4004", "The provided itemId does not belong to the user's business."),
+    PAYMENT_INFO_DOES_NOT_BELONG_TO_USER("APP-2005", "Payment information does not belong to the user"),
+
 
     //**************************************************************************//
     //****************** Internal Server error (5000 - 5999) *******************//
@@ -48,14 +50,13 @@ public enum AppErrorCode {
     UNEXPECTED_ERROR("APP-9999", "An unexpected error occurred");
 
     private final String code;
-    private String description;
+    private final String description;
 
-    public String getFormattedError() {
+    public String getExplicationCode() {
         return code + ": " + description;
     }
 
-    public AppErrorCode withDetails(String additionalDetails) {
-        this.description = this.description + " Details: " + additionalDetails;
-        return this;
+    public String getDetails(String additionalDetails){
+        return code + ": " + additionalDetails;
     }
 }

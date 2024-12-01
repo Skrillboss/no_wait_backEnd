@@ -126,7 +126,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public RefreshTokenResponseDTO refreshTokens(String authorizationHeader, String accessToken) {
         if (authService.isNotExpiredToken(accessToken)) {
-            throw new AppException(AppErrorCode.TOKEN_NOT_EXPIRED_YET, HttpStatus.BAD_REQUEST);
+            throw new AppException(
+                    AppErrorCode.TOKEN_NOT_EXPIRED_YET,
+                    "refreshTokens",
+                    "accessToken: " + accessToken,
+                    HttpStatus.BAD_REQUEST);
         }
         Users obtainedUser = this.userRepository.getUserFromIdAndNickName(
                 authService.extractUserId(accessToken),
@@ -134,7 +138,11 @@ public class UserServiceImpl implements UserService {
         String refreshToken = authorizationHeader.replace("Bearer ", "");
 
         if (!authService.validateRefreshToken(refreshToken, obtainedUser.getRefreshUUID())) {
-            throw new AppException(AppErrorCode.INVALID_REFRESH_TOKEN, HttpStatus.UNAUTHORIZED);
+            throw new AppException(
+                    AppErrorCode.INVALID_REFRESH_TOKEN,
+                    "refreshTokens",
+                    "refreshToken: " + refreshToken,
+                    HttpStatus.UNAUTHORIZED);
         }
         String newRefreshToken = authService.generateRefreshToken();
         String newRandomUUID = authService.extractRandomUUID(newRefreshToken);

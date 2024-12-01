@@ -12,5 +12,7 @@ import java.util.List;
 public class ApiError {
     private int statusCode;
     private List<String> errorCode;
-    private String message;
+    private List<String> codeExplication;
+    private String methodName;
+    private List<String> details;
 }

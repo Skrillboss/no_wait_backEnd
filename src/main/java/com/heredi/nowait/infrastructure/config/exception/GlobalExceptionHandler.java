@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -17,11 +19,18 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AppException.class)
     public ResponseEntity<ApiError> handleAppException(AppException ex) {
         List<String> errorCodes = ex.getErrorCodes().stream().map(AppErrorCode::getCode).toList();
+        List<String> explicationCode = generateMessage(ex.getErrorCodes(), AppErrorCode::getExplicationCode);
+        List<String> detailsCode = generateMessage(ex.getErrorCodes(), errorCode ->
+                errorCode.getDetails(ex.getDetails().get(ex.getErrorCodes().indexOf(errorCode))));
+
         ApiError error = new ApiError(
                 ex.getStatus().value(),
                 errorCodes,
-                ex.getMessage()
+                explicationCode,
+                ex.getMethodName(),
+                detailsCode
         );
+
         return new ResponseEntity<>(error, ex.getStatus());
     }
 
@@ -30,8 +39,16 @@ public class GlobalExceptionHandler {
         ApiError error = new ApiError(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 Collections.singletonList(AppErrorCode.UNEXPECTED_ERROR.getCode()),
-                "An unexpected error occurred: " + ex.getMessage()
+                List.of("An unexpected error occurred: " + ex.getMessage()),
+                "unknown",
+                Collections.emptyList()
         );
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    private List<String> generateMessage(List<AppErrorCode> errorCodes, Function<AppErrorCode, String> function) {
+        return errorCodes.stream()
+                .map(function)
+                .collect(Collectors.toList());
     }
 }

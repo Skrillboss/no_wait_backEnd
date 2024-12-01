@@ -72,7 +72,11 @@ public class AuthJwtImpl implements AuthRepository {
             // Si el token ha expirado, aún podemos obtener las claims desde e.getClaims()
             return e.getClaims();  // Retornamos las claims incluso si está expirado
         } catch (SignatureException e) {
-            throw new AppException(AppErrorCode.INVALID_TOKEN_SIGNATURE, HttpStatus.UNAUTHORIZED);
+            throw new AppException(
+                    AppErrorCode.INVALID_TOKEN_SIGNATURE,
+                    "extractAllClaims",
+                    "token: " + token,
+                    HttpStatus.UNAUTHORIZED);
         }
     }
 

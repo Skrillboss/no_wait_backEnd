@@ -68,10 +68,10 @@ public class ItemServiceImpl implements ItemService {
 
         if(!userHasItem){
             throw new AppException(
-                    AppErrorCode.ITEM_NOT_FOUND_IN_BUSINESS.withDetails(
-                            "ItemId: " + itemId + " BusinessId: " + user.getBusiness().getId()
-                    ),
-                    HttpStatus.NOT_FOUND
+                    AppErrorCode.ITEM_NOT_FOUND_IN_BUSINESS,
+                    "saveItemIdQrToMail",
+                    "ItemId: " + itemId + " BusinessId: " + user.getBusiness().getId(),
+                    HttpStatus.FORBIDDEN
             );
         }
 
