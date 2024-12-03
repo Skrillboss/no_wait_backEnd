@@ -144,7 +144,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         ApiError error = new ApiError(
                 ex.getStatus().value(),
                 ex.getErrorCodes().stream().map(AppErrorCode::getCode).toList(),
-                List.of("Error processing request: " + ex.getMessage()),
+                List.of(ex.getMessage()),
                 ex.getMethodName(),
                 Collections.emptyList()
         );
