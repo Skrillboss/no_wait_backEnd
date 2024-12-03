@@ -44,14 +44,8 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<LoginUserResponseDTO> loginUser(@RequestParam String nickName, String password) {
-        try {
             LoginUserResponseDTO authUserResultDTO = userService.loginUser(nickName, password);
             return new ResponseEntity<LoginUserResponseDTO>(authUserResultDTO, HttpStatus.OK);
-        } catch (NoSuchElementException e) {
-            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
     }
 
     @PatchMapping("/update")

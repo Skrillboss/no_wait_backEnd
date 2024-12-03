@@ -1,7 +1,10 @@
-package com.heredi.nowait.infrastructure.securityConfig;
+package com.heredi.nowait.infrastructure.config.security;
 
+import com.heredi.nowait.application.exception.AppErrorCode;
+import com.heredi.nowait.application.exception.AppException;
 import com.heredi.nowait.infrastructure.model.user.jpa.UserJPARepository;
 import com.heredi.nowait.infrastructure.model.user.entity.UserEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -23,7 +26,11 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String nickName) throws UsernameNotFoundException {
         UserEntity userEntity = userRepository.findByNickName(nickName)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado con el nickName: " + nickName));
+                .orElseThrow(() -> new AppException(
+                        AppErrorCode.USER_NOT_FOUND_BY_NICK_NAME,
+                        "loadUserByUsername",
+                        "nickName: " + nickName,
+                        HttpStatus.UNAUTHORIZED));
 
         List<GrantedAuthority> authorities = List.of(
                 new SimpleGrantedAuthority("ROLE_" + userEntity.getAuthorityEntity().getRole().name()),

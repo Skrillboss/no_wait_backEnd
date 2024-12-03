@@ -21,7 +21,7 @@ public class UserEntity {
     @Column(name = "id")
     private Long id;
 
-    private String refreshToken;
+    private String refreshUUID;
 
     @Column(nullable = false)
     private String name;

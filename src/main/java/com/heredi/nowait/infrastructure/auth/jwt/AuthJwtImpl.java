@@ -1,11 +1,14 @@
 package com.heredi.nowait.infrastructure.auth.jwt;
 
+import com.heredi.nowait.application.exception.AppErrorCode;
+import com.heredi.nowait.application.exception.AppException;
 import com.heredi.nowait.domain.auth.port.AuthRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.SignatureException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -56,19 +59,35 @@ public class AuthJwtImpl implements AuthRepository {
                 .compact();
     }
 
-    public boolean validateRefreshToken(String token, String refreshUUID) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        final String extractedUUID = extractRandomUUID(token);
-        return (extractedUUID.equals(refreshUUID) && isNotExpired(token));
+    public Claims extractAllClaims(String token) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        try {
+            // Intentamos extraer las claims normalmente
+            return Jwts.parserBuilder()
+                    .setSigningKey(getKeyFromPassword(SECRET_KEY, SALT))
+                    .build()
+                    .parseClaimsJws(token)  // Esto es lo que verifica la firma y la expiración
+                    .getBody();
+        } catch (ExpiredJwtException e) {
+            //TODO: mejorar por temas de seguridad.
+            // Si el token ha expirado, aún podemos obtener las claims desde e.getClaims()
+            return e.getClaims();  // Retornamos las claims incluso si está expirado
+        } catch (SignatureException e) {
+            throw new AppException(
+                    AppErrorCode.INVALID_TOKEN_SIGNATURE,
+                    "extractAllClaims",
+                    "token: " + token,
+                    HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    public boolean validateRefreshToken(String refreshToken, String refreshUUID) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        final String extractedUUID = extractRandomUUID(refreshToken);
+        return (extractedUUID.equals(refreshUUID) && !isExpired(refreshToken));
     }
 
     @Override
     public String extractTokenType(String token) throws NoSuchAlgorithmException, InvalidKeySpecException {
         return extractAllClaims(token).get("token_type", String.class);
-    }
-
-    public boolean validateToken(String token, String username) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        final String extractedUsername = extractUsername(token);
-        return (extractedUsername.equals(username) && isNotExpired(token));
     }
 
     @Override
@@ -86,26 +105,9 @@ public class AuthJwtImpl implements AuthRepository {
         return extractAllClaims(token).get("randomUUID", String.class);
     }
 
-    public Claims extractAllClaims(String token) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        try {
-            // Intentamos extraer las claims normalmente
-            return Jwts.parserBuilder()
-                    .setSigningKey(getKeyFromPassword(SECRET_KEY, SALT))
-                    .build()
-                    .parseClaimsJws(token)  // Esto es lo que verifica la firma y la expiración
-                    .getBody();
-        } catch (ExpiredJwtException e) {
-            //TODO: mejorar por temas de seguridad.
-            // Si el token ha expirado, aún podemos obtener las claims desde e.getClaims()
-            return e.getClaims();  // Retornamos las claims incluso si está expirado
-        } catch (SignatureException e) {
-            throw new IllegalArgumentException("Token signature invalid");
-        }
-    }
-
-    public boolean isNotExpired(String token) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public boolean isExpired(String token) throws NoSuchAlgorithmException, InvalidKeySpecException {
         try{
-            return !extractAllClaims(token).getExpiration().before(new Date());
+            return extractAllClaims(token).getExpiration().before(new Date());
         }catch (ExpiredJwtException e){
             return false;
         }

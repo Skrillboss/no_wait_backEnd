@@ -1,6 +1,8 @@
 package com.heredi.nowait.application.model.user.service.implementations;
 
 import com.heredi.nowait.application.auth.AuthService;
+import com.heredi.nowait.application.exception.AppErrorCode;
+import com.heredi.nowait.application.exception.AppException;
 import com.heredi.nowait.application.model.email.dto.EmailDTO;
 import com.heredi.nowait.application.model.email.service.interfaces.MailSenderService;
 import com.heredi.nowait.application.model.user.dto.in.CreateUserRequestDTO;
@@ -15,6 +17,7 @@ import com.heredi.nowait.domain.user.model.Users;
 import com.heredi.nowait.domain.user.port.UserRepository;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -90,10 +93,20 @@ public class UserServiceImpl implements UserService {
         boolean hasPaymentInfo = createUserRequestDTO.getPaymentInfoRequestDTOList() != null;
 
         if (isAdmin && (!hasBusinessInfo || !hasPaymentInfo)) {
-            throw new IllegalArgumentException("'ADMIN' roles need both payment and business information");
+            throw new AppException(
+                    AppErrorCode.ADMIN_ROLE_NEEDS_PAYMENT_AND_BUSINESS,
+                    "validateRoleSpecificInfo",
+                    "",
+                    HttpStatus.BAD_REQUEST
+                    );
         }
         if (!isAdmin && (hasBusinessInfo || hasPaymentInfo)) {
-            throw new IllegalArgumentException("Only 'ADMIN' roles can record payment or business information");
+            throw new AppException(
+                    AppErrorCode.ONLY_ADMIN_CAN_RECORD_PAYMENT_OR_BUSINESS,
+                    "validateRoleSpecificInfo",
+                    "",
+                    HttpStatus.FORBIDDEN
+            );
         }
     }
 
@@ -122,21 +135,29 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public RefreshTokenResponseDTO refreshTokens(String authorizationHeader, String accessToken) {
-        if (!authService.isNotExpiredToken(accessToken)) {
-            String nickName = authService.extractUsername(accessToken);
-            Long userId = authService.extractUserId(accessToken);
-            Users obtainedUser = this.userRepository.getUserFromIdAndNickName(userId, nickName);
-            String refreshToken = authorizationHeader.replace("Bearer ", "");
-
-            if (obtainedUser.getRefreshToken().equals(authService.extractRandomUUID(refreshToken))) {
-                String newRefreshToken = authService.generateRefreshToken();
-                String newRandomUUID = authService.extractRandomUUID(newRefreshToken);
-                userRepository.saveUUID(newRandomUUID, userId);
-                return new RefreshTokenResponseDTO(authService.generateToken(obtainedUser.getId(), obtainedUser.getNickName()), newRefreshToken);
-            }
-        } else {
-            throw new IllegalStateException("The access token has not expired yet.");
+        if (!authService.isExpiredToken(accessToken)) {
+            throw new AppException(
+                    AppErrorCode.TOKEN_NOT_EXPIRED_YET,
+                    "refreshTokens",
+                    "accessToken: " + accessToken,
+                    HttpStatus.BAD_REQUEST);
         }
-        throw new IllegalStateException("Invalid refresh token.");
+        Users obtainedUser = this.userRepository.getUserFromIdAndNickName(
+                authService.extractUserId(accessToken),
+                authService.extractUsername(accessToken));
+        String refreshToken = authorizationHeader.replace("Bearer ", "");
+
+        if (!authService.validateRefreshToken(refreshToken, obtainedUser.getRefreshUUID())) {
+            throw new AppException(
+                    AppErrorCode.INVALID_REFRESH_TOKEN,
+                    "refreshTokens",
+                    "refreshToken: " + refreshToken,
+                    HttpStatus.UNAUTHORIZED);
+        }
+        String newRefreshToken = authService.generateRefreshToken();
+        String newRandomUUID = authService.extractRandomUUID(newRefreshToken);
+        userRepository.saveUUID(newRandomUUID, obtainedUser.getId());
+        return new RefreshTokenResponseDTO(authService.generateToken(obtainedUser.getId(),
+                obtainedUser.getNickName()), newRefreshToken);
     }
 }

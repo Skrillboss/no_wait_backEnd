@@ -1,5 +1,7 @@
 package com.heredi.nowait.infrastructure.model.paymentInfo.adapter;
 
+import com.heredi.nowait.application.exception.AppErrorCode;
+import com.heredi.nowait.application.exception.AppException;
 import com.heredi.nowait.domain.paymentInfo.model.PaymentInfo;
 import com.heredi.nowait.domain.paymentInfo.port.PaymentInfoRepository;
 import com.heredi.nowait.infrastructure.model.paymentInfo.entity.PaymentInfoEntity;
@@ -8,10 +10,10 @@ import com.heredi.nowait.infrastructure.model.paymentInfo.mapper.PaymentInfoEnti
 import com.heredi.nowait.infrastructure.model.user.entity.UserEntity;
 import com.heredi.nowait.infrastructure.model.user.jpa.UserJPARepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Repository
@@ -53,10 +55,19 @@ public class PaymentInfoRepositoryImpl implements PaymentInfoRepository {
     public PaymentInfo updatePaymentInfo(Long userId, PaymentInfo paymentInfo) {
 
         PaymentInfoEntity paymentInfoEntity = this.paymentInfoJPARepository.findById(paymentInfo.getId())
-                .orElseThrow(() -> new NoSuchElementException("PaymentInfo not found by Id: " + paymentInfo.getId()));
+                .orElseThrow(() -> new AppException(
+                        AppErrorCode.PAYMENT_INFO_NOT_FOUND_BY_ID,
+                        "updatePaymentInfo",
+                        "PaymentInfo Id Provided: " + paymentInfo.getId(),
+                        HttpStatus.NOT_FOUND));
 
         if (!paymentInfoEntity.getUserEntity().getId().equals(userId)) {
-            throw new IllegalArgumentException("Payment information does not belong to the user with Id: " + userId);
+            throw new AppException(
+                    AppErrorCode.PAYMENT_INFO_DOES_NOT_BELONG_TO_USER,
+                    "updatePaymentInfo",
+                    "Payment Info Id: " + paymentInfoEntity.getId() +
+                            "User Id: " + userId,
+                    HttpStatus.FORBIDDEN);
         }
 
         paymentInfoEntity.setCardNumber(paymentInfo.getCardNumber());

@@ -1,10 +1,13 @@
 package com.heredi.nowait.application.model.email.service.implementations;
 
+import com.heredi.nowait.application.exception.AppErrorCode;
+import com.heredi.nowait.application.exception.AppException;
 import com.heredi.nowait.application.model.email.service.interfaces.MailSenderService;
 import com.heredi.nowait.application.model.email.dto.EmailDTO;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -43,7 +46,12 @@ public class MailSenderServiceImpl implements MailSenderService {
             javaMailSender.send(message);
 
         }catch (Exception e){
-            throw  new RuntimeException("Error al enviar el correo: " + e.getMessage(), e);
+             throw new AppException(
+                    AppErrorCode.EMAIL_SENDING_FAILED,
+                    "sendNewMail",
+                    "Exception: " + e + " message: " + e.getMessage(),
+                    HttpStatus. INTERNAL_SERVER_ERROR
+            );
         }
     }
 }
