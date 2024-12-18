@@ -23,7 +23,7 @@ public class MailSenderServiceImpl implements MailSenderService {
     @Autowired
     private final TemplateEngine templateEngine;
 
-    public MailSenderServiceImpl(JavaMailSender javaMailSender, TemplateEngine templateEngine) {
+    public MailSenderServiceImpl(TemplateEngine templateEngine) {
         this.templateEngine = templateEngine;
     }
 

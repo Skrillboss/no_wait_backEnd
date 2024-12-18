@@ -5,6 +5,7 @@ import com.heredi.nowait.application.exception.AppErrorCode;
 import com.heredi.nowait.application.exception.AppException;
 import com.heredi.nowait.application.model.email.dto.EmailDTO;
 import com.heredi.nowait.application.model.email.service.interfaces.MailSenderService;
+import com.heredi.nowait.application.model.phone.interfaces.PhoneSenderService;
 import com.heredi.nowait.application.model.user.dto.in.CreateUserRequestDTO;
 import com.heredi.nowait.application.model.user.dto.in.UpdateUserRequestDTO;
 import com.heredi.nowait.application.model.user.dto.out.LoginUserResponseDTO;
@@ -27,18 +28,22 @@ import java.io.File;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    @Autowired
+
     private final UserMapper userMapper;
 
     private final AuthService authService;
 
-    @Autowired
-    private MailSenderService mailSenderService;
+    private final MailSenderService mailSenderService;
 
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, AuthService authService) {
+    private final PhoneSenderService phoneService;
+
+    @Autowired
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, AuthService authService, MailSenderService mailSenderService, PhoneSenderService phoneService) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.authService = authService;
+        this.mailSenderService = mailSenderService;
+        this.phoneService = phoneService;
     }
 
     @Override
@@ -56,7 +61,7 @@ public class UserServiceImpl implements UserService {
                 new File("logoNoWait.png")
         );
         mailSenderService.sendNewMail("verifyEmail" , emailDTO);
-
+        phoneService.sendMessage(createdUser.getPhoneNumber(), "Esta es una prueba para verificar...");
 
         return userMapper.toUserResponseDTO(createdUser);
     }
