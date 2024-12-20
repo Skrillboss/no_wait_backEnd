@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
                 new File("logoNoWait.png")
         );
         mailSenderService.sendNewMail("verifyEmail" , emailDTO);
-        phoneService.sendMessage(createdUser.getPhoneNumber(), "Esta es una prueba para verificar...");
+        phoneService.sendMessage(createdUser.getPhoneNumber(), "TODO: débo colocar un metodo para crear un numero aleatorio con el cual pueda veriifcar la pertenencia del numero telefonico del usuario.");
 
         return userMapper.toUserResponseDTO(createdUser);
     }
