@@ -96,6 +96,16 @@ public class UserServiceImpl implements UserService {
     }
 
     private void validateRoleSpecificInfo(CreateUserRequestDTO createUserRequestDTO) {
+        if(createUserRequestDTO.getRoleRequestDTO() == null){
+            throw new AppException(
+                AppErrorCode.USER_ROLE_NOT_FOUND,
+                    "validateRoleSpecificInfo",
+                    "The roleRequestDTO value which is inside the createUserRequestDTO " +
+                            "object given by parameter within the validateRoleSpecificInfo " +
+                            "method is null",
+                    HttpStatus.FORBIDDEN
+            );
+        }
         boolean isAdmin = "ADMIN".equals(createUserRequestDTO.getRoleRequestDTO().getName());
         boolean hasBusinessInfo = createUserRequestDTO.getBusinessRequestDTO() != null;
         boolean hasPaymentInfo = createUserRequestDTO.getPaymentInfoRequestDTOList() != null;

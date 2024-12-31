@@ -12,6 +12,7 @@ public enum AppErrorCode {
     //**************************************************************************//
 
     RESOURCE_NOT_FOUND("APP-1001", "The resource you want to access doesn't exist"),
+    USER_ROLE_NOT_FOUND("APP-1002", "The user's role was not sent when it was created"),
 
     //**************************************************************************//
     //******************* Resource conflicts (2000 - 2999) *********************//
