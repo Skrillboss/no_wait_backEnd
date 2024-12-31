@@ -61,7 +61,10 @@ public class UserServiceImpl implements UserService {
                 new File("logoNoWait.png")
         );
         mailSenderService.sendNewMail("verifyEmail" , emailDTO);
-        phoneService.sendMessage(createdUser.getPhoneNumber(), "TODO: débo colocar un metodo para crear un numero aleatorio con el cual pueda veriifcar la pertenencia del numero telefonico del usuario.");
+//        phoneService.sendMessage(createdUser.getPhoneNumber(),
+//        "TODO: Ya tengo la implementación dia 31/12/2024, débo verificar que funcione
+//        me concentrare en el funcionamiento completo de la aplicación pero ya esta implementado
+//        con Twilio
 
         return userMapper.toUserResponseDTO(createdUser);
     }
