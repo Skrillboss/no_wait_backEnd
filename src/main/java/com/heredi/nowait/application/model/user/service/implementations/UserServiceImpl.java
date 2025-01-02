@@ -108,7 +108,9 @@ public class UserServiceImpl implements UserService {
         }
         boolean isAdmin = "ADMIN".equals(createUserRequestDTO.getRoleRequestDTO().getName());
         boolean hasBusinessInfo = createUserRequestDTO.getBusinessRequestDTO() != null;
-        boolean hasPaymentInfo = createUserRequestDTO.getPaymentInfoRequestDTOList() != null;
+        boolean hasPaymentInfo = createUserRequestDTO.getPaymentInfoRequestDTOList() != null
+                && !createUserRequestDTO.getPaymentInfoRequestDTOList().isEmpty();
+
 
         if (isAdmin && (!hasBusinessInfo || !hasPaymentInfo)) {
             throw new AppException(

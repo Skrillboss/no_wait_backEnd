@@ -19,7 +19,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AppException.class)
     public ResponseEntity<ApiError> handleAppException(AppException ex) {
-        List<String> errorCodes = ex.getErrorCodes().stream().map(AppErrorCode::getCode).toList();
+        List<Integer> errorCodes = ex.getErrorCodes().stream().map(AppErrorCode::getCode).toList();
         List<String> explicationCode = generateMessage(ex.getErrorCodes(), AppErrorCode::getExplicationCode);
         List<String> detailsCode = generateMessage(ex.getErrorCodes(), errorCode ->
                 errorCode.getDetails(ex.getDetails().get(ex.getErrorCodes().indexOf(errorCode))));

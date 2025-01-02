@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ApiError {
     private int statusCode;
-    private List<String> errorCode;
+    private List<Integer> errorCode;
     private List<String> codeExplication;
     private String methodName;
     private List<String> details;
