@@ -7,12 +7,26 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum AppErrorCode {
 
-    //**************************************************************************//
-    //*********************** Data Validation (1000 - 1999) ********************//
-    //**************************************************************************//
+//**************************************************************************//
+//*********************** Data Validation (1000 - 1999) ********************//
+//**************************************************************************//
 
     RESOURCE_NOT_FOUND(1001, "The resource you want to access doesn't exist"),
     USER_ROLE_NOT_FOUND(1002, "The user's role was not sent when it was created"),
+    USERNAME_EMPTY_TO_REGISTER(1003, "User name field cannot be empty"),
+    //TODO: el texto de 3 y 30 debe estar guardado en constantes para igualarse a la validación
+    USERNAME_LENGTH_ERROR(1004, "The user's name must be between 3 and 30 characters"),
+    NICKNAME_EMPTY_TO_REGISTER(1005, "NickName field cannot be empty"),
+    NICKNAME_LENGTH_ERROR(1006, "The user's nickName must be between 8 and 20 characters"),
+    USER_EMAIL_EMPTY_TO_REGISTER(1007, "Email field cannot be empty"),
+    USER_EMAIL_LENGTH_ERROR(1008, "The user's email must be between 6 and 254 characters"),
+    EMAIL_FORMAT_ERROR(1009, "The email format is invalid."),
+    PASSWORD_EMPTY_TO_REGISTER(1010, "Password field cannot be empty"),
+    PASSWORD_LENGTH_ERROR(1011, "The password must be between 8 and 50 characters"),
+    PASSWORD_FORMAT_ERROR(1012, "The password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"),
+    PHONE_NUMBER_EMPTY_TO_REGISTER(1013, "Phone number field cannot be empty"),
+    PHONE_NUMBER_FORMAT_ERROR(1014, "The phone number format is invalid. It must have 10 digits."),
+
 
     //**************************************************************************//
     //******************* Resource conflicts (2000 - 2999) *********************//
@@ -48,6 +62,7 @@ public enum AppErrorCode {
     ITEM_NOT_FOUND_IN_BUSINESS(4003, "The provided itemId does not belong to the user's business."),
     PAYMENT_INFO_DOES_NOT_BELONG_TO_USER(4004, "Payment information does not belong to the user"),
     BUSINESS_DOES_NOT_BELONG_TO_USER(4005, "Business does not belong to the user"),
+    CREATE_USER_NULL(4006, "The 'CreateUserRequestDTO' object is null"),
 
     //**************************************************************************//
     //****************** Internal Server error (5000 - 5999) *******************//
