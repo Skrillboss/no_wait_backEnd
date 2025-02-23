@@ -57,16 +57,16 @@ public class UserRepositoryImpl implements UserRepository {
         userEntity.getAuthorityEntity().setStatus(AuthorityEntity.UserStatus.EMAIL_UNVERIFIED);
         UserEntity savedUserEntity = this.userJPARepository.save(userEntity);
 
-        List<PaymentInfoEntity> paymentInfoEntityList = user.getPaymentInfoList().stream()
-                .map(paymentInfo -> {
-                    PaymentInfoEntity paymentInfoCollected = this.paymentInfoEntityMapper.toPaymentInfoEntity(paymentInfo);
-                    paymentInfoCollected.setUserEntity(savedUserEntity); // Asigna el usuario ya persistido.
-                    return this.paymentInfoJPARepository.save(paymentInfoCollected);
-                })
-                .toList();
-
-        savedUserEntity.setPaymentInfoEntityList(paymentInfoEntityList);
-
+        if(user.getPaymentInfoList() != null && !(user.getPaymentInfoList().isEmpty())){
+            List<PaymentInfoEntity> paymentInfoEntityList = user.getPaymentInfoList().stream()
+                    .map(paymentInfo -> {
+                        PaymentInfoEntity paymentInfoCollected = this.paymentInfoEntityMapper.toPaymentInfoEntity(paymentInfo);
+                        paymentInfoCollected.setUserEntity(savedUserEntity);
+                        return this.paymentInfoJPARepository.save(paymentInfoCollected);
+                    })
+                    .toList();
+            savedUserEntity.setPaymentInfoEntityList(paymentInfoEntityList);
+        }
         return this.userEntityMapper.toUser(savedUserEntity);
     }
 

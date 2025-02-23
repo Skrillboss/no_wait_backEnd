@@ -5,7 +5,6 @@ import com.heredi.nowait.application.exception.AppErrorCode;
 import com.heredi.nowait.application.exception.AppException;
 import com.heredi.nowait.application.model.email.dto.EmailDTO;
 import com.heredi.nowait.application.model.email.service.interfaces.MailSenderService;
-import com.heredi.nowait.application.model.phone.interfaces.PhoneSenderService;
 import com.heredi.nowait.application.model.user.dto.in.CreateUserRequestDTO;
 import com.heredi.nowait.application.model.user.dto.in.UpdateUserRequestDTO;
 import com.heredi.nowait.application.model.user.dto.out.LoginUserResponseDTO;
@@ -14,6 +13,7 @@ import com.heredi.nowait.application.model.user.dto.out.UserResponseDTO;
 import com.heredi.nowait.application.model.user.dto.out.RefreshTokenResponseDTO;
 import com.heredi.nowait.application.model.user.mapper.UserMapper;
 import com.heredi.nowait.application.model.user.service.interfaces.UserService;
+import com.heredi.nowait.application.model.user.service.validation.UserValidationService;
 import com.heredi.nowait.domain.user.model.Users;
 import com.heredi.nowait.domain.user.port.UserRepository;
 import jakarta.mail.MessagingException;
@@ -31,24 +31,26 @@ public class UserServiceImpl implements UserService {
 
     private final UserMapper userMapper;
 
+    private final UserValidationService validationService;
+
     private final AuthService authService;
 
     private final MailSenderService mailSenderService;
 
-    private final PhoneSenderService phoneService;
+//    private final PhoneSenderService phoneService;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, AuthService authService, MailSenderService mailSenderService, PhoneSenderService phoneService) {
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, AuthService authService, MailSenderService mailSenderService, UserValidationService validationService) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.authService = authService;
         this.mailSenderService = mailSenderService;
-        this.phoneService = phoneService;
+        this.validationService = validationService;
     }
 
     @Override
     public UserResponseDTO createUser(CreateUserRequestDTO createUserRequestDTO) throws MessagingException {
-        validateRoleSpecificInfo(createUserRequestDTO);
+        validationService.validateCreateUser(createUserRequestDTO);
 
         Users createdUser = this.userRepository.createUser(userMapper.toUser(createUserRequestDTO));
 
@@ -93,41 +95,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public void verifyNickNameAndEmail(String nickName, String email) {
         this.userRepository.getUserByNickNameAndEmail(nickName, email);
-    }
-
-    private void validateRoleSpecificInfo(CreateUserRequestDTO createUserRequestDTO) {
-        if(createUserRequestDTO.getRoleRequestDTO() == null){
-            throw new AppException(
-                AppErrorCode.USER_ROLE_NOT_FOUND,
-                    "validateRoleSpecificInfo",
-                    "The roleRequestDTO value which is inside the createUserRequestDTO " +
-                            "object given by parameter within the validateRoleSpecificInfo " +
-                            "method is null",
-                    HttpStatus.FORBIDDEN
-            );
-        }
-        boolean isAdmin = "ADMIN".equals(createUserRequestDTO.getRoleRequestDTO().getName());
-        boolean hasBusinessInfo = createUserRequestDTO.getBusinessRequestDTO() != null;
-        boolean hasPaymentInfo = createUserRequestDTO.getPaymentInfoRequestDTOList() != null
-                && !createUserRequestDTO.getPaymentInfoRequestDTOList().isEmpty();
-
-
-        if (isAdmin && (!hasBusinessInfo || !hasPaymentInfo)) {
-            throw new AppException(
-                    AppErrorCode.ADMIN_ROLE_NEEDS_PAYMENT_AND_BUSINESS,
-                    "validateRoleSpecificInfo",
-                    "",
-                    HttpStatus.BAD_REQUEST
-                    );
-        }
-        if (!isAdmin && (hasBusinessInfo || hasPaymentInfo)) {
-            throw new AppException(
-                    AppErrorCode.ONLY_ADMIN_CAN_RECORD_PAYMENT_OR_BUSINESS,
-                    "validateRoleSpecificInfo",
-                    "",
-                    HttpStatus.FORBIDDEN
-            );
-        }
     }
 
     @Transactional
