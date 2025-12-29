@@ -56,7 +56,9 @@ public class BusinessRepositoryImpl implements BusinessRepository {
 
         UserEntity userEntity = this.userJPARepository.getReferenceById(userId);
 
-        if(!userEntity.getBusiness().getId().equals(businessEntity.getId())){
+
+        //I check if the business belongs to the user
+        if(userEntity.getBusiness() == null || !userEntity.getBusiness().getId().equals(businessEntity.getId())){
             throw new AppException(
                     AppErrorCode.BUSINESS_DOES_NOT_BELONG_TO_USER,
                     "updateBusiness",
