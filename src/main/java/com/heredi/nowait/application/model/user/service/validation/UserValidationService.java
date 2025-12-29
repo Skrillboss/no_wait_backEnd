@@ -3,10 +3,12 @@ package com.heredi.nowait.application.model.user.service.validation;
 import com.heredi.nowait.application.exception.AppErrorCode;
 import com.heredi.nowait.application.exception.AppException;
 import com.heredi.nowait.application.model.user.dto.in.CreateUserRequestDTO;
+import com.heredi.nowait.domain.role.model.Authority;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -38,7 +40,7 @@ public class UserValidationService {
         if (!this.errorCodes.isEmpty() || !this.details.isEmpty()) {
             throw new AppException(
                     this.errorCodes,
-                    "validateUniqueFields",
+                    "validateCreateUser",
                     this.details,
                     HttpStatus.BAD_REQUEST);
         }
@@ -121,11 +123,12 @@ public class UserValidationService {
     }
 
     private void validateRoleSpecificInfo(CreateUserRequestDTO createUserRequestDTO) {
-        if(createUserRequestDTO.getRoleRequestDTO() == null){
+        if(createUserRequestDTO.getRoleRequestDTO() == null || createUserRequestDTO.getRoleRequestDTO().getName().isEmpty()){
             this.errorCodes.add(AppErrorCode.USER_ROLE_NOT_FOUND);
             this.details.add("The roleRequestDTO value which is inside the createUserRequestDTO "+
                     "object given by parameter within the validateRoleSpecificInfo "+
-                    "method is null");
+                    "method is null or is empty."+
+                    "The value must be " + Arrays.toString(Authority.RoleUser.values()));
         }else{
             boolean isAdmin = "ADMIN".equals(createUserRequestDTO.getRoleRequestDTO().getName());
             boolean hasBusinessInfo = createUserRequestDTO.getBusinessRequestDTO() != null;

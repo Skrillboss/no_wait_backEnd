@@ -17,7 +17,7 @@ public class RoleMapper {
     }
 
     public Authority toRole(RoleDTO roleRequestDTO){
-        if(roleRequestDTO == null){
+        if(roleRequestDTO == null || roleRequestDTO.getName().isEmpty()){
             return null;
         }
 
