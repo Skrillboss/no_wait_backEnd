@@ -31,6 +31,6 @@ public class ShiftController {
     public ResponseEntity<ShiftResponseDTO> createShift(@RequestHeader("Authorization") String authorizationHeader, @PathVariable String queueId) throws NoSuchAlgorithmException, InvalidKeySpecException {
         String accessToken = authorizationHeader.replace("Bearer ", "");
         Long userId = authJwt.extractUserId(accessToken);
-        return new ResponseEntity<ShiftResponseDTO>(shiftService.create(queueId, userId), HttpStatus.OK);
+        return new ResponseEntity<ShiftResponseDTO>(shiftService.create(Long.parseLong(queueId), userId), HttpStatus.OK);
     }
 }

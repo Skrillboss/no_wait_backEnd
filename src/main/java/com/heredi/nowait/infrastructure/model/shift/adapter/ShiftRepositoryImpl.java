@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Repository
@@ -32,6 +33,16 @@ public class ShiftRepositoryImpl implements ShiftRepository {
         this.queueJPARepository = queueJPARepository;
         this.shiftJPARepository = shiftJPARepository;
         this.userJPARepository = userJPARepository;
+    }
+
+    @Override
+    public List<Shift> getShiftsByQueueId(Long queueId) {
+
+        List<Shift> obteinedShift = this.shiftJPARepository.findByQueueId(queueId).stream()
+                .map(shiftEntity -> this.shiftEntityMapper.toShift(shiftEntity))
+                .toList();
+
+        return obteinedShift;
     }
 
     @Override
