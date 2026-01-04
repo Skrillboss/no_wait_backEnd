@@ -36,14 +36,30 @@ public class ShiftServiceImpl implements ShiftService {
     public ShiftResponseDTO create(Long queueId, Long userId) {
 
         Shift shift = new Shift();
+        Queue queue = queueRepository.getQueueById(queueId);
+        List<Shift> shiftsInQueue = shiftRepository.getShiftsByQueueId(queueId);
+        List<Shift> shiftsActive;
+        int tandas = 0;
 
         //TODO: estos valores no se pueden quedar asi
         //se debe crear la logica compleja de la geolocalización del usuario para
         //poder editar con mayor precisión el turno.
         shift.setCurrentWaitingDuration(Duration.ofMinutes(5));
-        Queue obteinedQueue = queueRepository.getQueueById(queueId);
-        List<Shift> obteinedShifts = shiftRepository.getShiftsByQueueId(queueId);
-        shift.setShiftNumber(obteinedShifts.size() + 1);
+        shiftsActive = shiftsInQueue.stream().filter(
+                s -> Shift.ShiftStatus.ACTIVE.equals(s.getStatus())
+        ).toList();
+
+        tandas = (int) Math.ceil(shiftsActive.size() / queue.getPeoplePerShift());
+
+
+        //setear numero de turno
+        shift.setShiftNumber(shiftsInQueue.size() + 1);
+
+        //setear tiempo que debe esperar el turno (chatgpt, este calculo es correcto?)
+        shift.setCurrentWaitingDuration(
+                queue.getCurrentWaitingDuration()
+                        .plus(queue.getShiftDuration().multipliedBy(Math.max(0, tandas - 1)))
+        );
 
         return this.shiftMapper.toShiftDTO(this.shiftRepository.createShift(queueId, userId, shift));
     }
